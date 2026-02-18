@@ -115,6 +115,10 @@ For every request: (1) Detect intent (bug/feature/enhancement/refactor/review). 
 
 Plans must include: exact file list, exact code sections, before/after snippets, reason for each edit, verification steps, doc update step when needed. Ask clarifying questions until gaps are closed.
 
+## When to Ask Questions vs. Proceed
+
+**Ask questions when**: Ambiguous requirements; missing critical info (API endpoint, data structure, user flow); high-risk changes (breaking, security); pattern conflicts or multiple valid approaches. **Proceed when**: Clear requirements; low-risk changes; well-defined patterns; standard tasks (bug fix with root cause, feature following patterns).
+
 ## Intent-Specific Rules
 
 **Bug fix**: Reproduce first, use root-cause analysis, test thoroughly. **Feature**: Follow architecture, use patterns, create types, handle errors. **Enhancement**: Maintain backward compatibility. **Refactor**: Maintain functionality, follow style, run tests. **Code review**: Check patterns, error handling, performance, accessibility.
@@ -318,6 +322,59 @@ Use this split to keep planning and execution efficient:
    - Missing critical information
    - High-risk changes
    - **Action**: Ask clarifying questions before plan approval and implementation
+
+## When to Ask Questions vs. Proceed Automatically
+
+### Ask Questions When
+
+1. **Ambiguous Requirements**:
+   - User request is unclear or has multiple interpretations
+   - Missing critical details (e.g., "add a button" - where? what does it do?)
+   - Conflicting requirements mentioned
+   - **Action**: Ask 1-2 specific questions to clarify
+
+2. **Missing Critical Information**:
+   - API endpoint not specified
+   - Data structure unknown
+   - User flow unclear
+   - **Action**: Ask for missing information before proceeding
+
+3. **High-Risk Changes**:
+   - Breaking changes to core architecture
+   - Changes affecting multiple modules
+   - Security-related changes
+   - **Action**: Confirm approach before implementing
+
+4. **Pattern Conflicts**:
+   - Request conflicts with existing patterns
+   - Multiple valid approaches exist
+   - **Action**: Ask which approach to use
+
+### Proceed Automatically When
+
+1. **Clear Requirements**:
+   - User request is specific and clear
+   - All necessary information is present
+   - Pattern is well-established
+   - **Action**: Implement immediately
+
+2. **Low-Risk Changes**:
+   - Single file modifications
+   - Following established patterns
+   - Non-breaking changes
+   - **Action**: Implement, verify, update docs
+
+3. **Well-Defined Patterns**:
+   - Similar implementations exist
+   - Architecture patterns are clear
+   - File structure is standard
+   - **Action**: Follow patterns automatically
+
+4. **Standard Tasks**:
+   - Bug fixes with clear root cause
+   - Feature additions following patterns
+   - Enhancements to existing features
+   - **Action**: Implement automatically
 
 ## File Specifications
 
