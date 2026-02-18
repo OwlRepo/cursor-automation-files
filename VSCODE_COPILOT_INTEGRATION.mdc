@@ -47,22 +47,18 @@ When non-compliance is detected:
 3. **Optional but Recommended**
    - **GitHub Copilot Chat**: For conversational AI assistance (often bundled with Copilot)
 
-### One-Time Setup (Enables "Just Prompt" Workflow)
+### One-Time Setup (Same as Cursor—Full Structure)
 
-VS Code automatically loads `.github/copilot-instructions.md` for every chat. Create this file once and you can then **just prompt**—no need to reference files, context, or rules manually.
+VS Code automatically loads `.github/copilot-instructions.md` for every chat. The setup creates the full `.github/docs/` structure (architecture, file-index, debugging, rules) so the AI works the same as Cursor: detects intent, finds files via index, applies rules, creates plans—all automatically.
 
-#### Option A: Prompt the AI to set up (easiest)
+**Command** (run once per project):
 
 1. Copy this file (`VSCODE_COPILOT_INTEGRATION.mdc`) into your project.
 2. Open Copilot Chat (`Ctrl+Shift+I` / `Cmd+Shift+I`).
 3. Reference the file: `@VSCODE_COPILOT_INTEGRATION.mdc`
-4. Prompt: **"Create .github/copilot-instructions.md for this project using the content in the 'File to Create: .github/copilot-instructions.md' section below. This will enable me to just prompt without referencing files or rules."**
-5. The AI will create the file. After that, you can simply describe what you need in every new chat.
+4. Prompt: **"Analyze the entire codebase and regenerate all `.github/` files according to the specifications in this document. Follow Project Detection & Adaptation first. Create: (1) .github/copilot-instructions.md using the 'File to Create' section. (2) .github/docs/ with the full Directory Structure: architecture/, file-index/, debugging/, rules/, maintenance/. Generate only the files that apply to the detected project type (frontend/backend/full-stack). Adapt paths for monorepo if detected."**
 
-#### Option B: Create the file manually
-
-1. Create `.github/` in your project root (if it does not exist).
-2. Create `.github/copilot-instructions.md` and paste the content from the section **"File to Create: .github/copilot-instructions.md"** below.
+**Manual fallback**: Create `.github/copilot-instructions.md` manually and paste the content from the "File to Create" section. For full parity, also create `.github/docs/` per the Directory Structure below.
 
 ### After Setup: Just Prompt
 
@@ -107,9 +103,9 @@ The AI will automatically: detect intent, find relevant files, apply the plannin
 2. **Fact-Based Planning**: Plans must be grounded in existing files and code only. Verify file existence before finalizing.
 3. **Strict Adherence**: Execute exactly against the approved plan. If code drifts, pause and request revised-step approval.
 
-## Workflow
+## Workflow (Same as Cursor Entry-Point)
 
-For every request: (1) Detect intent (bug/feature/enhancement/refactor/review). (2) Find relevant files via workspace search. (3) Create plan with exact files, snippets, reasons, verification steps. (4) Wait for approval. (5) Implement strictly per plan. (6) Verify (compile, lint, tests). (7) Update docs when applicable.
+For every request: (1) Detect intent from keywords and context (bug/feature/enhancement/refactor/review). (2) Find relevant files: read [.github/docs/file-index/](.github/docs/file-index/) when it exists—use src-index, components-index, hooks-index, routes-index, stores-index, utils-index, controllers-index, services-index, models-index (adapt to what exists); otherwise use workspace search. (3) Apply rules: read [.github/docs/rules/](.github/docs/rules/) for the detected intent (bug-fix, feature-implementation, enhancement, refactoring, code-review, testing). (4) Include architecture: read [.github/docs/architecture/](.github/docs/architecture/) for patterns. (5) Create plan with exact files, snippets, reasons, verification steps. (6) Wait for approval. (7) Implement strictly per plan. (8) Verify (compile, lint, tests). (9) Update docs when adding or modifying files: see Update Triggers in VSCODE_COPILOT_INTEGRATION.mdc (component→components-index+src-index; hook→hooks-index+src-index; etc.).
 
 ## Planning Contract
 
@@ -133,7 +129,55 @@ Verify files exist. Verify patterns exist. Verify APIs from existing code. Use e
 
 ## Project Context
 
-Before planning, analyze the codebase: project type, tech stack, directory structure, monorepo if present. Adapt plans to match.
+Before planning, read [.github/docs/architecture/](.github/docs/architecture/) when it exists (overview, tech-stack, module-structure). Analyze codebase for project type, tech stack, directory structure, monorepo. Adapt plans to match.
+```
+
+---
+
+## Directory Structure (Same as Cursor)
+
+```text
+.github/
+├── copilot-instructions.md           # Auto-loaded entry point (this file)
+└── docs/                             # Same structure as .cursor/
+    ├── architecture/                 # Adaptive (8-10 files)
+    │   ├── overview.md               # Always generated
+    │   ├── tech-stack.md             # Always generated
+    │   ├── routing.md               # Frontend/Full-Stack only
+    │   ├── state-management.md      # Frontend/Full-Stack only
+    │   ├── data-fetching.md         # Frontend/Full-Stack only
+    │   ├── api-integration.md       # Always generated
+    │   ├── component-patterns.md    # Frontend/Full-Stack only
+    │   ├── module-structure.md     # Always generated
+    │   ├── database.md             # Backend/Full-Stack only
+    │   └── service-patterns.md     # Backend/Full-Stack only
+    ├── file-index/                  # Adaptive (6-9 files)
+    │   ├── src-index.md             # Always generated
+    │   ├── components-index.md      # Frontend/Full-Stack only
+    │   ├── hooks-index.md           # React Frontend/Full-Stack only
+    │   ├── routes-index.md          # Frontend/Full-Stack only
+    │   ├── stores-index.md          # Frontend/Full-Stack only
+    │   ├── utils-index.md           # Always generated
+    │   ├── controllers-index.md     # Backend/Full-Stack only
+    │   ├── services-index.md        # Backend/Full-Stack only
+    │   └── models-index.md          # Backend/Full-Stack only
+    ├── debugging/                   # 4 files
+    │   ├── workflow.md
+    │   ├── root-cause-analysis.md
+    │   ├── common-issues.md
+    │   └── fix-plan-template.md
+    ├── rules/                       # 7 files
+    │   ├── bug-fix.md
+    │   ├── feature-implementation.md
+    │   ├── enhancement.md
+    │   ├── refactoring.md
+    │   ├── code-review.md
+    │   ├── testing.md
+    │   └── automation-guidelines.md
+    └── maintenance/                 # 3 files
+        ├── update-workflow.md
+        ├── update-checklist.md
+        └── auto-update-guide.md
 ```
 
 ---
@@ -236,15 +280,35 @@ Read dependency files and analyze code to identify:
 - **Turborepo**: Check for `turbo.json` in root
 - **Workspaces**: Check root `package.json` for `workspaces` field
 - **Workspace Structure**: Look for `apps/` and `packages/` directories
+- **Workspace Types**: Identify frontend apps, backend apps, and shared packages
 
-### 4. Adapt File Specifications
+**Monorepo Adaptation**:
+
+- If Turborepo detected, adapt all paths to use workspace structure
+- Update file indexes to reflect workspace locations
+- Generate workspace-specific rules (frontend vs backend)
+- Update import patterns to use workspace package names (e.g., `@myorg/shared`)
+- Adapt file discovery to check multiple workspace locations
+
+### 4. Detect Project Structure
+
+Analyze directory structure to identify:
+
+- **Modules/Features**: List all modules/features from directory structure
+- **File Organization**: Component-based, feature-based, MVC, etc.
+- **Patterns**: File-based routing, config-based routing, etc.
+- **Conventions**: Naming conventions, file organization patterns
+
+**For Monorepos**: Check each workspace separately (`apps/frontend/src/`, `apps/backend/src/`, etc.)
+
+### 5. Adapt File Specifications
 
 **After detection, adapt the plan**:
 
 - **Frontend Projects**: Focus on components, hooks, routes, state management, UI patterns
 - **Backend Projects**: Focus on controllers, services, models, API patterns, database patterns
 - **Full-Stack Projects**: Include both frontend and backend patterns
-- **Monorepo Projects**: Use workspace paths and package names
+- **Monorepo Projects**: Use workspace paths (`apps/frontend/src/`, `apps/backend/src/`, `packages/shared/src/`), generate separate rules for frontend and backend workspaces, update import examples to use workspace package names
 
 ## Planning Contract (Canonical)
 
@@ -378,79 +442,218 @@ Use this split to keep planning and execution efficient:
 
 ## File Specifications
 
-**IMPORTANT**: Adapt these specifications based on detected project type and tech stack. Use these as prompts when generating or regenerating project documentation.
+**IMPORTANT**: Adapt these specifications based on detected project type and tech stack. Same as CURSOR_INTEGRATION.mdc—generate only relevant files.
 
-### Architecture Documentation (Adaptive)
+### Architecture Documentation (Adaptive - Generate Only Relevant Files)
 
-- **overview.mdc**: System architecture, modules, data flow
-- **tech-stack.mdc**: Dependencies, versions, environment variables
-- **routing.mdc**: Frontend/Full-Stack only
-- **state-management.mdc**: Frontend/Full-Stack only
-- **data-fetching.mdc**: Frontend/Full-Stack only
-- **api-integration.mdc**: Always
-- **component-patterns.mdc**: Frontend/Full-Stack only
-- **module-structure.mdc**: Always
-- **database.mdc**: Backend/Full-Stack only
-- **service-patterns.mdc**: Backend/Full-Stack only
+1. **architecture/overview.md** (Always generate)
+   - System architecture with mermaid diagrams (application flow, module relationships, data flow)
+   - Key architectural decisions
+   - Directory structure
+   - Development patterns
+   - **Adapt**: Include detected project type, tech stack, and modules
 
-### File Indexes (Adaptive)
+2. **architecture/tech-stack.md** (Always generate)
+   - **Adapt**: Complete technology stack based on detected dependencies
+   - **Frontend**: Framework, build tool, state management, routing, UI library, data fetching, language
+   - **Backend**: Runtime, framework, database, ORM/ODM, API style, authentication
+   - **Full-Stack**: Include both frontend and backend
+   - Version information from dependency files
+   - Package management (npm, yarn, pnpm, pip, go mod, etc.)
+   - Environment variables
 
-- **src-index.mdc**: Directory tree, file purposes
-- **components-index.mdc**: Frontend/Full-Stack only
-- **hooks-index.mdc**: React Frontend/Full-Stack only
-- **routes-index.mdc**: Frontend/Full-Stack only
-- **stores-index.mdc**: Frontend/Full-Stack only
-- **utils-index.mdc**: Always
-- **controllers-index.mdc**: Backend/Full-Stack only
-- **services-index.mdc**: Backend/Full-Stack only
-- **models-index.mdc**: Backend/Full-Stack only
+3. **architecture/routing.md** (Generate for Frontend/Full-Stack only)
+   - **Adapt**: Routing patterns based on detected framework
+   - **Skip**: For backend-only projects
 
-### Rules and Debugging
+4. **architecture/state-management.md** (Generate for Frontend/Full-Stack only)
+   - **Adapt**: State management patterns based on detected library
+   - **Skip**: For backend-only projects
 
-- **rules**: bug-fix, feature-implementation, enhancement, refactoring, code-review, testing, automation-guidelines
-- **debugging**: workflow, root-cause-analysis, common-issues, fix-plan-template
+5. **architecture/data-fetching.md** (Generate for Frontend/Full-Stack only)
+   - **Adapt**: Data fetching patterns based on detected library
+   - **Skip**: For backend-only projects
 
-**Prompt for rule application**: When you need to apply a rule, explicitly reference it in your prompt, e.g.: "Following the bug-fix rules: reproduce first, use RCA, test thoroughly."
+6. **architecture/api-integration.md** (Generate for Frontend/Full-Stack or Backend)
+   - **Frontend**: HTTP client configuration
+   - **Backend**: API patterns (REST, GraphQL, gRPC)
+
+7. **architecture/component-patterns.md** (Generate for Frontend/Full-Stack only)
+   - **Adapt**: Component architecture based on detected framework
+   - **Skip**: For backend-only projects
+
+8. **architecture/module-structure.md** (Always generate)
+   - **Adapt**: List all detected modules/features from directory structure
+
+9. **architecture/database.md** (Generate for Backend/Full-Stack only)
+   - **Adapt**: Database patterns based on detected database and ORM/ODM
+   - **Skip**: For frontend-only projects
+
+10. **architecture/service-patterns.md** (Generate for Backend/Full-Stack only)
+    - **Adapt**: Service layer patterns based on detected framework
+    - **Skip**: For frontend-only projects
+
+### File Indexes (Adaptive - Generate Based on Project Structure)
+
+1. **file-index/src-index.md** (Always generate)
+   - Complete directory tree based on actual project structure
+   - File purposes and relationships
+   - Directory structure with descriptions
+
+2. **file-index/components-index.md** (Generate for Frontend/Full-Stack only)
+   - Component categorization (UI, dialogs, forms, layouts, inputs, etc.)
+   - Component descriptions and purposes
+   - **Skip**: For backend-only projects
+
+3. **file-index/hooks-index.md** (Generate for React Frontend/Full-Stack only)
+   - Hooks categorized (query, mutation, socket, custom)
+   - **Skip**: For non-React projects or backend-only projects
+
+4. **file-index/routes-index.md** (Generate for Frontend/Full-Stack only)
+   - Routes with paths, purposes, auth requirements, related components
+   - **Skip**: For backend-only projects
+
+5. **file-index/stores-index.md** (Generate for Frontend/Full-Stack only)
+   - State management stores with structures, actions, usage patterns
+   - **Skip**: For backend-only projects or projects without state management
+
+6. **file-index/utils-index.md** (Always generate)
+   - Utility functions with purposes and usage examples
+
+7. **file-index/controllers-index.md** (Generate for Backend/Full-Stack only)
+   - Controllers/routes with purposes and endpoints
+   - **Skip**: For frontend-only projects
+
+8. **file-index/services-index.md** (Generate for Backend/Full-Stack only)
+   - Service purposes and business logic patterns
+   - **Skip**: For frontend-only projects
+
+9. **file-index/models-index.md** (Generate for Backend/Full-Stack only)
+   - Models/schemas with purposes and relationships
+   - **Skip**: For frontend-only projects
+
+### Debugging Files (4 files)
+
+1. **debugging/workflow.md** – Step-by-step debugging process (reproduce → identify → RCA → fix → test)
+2. **debugging/root-cause-analysis.md** – RCA template (problem, affected areas, root cause, impact, solution)
+3. **debugging/common-issues.md** – Known issues database with solutions and prevention strategies
+4. **debugging/fix-plan-template.md** – Standardized fix plan format
+
+### Rules System (7 files)
+
+1. **rules/bug-fix.md** – Bug fixing guidelines (reproduce first, use RCA, test thoroughly, follow patterns)
+2. **rules/feature-implementation.md** – Feature rules (follow architecture, use patterns, create types, error handling, tests)
+3. **rules/enhancement.md** – Enhancement guidelines (understand current, identify improvements, maintain compatibility, document)
+4. **rules/refactoring.md** – Refactoring rules (maintain functionality, follow style, update related files, test)
+5. **rules/code-review.md** – Review guidelines (check patterns, error handling, performance, accessibility)
+6. **rules/testing.md** – Testing rules (happy paths, error cases, edge cases, integration)
+7. **rules/automation-guidelines.md** – When to proceed automatically vs ask questions, quality gates, hallucination prevention
+
+### Maintenance (3 files)
+
+1. **maintenance/update-workflow.md** – When and how to update files
+2. **maintenance/update-checklist.md** – Maintenance checklist
+3. **maintenance/auto-update-guide.md** – AI auto-update instructions
 
 ## Update Triggers & Maintenance
 
-### When to Update Documentation
+Same as CURSOR_INTEGRATION.mdc. When adding or modifying code, update the relevant `.github/docs/` files.
+
+### Automatic Update Triggers
 
 **New Files Added**:
 
-- **Frontend**: Component → Update components-index, src-index
-- **Frontend**: Hook → Update hooks-index, src-index
-- **Frontend**: Route → Update routes-index, src-index
-- **Backend**: Controller → Update controllers-index, src-index
-- **Backend**: Service → Update services-index, src-index
-- **Backend**: Model → Update models-index, src-index
-- **All**: Utility → Update utils-index, src-index
+- **Frontend**: Component → Update `file-index/components-index.md`, `file-index/src-index.md`
+- **Frontend**: Hook → Update `file-index/hooks-index.md`, `file-index/src-index.md`
+- **Frontend**: Route → Update `file-index/routes-index.md`, `file-index/src-index.md`
+- **Frontend**: Store → Update `file-index/stores-index.md`, `file-index/src-index.md`
+- **Backend**: Controller → Update `file-index/controllers-index.md`, `file-index/src-index.md`
+- **Backend**: Service → Update `file-index/services-index.md`, `file-index/src-index.md`
+- **Backend**: Model → Update `file-index/models-index.md`, `file-index/src-index.md`
+- **All**: Utility → Update `file-index/utils-index.md`, `file-index/src-index.md`
 
 **New Features**:
 
-- New module → Update module-structure, relevant file-index files
-- New pattern → Update relevant architecture files
+- New module → Update `architecture/module-structure.md`, relevant file-index files
+- New pattern → Update relevant `architecture/` files
+- **Frontend**: New component pattern → Update `architecture/component-patterns.md`
+- **Frontend**: New route pattern → Update `architecture/routing.md`
+- **Frontend**: New state pattern → Update `architecture/state-management.md`
+- **Backend**: New service pattern → Update `architecture/service-patterns.md`
+- **Backend**: New database pattern → Update `architecture/database.md`
+- **All**: New API pattern → Update `architecture/api-integration.md`
 
 **Breaking Changes**:
 
-- Architecture change → Update overview
-- Tech stack change → Update tech-stack
-- Add to common-issues if migration needed
+- Architecture change → Update `architecture/overview.md`
+- Tech stack change → Update `architecture/tech-stack.md`
+- Pattern change → Update relevant `architecture/` files
+- Add to `debugging/common-issues.md` if migration needed
+
+**Bug Fixes**:
+
+- Common bug → Add to `debugging/common-issues.md`
+- New bug pattern → Update `debugging/workflow.md` if needed
+
+**Code Changes**:
+
+- File renamed → Update relevant `file-index/` files
+- File deleted → Remove from `file-index/` files
+- File moved → Update `file-index/src-index.md`
 
 ### Maintenance Workflow
 
 1. **Detect Change**: Identify type of change (new file, modified, deleted, pattern change)
-2. **Identify Affected Files**: Determine which documentation files need updates
+2. **Identify Affected Files**: Determine which `.github/docs/` files need updates
 3. **Update Files**: Apply changes to relevant documentation
 4. **Verify**: Check that updates are complete and accurate
 
+See `maintenance/update-workflow.md` for detailed workflow.
+
+## Fully Automatic Development System (Same as Cursor)
+
+**IMPORTANT**: The system is designed for **fully automated development with a mandatory planning gate**. Users do NOT need to:
+
+- Reference command files or rules
+- Mention specific documentation files
+- Intervene unless AI hallucinates or many files need review
+
+**copilot-instructions.md is the entry point**: It automatically instructs the AI to detect intent, find files via file-index, apply rules, include architecture docs, create plans, implement, verify, and update docs.
+
+**Users can simply describe what they need**—the system handles everything automatically, from planning to implementation to verification, while requiring a complete plan artifact before edits.
+
+## Automatic Workflow Example
+
+**User Prompt** (No command file, no rules mentioned):
+
+```text
+I need usePaginatedTableSocket to handle 100k records from socket 
+data and store it in IndexedDB for the live-data-table component
+```
+
+**System Automatically** (when .github/docs/ exists):
+
+1. **Detects Intent**: Keywords "need", "handle", "store" → Feature/Enhancement intent
+2. **Finds Files**:
+   - `usePaginatedTableSocket` → Found in `file-index/hooks-index.md`
+   - `live-data-table` → Found in `file-index/components-index.md`
+   - `IndexedDB` → Found in `file-index/utils-index.md`
+3. **Applies Rules**: `rules/feature-implementation.md`, `rules/enhancement.md`, `rules/testing.md`
+4. **Includes Documentation**: `architecture/data-fetching.md`, `architecture/component-patterns.md`, relevant file-index files
+5. **Creates Plan**: Comprehensive implementation plan with all details
+
+**Result**: User gets complete plan without mentioning any command files or rules!
+
 ## Key Principles
 
-- **After Setup, Just Prompt**: `.github/copilot-instructions.md` auto-loads; no need to reference files, rules, or context
+- **Entry-Point Equivalent**: `.github/copilot-instructions.md` auto-loads; no need to reference files, rules, or context
 - **Plan-Before-Implement**: Always produce and approve a plan artifact before any code edits
-- **Stepwise Execution**: For complex changes, apply edits in steps and verify between steps
-- **Fact-Based**: Plans must be grounded in existing files and code only
-- **Hallucination Prevention**: Verify file existence, patterns, and APIs before implementing
+- **Fully Automatic**: File-index, rules, and architecture are used automatically when planning
+- **Cross-Functional**: Rules work together; copilot-instructions orchestrates routing
+- **Auto-Context**: System provides relevant context from architecture, indexes, common issues, patterns
+- **Intelligent Detection**: Uses keywords, file references, and context clues to detect intent
+- **Minimal Prompting**: Just describe what you need—system handles the rest
+- **Self-Updating**: Update `.github/docs/` when code changes (see Update Triggers)
 
 ## Quality Gates & Checkpoints
 
@@ -538,12 +741,12 @@ System is successful when:
 | Cursor Concept                                | VS Code + Copilot Equivalent                                       |
 | --------------------------------------------- | ------------------------------------------------------------------- |
 | `@.cursor/entry-point.mdc`                     | `.github/copilot-instructions.md` (auto-loaded after one-time setup) |
-| `bun run scripts/setup-cursor-integration.ts` | Prompt AI: "Create .github/copilot-instructions.md per VSCODE_COPILOT_INTEGRATION.mdc" |
-| Auto-context from file-index                  | After setup: auto via copilot-instructions; AI searches workspace   |
-| Auto-routing to rules                         | After setup: rules embedded in copilot-instructions; auto-applied   |
-| Auto-update indexes                           | Manual or script-driven; prompt to update docs when needed          |
+| `bun run scripts/setup-cursor-integration.ts` | Prompt AI: "Analyze codebase and regenerate all .github/ files per VSCODE_COPILOT_INTEGRATION.mdc" |
+| `.cursor/` (architecture, file-index, rules, etc.) | `.github/docs/` (same structure: architecture/, file-index/, debugging/, rules/, maintenance/) |
+| Auto-context from file-index                  | copilot-instructions instructs AI to read .github/docs/file-index/ when planning |
+| Auto-routing to rules                         | copilot-instructions instructs AI to read .github/docs/rules/ based on detected intent |
+| Pre-commit indexer script                     | Prompt AI to update indexes when adding/modifying files; see Update Triggers |
 | Cursor Composer                               | Copilot Chat + Inline Chat                                          |
-| `.cursor/` directory                          | Optional `.vscode/` or project-specific docs; use `.mdc` if desired |
 <!-- markdownlint-enable MD060 -->
 
 ## Cross-Project Usage

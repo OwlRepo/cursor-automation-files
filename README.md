@@ -30,7 +30,7 @@ This repository contains two master prompt files that act as "instruction manual
 | File | Purpose |
 |------|---------|
 | **CURSOR_INTEGRATION.mdc** | For Cursor users. Uses an entry-point that auto-loads rules, file indexes, and architecture docs. You describe what you need; the system routes automatically. |
-| **VSCODE_COPILOT_INTEGRATION.mdc** | For VS Code + GitHub Copilot users. After one-time setup, `.github/copilot-instructions.md` auto-loads—you just prompt. No files or rules to reference. |
+| **VSCODE_COPILOT_INTEGRATION.mdc** | For VS Code + GitHub Copilot users. Same structure as Cursor: `.github/docs/` (architecture, file-index, rules, debugging, maintenance). After setup, you just prompt—file-index and rules used automatically. |
 <!-- markdownlint-enable MD060 -->
 
 **Shared concepts** in both files:
@@ -101,14 +101,14 @@ This repository contains two master prompt files that act as "instruction manual
 
 **Prerequisites**: VS Code and a GitHub account with Copilot access.
 
-**One-time setup** (enables "just prompt" workflow):
+**One-time setup** (same structure as Cursor—architecture, file-index, rules, etc.):
 
 1. Install [VS Code](https://code.visualstudio.com/) and the [GitHub Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) extension. Sign in.
 2. Copy `VSCODE_COPILOT_INTEGRATION.mdc` to your project.
-3. Open Copilot Chat (`Ctrl+Shift+I` / `Cmd+Shift+I`), reference `@VSCODE_COPILOT_INTEGRATION.mdc`, and prompt: **"Create .github/copilot-instructions.md for this project using the content in the 'File to Create' section. This will let me just prompt without referencing files or rules."**
-4. The AI creates the file. Done.
+3. Open Copilot Chat (`Ctrl+Shift+I` / `Cmd+Shift+I`), reference `@VSCODE_COPILOT_INTEGRATION.mdc`, and prompt: **"Analyze the entire codebase and regenerate all .github/ files according to the specifications in this document. Follow Project Detection & Adaptation first. Create .github/copilot-instructions.md and the full .github/docs/ structure (architecture/, file-index/, debugging/, rules/, maintenance/). Generate only files that apply to the detected project type."**
+4. The AI creates the full structure. Done.
 
-**After setup**: Open Copilot Chat and describe what you need. No `@` references required. The AI will detect intent, find files, create a plan, and guide you through implementation.
+**After setup**: Open Copilot Chat and describe what you need. No `@` references required. The AI will detect intent, find files via file-index, apply rules, create a plan, and guide you through implementation—same as Cursor.
 
 ---
 
@@ -276,19 +276,19 @@ Analyze the codebase and regenerate all .cursor/ files according to @CURSOR_INTE
 
 ### Using VSCODE_COPILOT_INTEGRATION.mdc
 
-**Best for**: VS Code + GitHub Copilot users who want to "just prompt" without thinking about files, context, or rules.
+**Best for**: VS Code + GitHub Copilot users who want the same experience as Cursor—full architecture, file-index, rules, and "just prompt" workflow.
 
 **One-time setup**:
 
 1. Copy `VSCODE_COPILOT_INTEGRATION.mdc` into your project.
-2. Open Copilot Chat, reference `@VSCODE_COPILOT_INTEGRATION.mdc`, and prompt: **"Create .github/copilot-instructions.md for this project using the content in the 'File to Create' section."**
-3. The AI creates the file. VS Code will auto-load it for every chat.
+2. Open Copilot Chat, reference `@VSCODE_COPILOT_INTEGRATION.mdc`, and prompt: **"Analyze the entire codebase and regenerate all .github/ files according to the specifications in this document. Follow Project Detection & Adaptation first. Create .github/copilot-instructions.md and the full .github/docs/ structure (architecture/, file-index/, debugging/, rules/, maintenance/). Generate only files that apply to the detected project type."**
+3. The AI creates the full structure. VS Code will auto-load `.github/copilot-instructions.md` for every chat.
 
 **After setup—just prompt**:
 
 1. Open Copilot Chat (`Ctrl+Shift+I` / `Cmd+Shift+I`).
 2. Describe what you need. No `@` references required.
-3. The AI will detect intent, find relevant files, create a plan, and guide you through implementation and verification.
+3. The AI will detect intent, find files via file-index, apply rules, create a plan, and guide you through implementation and verification—same as Cursor.
 
 **Example prompts** (after setup):
 
@@ -304,7 +304,7 @@ Fix the login form validation bug—the email field accepts invalid formats.
 Refactor the API client to use fetch instead of axios.
 ```
 
-**Notes**: After setup, `.github/copilot-instructions.md` is auto-loaded. You do not need to reference files, rules, or the integration file. If you have not run setup, reference `@VSCODE_COPILOT_INTEGRATION.mdc` and use the prompt templates in that file.
+**Notes**: After setup, `.github/copilot-instructions.md` is auto-loaded and instructs the AI to use `.github/docs/` (file-index, architecture, rules) for file discovery and rule application. Same behavior as Cursor's entry-point. When adding or modifying files, prompt the AI to update the relevant indexes per the Update Triggers.
 
 ---
 
@@ -335,8 +335,8 @@ cursor-automation-files/
 |-----------|---------|
 | **Audience** | VS Code + GitHub Copilot users |
 | **Assumes** | VS Code, Copilot extension, explicit prompt orchestration |
-| **Setup** | One-time: prompt AI to create `.github/copilot-instructions.md` (content in integration file) |
-| **Workflow** | After setup: just prompt; auto-loaded instructions handle intent, rules, and context |
+| **Setup** | One-time: prompt AI to regenerate all `.github/` files (copilot-instructions + full docs structure) |
+| **Workflow** | After setup: just prompt; same as Cursor—file-index, rules, architecture used automatically |
 <!-- markdownlint-enable MD060 -->
 
 ---
@@ -386,7 +386,8 @@ If you switch editors, use the **Migration Map** in `VSCODE_COPILOT_INTEGRATION.
 | Auto-context from file-index   | Explicit `@file` or path references  |
 | Auto-routing to rules          | Explicit rule references in prompts  |
 | Cursor Composer                | Copilot Chat + Inline Chat           |
-| Just describe intent           | Same after setup; copilot-instructions auto-loads |
+| `.cursor/` (architecture, file-index, rules) | `.github/docs/` (same structure) |
+| Just describe intent           | Same after setup; copilot-instructions + docs auto-used |
 <!-- markdownlint-enable MD060 -->
 
 ---
