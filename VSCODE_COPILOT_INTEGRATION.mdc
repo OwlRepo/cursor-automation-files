@@ -1,0 +1,438 @@
+# Visual Studio Code + GitHub Copilot Integration - Master Prompt
+
+**Purpose**: Complete master prompt for the Visual Studio Code + GitHub Copilot workflow. Use this file as a standalone prompt to guide AI-assisted development with Copilot Chat and Inline Chat.
+
+## Hard Rules (Non-Negotiable)
+
+**These rules MUST be followed. Non-compliance must be flagged and corrected.**
+
+### Hard Rule A: Prompt-First Orchestration
+
+- `@VSCODE_COPILOT_INTEGRATION.mdc` (or equivalent master prompt) MUST be referenced as the first context when starting a new workflow in Copilot Chat.
+- Before planning, implementing, or applying rules, the master prompt must be loaded into the conversation.
+- Usage and workflow sections must explicitly mention prompt-first behavior.
+
+### Hard Rule B: Plan-Before-Implement
+
+- An execution plan with required contents (see Planning Contract) MUST be produced and approved before any code edits.
+- Copilot Chat should be used for planning; Inline Chat or manual edits follow the approved plan.
+- Never implement changes without a concrete, file-specific plan artifact.
+
+### Verification Checklist
+
+Before considering any workflow complete:
+
+- [ ] Master prompt was loaded at conversation start
+- [ ] Plan artifact was created with exact files, edits, reasons, and verification steps
+- [ ] Implementation followed the approved plan strictly
+- [ ] Verification steps were run
+
+### Non-Compliance
+
+When non-compliance is detected:
+
+- **If plan is bypassed**: Do not proceed; require a plan artifact before any edits.
+- **If edits drift from plan**: Pause, report mismatch, request revised-step approval.
+
+## Quick Setup
+
+### Prerequisites
+
+1. **Visual Studio Code** (latest stable)
+   - Install from [code.visualstudio.com](https://code.visualstudio.com/)
+
+2. **GitHub Copilot Extension**
+   - Install "GitHub Copilot" from the VS Code Extensions marketplace
+   - Sign in with a GitHub account that has Copilot access (subscription required)
+
+3. **Optional but Recommended**
+   - **GitHub Copilot Chat**: For conversational AI assistance (often bundled with Copilot)
+   - **@vscode/copilot** workspace context: Ensure Copilot can access relevant files
+
+### Activation Flow
+
+1. Open VS Code and your project folder
+2. Open Copilot Chat (View → Command Palette → "GitHub Copilot: Open Chat" or `Ctrl+Shift+I` / `Cmd+Shift+I`)
+3. Reference this file: `@VSCODE_COPILOT_INTEGRATION.mdc` (or paste its path into the chat)
+4. Describe your intent; the system will guide you through the planning and implementation workflow
+
+### Recommended Chat Modes
+
+1. **Planning Prompt**: Use Copilot Chat to produce an execution plan
+2. **Implementation Prompt**: Use Copilot Chat or Inline Chat to apply edits per plan
+3. **Verification Prompt**: Use Copilot Chat to run verification steps and summarize results
+
+## Prompt Orchestration (Replaces Cursor Auto-Routing)
+
+**IMPORTANT**: Unlike Cursor's entry-point system, Copilot does not auto-load rules or files. You must explicitly orchestrate prompts.
+
+### Prompt Templates
+
+Use these templates when starting a Copilot Chat session:
+
+**Planning Template**:
+
+```text
+@VSCODE_COPILOT_INTEGRATION.mdc
+
+I need to [describe task]. Following the Planning Contract, produce an execution plan with:
+1. Exact file list to update
+2. Exact code sections and before/after snippets
+3. Reason for each edit
+4. Verification steps
+5. Any index/doc update requirements
+```
+
+**Implementation Template** (after plan approved):
+
+```text
+Here is the approved plan: [paste plan or reference]
+
+Implement step 1: [exact step from plan]. Apply only this step.
+```
+
+**Verification Template**:
+
+```text
+Run verification for the changes we just made:
+- [ ] Compile/type check
+- [ ] Lint
+- [ ] Follow project patterns
+```
+
+### Checklist for Prompt Orchestration
+
+- [ ] Load master prompt at start of conversation
+- [ ] Detect intent (bug/feature/enhancement/refactor/review)
+- [ ] Include relevant file paths or `@file` references for context
+- [ ] Request plan artifact before implementation
+- [ ] Apply edits in steps, not all at once for complex changes
+- [ ] Run verification after implementation
+
+## Project Detection & Adaptation
+
+**CRITICAL FIRST STEP**: Before generating any files or plans, analyze the codebase to detect and adapt to the project:
+
+### 1. Detect Project Type
+
+Analyze the codebase to determine project type:
+
+- **Frontend**: React, Vue, Angular, Svelte, etc.
+- **Backend**: Node.js/Express, Python/Django/Flask, Go, Java/Spring, Ruby/Rails, etc.
+- **Full-Stack**: Contains both frontend and backend
+- **Mobile**: React Native, Flutter, Swift, Kotlin, etc.
+- **Desktop**: Electron, Tauri, etc.
+- **CLI/Tool**: Command-line applications
+
+**Detection Methods**:
+
+- Check `package.json`, `requirements.txt`, `go.mod`, `pom.xml`, `Cargo.toml`, etc.
+- Analyze directory structure (`src/`, `app/`, `components/`, `routes/`, `controllers/`, etc.)
+- Check for framework-specific files (e.g., `vite.config.js`, `next.config.js`, `django/settings.py`)
+
+### 2. Detect Tech Stack
+
+Read dependency files and analyze code to identify:
+
+**Frontend Detection**:
+
+- Framework: React, Vue, Angular, Svelte, etc.
+- Build Tool: Vite, Webpack, Next.js, etc.
+- State Management: Redux, Zustand, Pinia, Context API, etc.
+- Routing: React Router, TanStack Router, Vue Router, etc.
+- UI Library: Tailwind, Material-UI, shadcn/ui, Chakra UI, etc.
+- Data Fetching: TanStack Query, SWR, Apollo, etc.
+- Language: TypeScript, JavaScript, etc.
+
+**Backend Detection**:
+
+- Runtime: Node.js, Python, Go, Java, Ruby, etc.
+- Framework: Express, FastAPI, Django, Flask, Gin, Spring Boot, Rails, etc.
+- Database: PostgreSQL, MySQL, MongoDB, Redis, etc.
+- ORM/ODM: Prisma, Sequelize, Mongoose, SQLAlchemy, etc.
+- API Style: REST, GraphQL, gRPC, etc.
+- Authentication: JWT, OAuth, etc.
+
+### 3. Detect Monorepo Structure
+
+**CRITICAL**: Check for monorepo setup before analyzing project structure:
+
+- **Turborepo**: Check for `turbo.json` in root
+- **Workspaces**: Check root `package.json` for `workspaces` field
+- **Workspace Structure**: Look for `apps/` and `packages/` directories
+
+### 4. Adapt File Specifications
+
+**After detection, adapt the plan**:
+
+- **Frontend Projects**: Focus on components, hooks, routes, state management, UI patterns
+- **Backend Projects**: Focus on controllers, services, models, API patterns, database patterns
+- **Full-Stack Projects**: Include both frontend and backend patterns
+- **Monorepo Projects**: Use workspace paths and package names
+
+## Planning Contract (Canonical)
+
+Before any implementation, create an execution plan that is specific enough for any LLM to follow without additional searching.
+
+### Required plan contents
+
+1. Exact file list to update
+2. Exact code sections to update in each file
+3. Reason for every planned edit
+4. Targeted before/after code snippet pairs for every edit
+5. Verification steps and commands
+6. Post-execution index update step when required
+
+### Fact-only planning rule
+
+- Plans must be based on existing files and code only.
+- Verify file existence and current implementation before finalizing plan steps.
+- Avoid theory-first or hypothetical edits that are not grounded in repository state.
+
+### Clarification and recommendation rule
+
+- Ask clarifying questions until execution-critical gaps are closed.
+- Ask one recommendation question only when multiple materially different valid implementations exist.
+
+### Strict adherence rule
+
+- Execute strictly against the approved plan.
+- If real code differs from the plan, pause at a checkpoint, report mismatch, and request approval for a revised step.
+
+## Model Split: Planning vs. Execution
+
+Use this split to keep planning and execution efficient:
+
+1. **Planning (Copilot Chat)**:
+   - Produces the execution-plan artifact with required contents above.
+   - Confirms facts from files before finalizing.
+2. **Execution (Copilot Inline Chat or manual edits)**:
+   - Validates plan anchors before edits (files exist, snippets still match, no unanswered gaps).
+   - Executes exact approved steps.
+   - Raises checkpoint on drift or contradictions.
+
+### Required handoff add-ons
+
+- **Plan artifact contract**: exact files, exact edits, reasons, before/after snippets, verification, index step
+- **Execution handoff checklist**: file existence, snippet anchor validity, zero unresolved gaps
+- **Deviation protocol**: stop, report mismatch, request revised-step approval
+- **Plan version stamp**: `plan_version`, `planned_files_count`, `planned_steps_count`
+
+### Automation Levels
+
+1. **Full Auto (Proceed Automatically)**:
+   - Single file changes (< 3 files)
+   - Clear requirements
+   - Well-defined patterns exist
+   - Low risk changes
+   - **Action**: Create required plan artifact, implement approved steps, verify, update docs/indexes
+
+2. **Auto with Verification (Proceed + Verify)**:
+   - Multiple files (3-10 files)
+   - Moderate complexity
+   - Some ambiguity but resolvable
+   - **Action**: Create required plan artifact, implement approved steps, run verification checks, show summary
+
+3. **Auto with Checkpoint (Proceed + Pause for Review)**:
+   - Many files (10+ files)
+   - High complexity
+   - Breaking changes
+   - Architecture changes
+   - **Action**: Create required plan artifact, implement approved steps, pause before final commit, show review summary
+
+4. **Ask First (Clarify Before Proceeding)**:
+   - Ambiguous requirements
+   - Conflicting patterns
+   - Missing critical information
+   - High-risk changes
+   - **Action**: Ask clarifying questions before plan approval and implementation
+
+## File Specifications
+
+**IMPORTANT**: Adapt these specifications based on detected project type and tech stack. Use these as prompts when generating or regenerating project documentation.
+
+### Architecture Documentation (Adaptive)
+
+- **overview.mdc**: System architecture, modules, data flow
+- **tech-stack.mdc**: Dependencies, versions, environment variables
+- **routing.mdc**: Frontend/Full-Stack only
+- **state-management.mdc**: Frontend/Full-Stack only
+- **data-fetching.mdc**: Frontend/Full-Stack only
+- **api-integration.mdc**: Always
+- **component-patterns.mdc**: Frontend/Full-Stack only
+- **module-structure.mdc**: Always
+- **database.mdc**: Backend/Full-Stack only
+- **service-patterns.mdc**: Backend/Full-Stack only
+
+### File Indexes (Adaptive)
+
+- **src-index.mdc**: Directory tree, file purposes
+- **components-index.mdc**: Frontend/Full-Stack only
+- **hooks-index.mdc**: React Frontend/Full-Stack only
+- **routes-index.mdc**: Frontend/Full-Stack only
+- **stores-index.mdc**: Frontend/Full-Stack only
+- **utils-index.mdc**: Always
+- **controllers-index.mdc**: Backend/Full-Stack only
+- **services-index.mdc**: Backend/Full-Stack only
+- **models-index.mdc**: Backend/Full-Stack only
+
+### Rules and Debugging
+
+- **rules**: bug-fix, feature-implementation, enhancement, refactoring, code-review, testing, automation-guidelines
+- **debugging**: workflow, root-cause-analysis, common-issues, fix-plan-template
+
+**Prompt for rule application**: When you need to apply a rule, explicitly reference it in your prompt, e.g.: "Following the bug-fix rules: reproduce first, use RCA, test thoroughly."
+
+## Update Triggers & Maintenance
+
+### When to Update Documentation
+
+**New Files Added**:
+
+- **Frontend**: Component → Update components-index, src-index
+- **Frontend**: Hook → Update hooks-index, src-index
+- **Frontend**: Route → Update routes-index, src-index
+- **Backend**: Controller → Update controllers-index, src-index
+- **Backend**: Service → Update services-index, src-index
+- **Backend**: Model → Update models-index, src-index
+- **All**: Utility → Update utils-index, src-index
+
+**New Features**:
+
+- New module → Update module-structure, relevant file-index files
+- New pattern → Update relevant architecture files
+
+**Breaking Changes**:
+
+- Architecture change → Update overview
+- Tech stack change → Update tech-stack
+- Add to common-issues if migration needed
+
+### Maintenance Workflow
+
+1. **Detect Change**: Identify type of change (new file, modified, deleted, pattern change)
+2. **Identify Affected Files**: Determine which documentation files need updates
+3. **Update Files**: Apply changes to relevant documentation
+4. **Verify**: Check that updates are complete and accurate
+
+## Key Principles
+
+- **Prompt-First**: Use `@VSCODE_COPILOT_INTEGRATION.mdc` (or equivalent) as the first context for any workflow
+- **Plan-Before-Implement**: Always produce and approve a plan artifact before any code edits
+- **Explicit Orchestration**: You must explicitly reference rules, files, and context; Copilot does not auto-load them
+- **Stepwise Execution**: For complex changes, apply edits in steps and verify between steps
+- **Fact-Based**: Plans must be grounded in existing files and code only
+- **Hallucination Prevention**: Verify file existence, patterns, and APIs before implementing
+
+## Quality Gates & Checkpoints
+
+### Automatic Verification Steps
+
+After implementing changes:
+
+1. **Code Quality Checks**:
+   - ✅ **TypeScript/JavaScript**: Compiles without errors
+   - ✅ **Python**: No syntax errors, passes type checking (if mypy/pyright used)
+   - ✅ **Go**: Compiles without errors
+   - ✅ **Java**: Compiles without errors
+   - ✅ No linting errors (ESLint, Pylint, golint, etc.)
+   - ✅ Follows project patterns
+   - ✅ Matches code style
+
+2. **Functional Verification**:
+   - ✅ Files are syntactically correct
+   - ✅ Imports are valid
+   - ✅ Types are properly defined
+   - ✅ No obvious logic errors
+
+3. **Pattern Compliance**:
+   - ✅ Follows architecture patterns
+   - ✅ Uses established components
+   - ✅ Follows naming conventions
+
+### Hallucination Prevention
+
+**Detect and prevent hallucinations**:
+
+1. **File Existence Check**: Verify files exist before referencing
+2. **Pattern Verification**: Verify patterns exist in architecture docs
+3. **API Verification**: Verify API endpoints from existing code
+4. **Type Safety**: Use existing types when possible
+5. **Cross-Reference Check**: Verify imports and file relationships
+
+**When hallucination detected**:
+
+- Stop implementation
+- Show what was detected
+- Ask for clarification
+- Verify with user before proceeding
+
+## Implementation Workflow
+
+### Standard Workflow
+
+1. **Load Master Prompt**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc` at conversation start
+2. **Analyze Request**: Detect intent, find files, apply rules (explicitly)
+3. **Create Plan (Required Gate)**: Comprehensive, file-specific, step-by-step plan with targeted before/after snippets and reasons
+4. **Close Gaps**: Ask clarifying questions until execution-critical gaps are closed
+5. **Implement**: Make changes strictly according to approved plan
+6. **Verify**: Run quality checks
+7. **Update Docs**: Update documentation if applicable
+8. **Show Summary**: Display what was done
+
+### Workflow with Checkpoint
+
+1. **Load Master Prompt**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc`
+2. **Analyze Request**: Detect intent, find files
+3. **Create Plan (Required Gate)**: Comprehensive implementation plan
+4. **Implement**: Make changes strictly according to approved plan
+5. **Pause**: Show summary when drift, complexity, or risk requires review
+6. **Wait**: User reviews and confirms
+7. **Verify**: Run quality checks
+8. **Update Docs**: Update documentation if applicable
+9. **Finalize**: Complete implementation
+
+## Success Criteria
+
+System is successful when:
+
+- ✅ AI understands project context when master prompt is loaded
+- ✅ Plans are produced with exact files, edits, and verification steps
+- ✅ Implementation follows approved plans strictly
+- ✅ Code follows consistent patterns (rules applied via explicit prompts)
+- ✅ Quality gates prevent errors
+- ✅ Hallucination prevention catches invalid references
+- ✅ Developer intervenes when hallucination detected or many files changed
+
+## Migration Map: Cursor → VS Code + Copilot
+
+<!-- markdownlint-disable MD060 -->
+| Cursor Concept                                | VS Code + Copilot Equivalent                                       |
+| --------------------------------------------- | ------------------------------------------------------------------- |
+| `@.cursor/entry-point.mdc`                     | `@VSCODE_COPILOT_INTEGRATION.mdc` (or equivalent master prompt)     |
+| `bun run scripts/setup-cursor-integration.ts` | Manual setup; use VS Code + Copilot extension + this file          |
+| Auto-context from file-index                  | Explicit `@file` or path references in prompts                      |
+| Auto-routing to rules                         | Explicit rule references in prompts (e.g., "Following bug-fix rules...") |
+| Auto-update indexes                           | Manual or script-driven; prompt to update docs when needed          |
+| Cursor Composer                               | Copilot Chat + Inline Chat                                          |
+| `.cursor/` directory                          | Optional `.vscode/` or project-specific docs; use `.mdc` if desired |
+<!-- markdownlint-enable MD060 -->
+
+## Cross-Project Usage
+
+**This file is designed to work across different project types!**
+
+### How to Use in a New Project
+
+1. **Copy this file** to your project root or a `.vscode/` or docs folder
+2. **Open Copilot Chat** and reference this file
+3. **Prompt**: "Analyze the codebase and produce an execution plan for [task] according to @VSCODE_COPILOT_INTEGRATION.mdc"
+4. **Adapt**: The plan will adapt to detected project type, tech stack, and structure
+
+### Supported Project Types
+
+- ✅ **Frontend**: React, Vue, Angular, Svelte, etc.
+- ✅ **Backend**: Node.js, Python, Go, Java, Ruby, etc.
+- ✅ **Full-Stack**: Any combination of frontend + backend
+- ✅ **Mobile**: React Native, Flutter, etc.
+- ✅ **CLI/Tools**: Command-line applications
