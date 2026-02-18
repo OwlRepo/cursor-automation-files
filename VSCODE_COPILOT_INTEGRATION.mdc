@@ -6,11 +6,10 @@
 
 **These rules MUST be followed. Non-compliance must be flagged and corrected.**
 
-### Hard Rule A: Prompt-First Orchestration
+### Hard Rule A: Context Loading
 
-- `@VSCODE_COPILOT_INTEGRATION.mdc` (or equivalent master prompt) MUST be referenced as the first context when starting a new workflow in Copilot Chat.
-- Before planning, implementing, or applying rules, the master prompt must be loaded into the conversation.
-- Usage and workflow sections must explicitly mention prompt-first behavior.
+- **After one-time setup**: `.github/copilot-instructions.md` is auto-loaded for every chat. No `@` references needed—just prompt.
+- **Before setup**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc` at conversation start, or run the one-time setup first.
 
 ### Hard Rule B: Plan-Before-Implement
 
@@ -22,7 +21,7 @@
 
 Before considering any workflow complete:
 
-- [ ] Master prompt was loaded at conversation start
+- [ ] Context was loaded (auto via `.github/copilot-instructions.md` after setup, or via `@VSCODE_COPILOT_INTEGRATION.mdc` before setup)
 - [ ] Plan artifact was created with exact files, edits, reasons, and verification steps
 - [ ] Implementation followed the approved plan strictly
 - [ ] Verification steps were run
@@ -47,24 +46,97 @@ When non-compliance is detected:
 
 3. **Optional but Recommended**
    - **GitHub Copilot Chat**: For conversational AI assistance (often bundled with Copilot)
-   - **@vscode/copilot** workspace context: Ensure Copilot can access relevant files
 
-### Activation Flow
+### One-Time Setup (Enables "Just Prompt" Workflow)
 
-1. Open VS Code and your project folder
-2. Open Copilot Chat (View → Command Palette → "GitHub Copilot: Open Chat" or `Ctrl+Shift+I` / `Cmd+Shift+I`)
-3. Reference this file: `@VSCODE_COPILOT_INTEGRATION.mdc` (or paste its path into the chat)
-4. Describe your intent; the system will guide you through the planning and implementation workflow
+VS Code automatically loads `.github/copilot-instructions.md` for every chat. Create this file once and you can then **just prompt**—no need to reference files, context, or rules manually.
 
-### Recommended Chat Modes
+#### Option A: Prompt the AI to set up (easiest)
+
+1. Copy this file (`VSCODE_COPILOT_INTEGRATION.mdc`) into your project.
+2. Open Copilot Chat (`Ctrl+Shift+I` / `Cmd+Shift+I`).
+3. Reference the file: `@VSCODE_COPILOT_INTEGRATION.mdc`
+4. Prompt: **"Create .github/copilot-instructions.md for this project using the content in the 'File to Create: .github/copilot-instructions.md' section below. This will enable me to just prompt without referencing files or rules."**
+5. The AI will create the file. After that, you can simply describe what you need in every new chat.
+
+#### Option B: Create the file manually
+
+1. Create `.github/` in your project root (if it does not exist).
+2. Create `.github/copilot-instructions.md` and paste the content from the section **"File to Create: .github/copilot-instructions.md"** below.
+
+### After Setup: Just Prompt
+
+Once `.github/copilot-instructions.md` exists, open Copilot Chat and describe your intent. No `@` references needed. Examples:
+
+- "Add pagination to the user list component"
+- "Fix the login form validation bug"
+- "Refactor the API client to use fetch instead of axios"
+
+The AI will automatically: detect intent, find relevant files, apply the planning contract, and guide you through plan → implement → verify.
+
+### Recommended Chat Modes (Before or After Setup)
 
 1. **Planning Prompt**: Use Copilot Chat to produce an execution plan
 2. **Implementation Prompt**: Use Copilot Chat or Inline Chat to apply edits per plan
 3. **Verification Prompt**: Use Copilot Chat to run verification steps and summarize results
 
-## Prompt Orchestration (Replaces Cursor Auto-Routing)
+---
 
-**IMPORTANT**: Unlike Cursor's entry-point system, Copilot does not auto-load rules or files. You must explicitly orchestrate prompts.
+## File to Create: .github/copilot-instructions.md
+
+Create this file in your project root. VS Code will auto-load it for every chat.
+
+```markdown
+# Copilot Workspace Instructions (Auto-Loaded)
+
+This file is automatically applied to all Copilot Chat requests. You can simply describe what you need—no need to reference files, rules, or context manually.
+
+## How to Use
+
+**Just prompt.** Open Copilot Chat and describe your intent. Examples:
+
+- "Add pagination to the user list component"
+- "Fix the login form validation bug"
+- "Refactor the API client to use fetch instead of axios"
+
+The AI will automatically: detect intent, find relevant files, apply the planning contract, and guide you through plan → implement → verify.
+
+## Hard Rules
+
+1. **Plan-Before-Implement**: Never make code edits without an approved execution plan.
+2. **Fact-Based Planning**: Plans must be grounded in existing files and code only. Verify file existence before finalizing.
+3. **Strict Adherence**: Execute exactly against the approved plan. If code drifts, pause and request revised-step approval.
+
+## Workflow
+
+For every request: (1) Detect intent (bug/feature/enhancement/refactor/review). (2) Find relevant files via workspace search. (3) Create plan with exact files, snippets, reasons, verification steps. (4) Wait for approval. (5) Implement strictly per plan. (6) Verify (compile, lint, tests). (7) Update docs when applicable.
+
+## Planning Contract
+
+Plans must include: exact file list, exact code sections, before/after snippets, reason for each edit, verification steps, doc update step when needed. Ask clarifying questions until gaps are closed.
+
+## Intent-Specific Rules
+
+**Bug fix**: Reproduce first, use root-cause analysis, test thoroughly. **Feature**: Follow architecture, use patterns, create types, handle errors. **Enhancement**: Maintain backward compatibility. **Refactor**: Maintain functionality, follow style, run tests. **Code review**: Check patterns, error handling, performance, accessibility.
+
+## Quality Gates
+
+After implementing: compile/type-check, lint, run tests, follow project patterns.
+
+## Hallucination Prevention
+
+Verify files exist. Verify patterns exist. Verify APIs from existing code. Use existing types. Do not invent paths or APIs. When detected: stop, report, ask for clarification.
+
+## Project Context
+
+Before planning, analyze the codebase: project type, tech stack, directory structure, monorepo if present. Adapt plans to match.
+```
+
+---
+
+## Prompt Orchestration (Before Setup, or When .github/copilot-instructions.md Is Not Used)
+
+**If you have not run the one-time setup**, you must explicitly reference this file and add context. After setup, `.github/copilot-instructions.md` is auto-loaded—you can just prompt.
 
 ### Prompt Templates
 
@@ -317,9 +389,8 @@ Use this split to keep planning and execution efficient:
 
 ## Key Principles
 
-- **Prompt-First**: Use `@VSCODE_COPILOT_INTEGRATION.mdc` (or equivalent) as the first context for any workflow
+- **After Setup, Just Prompt**: `.github/copilot-instructions.md` auto-loads; no need to reference files, rules, or context
 - **Plan-Before-Implement**: Always produce and approve a plan artifact before any code edits
-- **Explicit Orchestration**: You must explicitly reference rules, files, and context; Copilot does not auto-load them
 - **Stepwise Execution**: For complex changes, apply edits in steps and verify between steps
 - **Fact-Based**: Plans must be grounded in existing files and code only
 - **Hallucination Prevention**: Verify file existence, patterns, and APIs before implementing
@@ -409,10 +480,10 @@ System is successful when:
 <!-- markdownlint-disable MD060 -->
 | Cursor Concept                                | VS Code + Copilot Equivalent                                       |
 | --------------------------------------------- | ------------------------------------------------------------------- |
-| `@.cursor/entry-point.mdc`                     | `@VSCODE_COPILOT_INTEGRATION.mdc` (or equivalent master prompt)     |
-| `bun run scripts/setup-cursor-integration.ts` | Manual setup; use VS Code + Copilot extension + this file          |
-| Auto-context from file-index                  | Explicit `@file` or path references in prompts                      |
-| Auto-routing to rules                         | Explicit rule references in prompts (e.g., "Following bug-fix rules...") |
+| `@.cursor/entry-point.mdc`                     | `.github/copilot-instructions.md` (auto-loaded after one-time setup) |
+| `bun run scripts/setup-cursor-integration.ts` | Prompt AI: "Create .github/copilot-instructions.md per VSCODE_COPILOT_INTEGRATION.mdc" |
+| Auto-context from file-index                  | After setup: auto via copilot-instructions; AI searches workspace   |
+| Auto-routing to rules                         | After setup: rules embedded in copilot-instructions; auto-applied   |
 | Auto-update indexes                           | Manual or script-driven; prompt to update docs when needed          |
 | Cursor Composer                               | Copilot Chat + Inline Chat                                          |
 | `.cursor/` directory                          | Optional `.vscode/` or project-specific docs; use `.mdc` if desired |

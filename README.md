@@ -30,7 +30,7 @@ This repository contains two master prompt files that act as "instruction manual
 | File | Purpose |
 |------|---------|
 | **CURSOR_INTEGRATION.mdc** | For Cursor users. Uses an entry-point that auto-loads rules, file indexes, and architecture docs. You describe what you need; the system routes automatically. |
-| **VSCODE_COPILOT_INTEGRATION.mdc** | For VS Code + GitHub Copilot users. Uses explicit prompt orchestration. You reference the file and add context (files, rules) as needed. |
+| **VSCODE_COPILOT_INTEGRATION.mdc** | For VS Code + GitHub Copilot users. After one-time setup, `.github/copilot-instructions.md` auto-loads—you just prompt. No files or rules to reference. |
 <!-- markdownlint-enable MD060 -->
 
 **Shared concepts** in both files:
@@ -55,7 +55,7 @@ This repository contains two master prompt files that act as "instruction manual
 | **Plan gate** | A checkpoint: no code edits until you approve a written plan with exact files and edits. |
 | **Planning contract** | The plan must include: file list, code snippets (before/after), reasons, and verification steps. |
 | **Auto-routing** | (Cursor only) The system figures out which rules and docs apply to your request without you specifying them. |
-| **Explicit orchestration** | (Copilot) You must tell the AI which files and rules to use; it does not auto-load context. |
+| **copilot-instructions.md** | (VS Code) `.github/copilot-instructions.md` auto-loads for every chat. After setup, you just prompt—no @ references needed. |
 | **File-index** | A catalog of your project’s files (components, hooks, routes, etc.) so the AI knows where things live. |
 | **Quality gates** | Automated checks (compile, lint, tests) that run after changes to catch errors early. |
 <!-- markdownlint-enable MD060 -->
@@ -81,7 +81,7 @@ This repository contains two master prompt files that act as "instruction manual
 **Main difference**: How context and rules are loaded.
 
 - **Cursor**: Entry-point auto-loads rules and file indexes; you describe intent and the system routes automatically.
-- **VS Code + Copilot**: You explicitly reference the master prompt and add file/rule context in your prompts; Copilot does not auto-load.
+- **VS Code + Copilot**: After one-time setup, `.github/copilot-instructions.md` auto-loads—you just prompt. Before setup, reference the integration file.
 
 ---
 
@@ -101,12 +101,14 @@ This repository contains two master prompt files that act as "instruction manual
 
 **Prerequisites**: VS Code and a GitHub account with Copilot access.
 
-1. Install [VS Code](https://code.visualstudio.com/) and the [GitHub Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) extension.
-2. Sign in with your GitHub account in VS Code.
-3. Copy `VSCODE_COPILOT_INTEGRATION.mdc` to your project root or a docs folder.
-4. Open Copilot Chat: `Ctrl+Shift+I` (Windows/Linux) or `Cmd+Shift+I` (macOS).
-5. Reference the file: `@VSCODE_COPILOT_INTEGRATION.mdc`
-6. Describe your task and ask for a plan first. After approval, ask for implementation and verification.
+**One-time setup** (enables "just prompt" workflow):
+
+1. Install [VS Code](https://code.visualstudio.com/) and the [GitHub Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) extension. Sign in.
+2. Copy `VSCODE_COPILOT_INTEGRATION.mdc` to your project.
+3. Open Copilot Chat (`Ctrl+Shift+I` / `Cmd+Shift+I`), reference `@VSCODE_COPILOT_INTEGRATION.mdc`, and prompt: **"Create .github/copilot-instructions.md for this project using the content in the 'File to Create' section. This will let me just prompt without referencing files or rules."**
+4. The AI creates the file. Done.
+
+**After setup**: Open Copilot Chat and describe what you need. No `@` references required. The AI will detect intent, find files, create a plan, and guide you through implementation.
 
 ---
 
@@ -274,43 +276,35 @@ Analyze the codebase and regenerate all .cursor/ files according to @CURSOR_INTE
 
 ### Using VSCODE_COPILOT_INTEGRATION.mdc
 
-**Best for**: VS Code + GitHub Copilot users who want structured planning and implementation with explicit control over context.
+**Best for**: VS Code + GitHub Copilot users who want to "just prompt" without thinking about files, context, or rules.
 
-**When to use**: You develop in VS Code with Copilot and prefer to specify which files and rules the AI should use.
+**One-time setup**:
 
-**Step-by-step**:
+1. Copy `VSCODE_COPILOT_INTEGRATION.mdc` into your project.
+2. Open Copilot Chat, reference `@VSCODE_COPILOT_INTEGRATION.mdc`, and prompt: **"Create .github/copilot-instructions.md for this project using the content in the 'File to Create' section."**
+3. The AI creates the file. VS Code will auto-load it for every chat.
 
-1. Copy `VSCODE_COPILOT_INTEGRATION.mdc` into your project root or docs folder.
-2. Open Copilot Chat: `Ctrl+Shift+I` (Windows/Linux) or `Cmd+Shift+I` (macOS).
-3. Start every new workflow by referencing the file: `@VSCODE_COPILOT_INTEGRATION.mdc`
-4. **Planning phase**: Ask for an execution plan with exact files, edits, and verification steps.
-5. Review and approve the plan before any edits.
-6. **Implementation phase**: Ask Copilot to apply the plan—one step at a time for complex changes, or the full plan for simple ones.
-7. **Verification phase**: Run compile, lint, and tests; confirm the changes match the plan.
+**After setup—just prompt**:
 
-**Example prompts**:
+1. Open Copilot Chat (`Ctrl+Shift+I` / `Cmd+Shift+I`).
+2. Describe what you need. No `@` references required.
+3. The AI will detect intent, find relevant files, create a plan, and guide you through implementation and verification.
 
-**Planning**:
+**Example prompts** (after setup):
 
 ```text
-@VSCODE_COPILOT_INTEGRATION.mdc
-
-I need to add pagination to the user list component. Following the Planning Contract, produce an execution plan with exact files, before/after snippets, and verification steps.
+Add pagination to the user list component. The API returns total count and page size.
 ```
-
-**Implementation** (after plan approved):
 
 ```text
-Here is the approved plan: [paste plan]. Implement step 1 only.
+Fix the login form validation bug—the email field accepts invalid formats.
 ```
-
-**Verification**:
 
 ```text
-Run verification: compile, lint, and confirm we follow project patterns.
+Refactor the API client to use fetch instead of axios.
 ```
 
-**Notes**: Copilot does not auto-load rules or file-indexes. Include relevant file paths or `@file` references when you need context. Use the prompt templates in the integration file for planning, implementation, and verification.
+**Notes**: After setup, `.github/copilot-instructions.md` is auto-loaded. You do not need to reference files, rules, or the integration file. If you have not run setup, reference `@VSCODE_COPILOT_INTEGRATION.mdc` and use the prompt templates in that file.
 
 ---
 
@@ -341,8 +335,8 @@ cursor-automation-files/
 |-----------|---------|
 | **Audience** | VS Code + GitHub Copilot users |
 | **Assumes** | VS Code, Copilot extension, explicit prompt orchestration |
-| **Setup** | Manual; no scripts required |
-| **Workflow** | Prompt-first; explicit rule and file references; plan-before-implement |
+| **Setup** | One-time: prompt AI to create `.github/copilot-instructions.md` (content in integration file) |
+| **Workflow** | After setup: just prompt; auto-loaded instructions handle intent, rules, and context |
 <!-- markdownlint-enable MD060 -->
 
 ---
@@ -392,6 +386,7 @@ If you switch editors, use the **Migration Map** in `VSCODE_COPILOT_INTEGRATION.
 | Auto-context from file-index   | Explicit `@file` or path references  |
 | Auto-routing to rules          | Explicit rule references in prompts  |
 | Cursor Composer                | Copilot Chat + Inline Chat           |
+| Just describe intent           | Same after setup; copilot-instructions auto-loads |
 <!-- markdownlint-enable MD060 -->
 
 ---
