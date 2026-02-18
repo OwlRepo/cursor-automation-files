@@ -7,6 +7,7 @@ Reusable master prompts and integration specs for AI-assisted development in **C
 ## Table of Contents
 
 - [What This Repository Provides](#what-this-repository-provides)
+- [Expected Outcomes & Business Value](#expected-outcomes--business-value)
 - [Key Concepts (In Plain English)](#key-concepts-in-plain-english)
 - [Which File to Use](#which-file-to-use)
 - [Quick Start](#quick-start)
@@ -43,6 +44,24 @@ This repository contains two master prompt files that act as "instruction manual
 - **Update triggers** – When and how to update documentation when code changes (component→components-index, hook→hooks-index, etc.).
 
 **How to use**: Copy the relevant file into your project and reference it when starting AI-assisted workflows.
+
+---
+
+## Expected Outcomes & Business Value
+
+Research shows that structured prompts (plan-first, context-aware, rule-grounded) tend to improve AI code generation quality compared to ad-hoc prompting. When implemented as intended, these integration files typically deliver:
+
+<!-- markdownlint-disable MD060 -->
+| Aspect | With Integration | Ad-hoc prompting |
+|--------|------------------|------------------|
+| **Plan adherence** | Plan gate ensures edits match intent; drift is caught early | Edits often diverge; more back-and-forth |
+| **Context accuracy** | File-index and architecture keep AI grounded in your codebase | AI guesses file locations; more wrong-file edits |
+| **Rework cycles** | Fewer—plan approval reduces trial-and-error | More—implement-first leads to redo loops |
+| **Onboarding** | New devs (and AI) get consistent workflow and docs | Each session starts from scratch |
+| **Maintenance** | Update triggers keep docs in sync with code | Docs drift; AI uses stale context |
+<!-- markdownlint-enable MD060 -->
+
+**Business impact**: Teams typically see faster iteration (less rework), fewer "AI went off-track" moments, and better consistency across sessions. Results vary by project size, team discipline, and how well docs are kept up to date.
 
 ---
 
