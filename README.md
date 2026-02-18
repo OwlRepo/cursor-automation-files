@@ -37,9 +37,10 @@ This repository contains two master prompt files that act as "instruction manual
 
 - **Planning contract** – A plan must list exact files, edits, and verification steps before any code changes.
 - **Quality gates** – Compile, lint, and pattern checks run after implementation.
-- **Project detection** – The AI analyzes your codebase to adapt to frontend, backend, full-stack, etc.
-- **File specifications** – Guidance for architecture docs, file indexes, and rules.
-- **Maintenance triggers** – When and how to update documentation when code changes.
+- **Project detection** – The AI analyzes your codebase to adapt to frontend, backend, full-stack, monorepo, etc.
+- **File specifications** – Full structure: architecture (8–10 files), file-index (6–9 files), debugging (4 files), rules (7 files), maintenance (3 files).
+- **When to ask questions** – Ask clarifying questions when requirements are ambiguous, critical info is missing, or changes are high-risk. Proceed automatically when requirements are clear and changes are low-risk.
+- **Update triggers** – When and how to update documentation when code changes (component→components-index, hook→hooks-index, etc.).
 
 **How to use**: Copy the relevant file into your project and reference it when starting AI-assisted workflows.
 
@@ -55,7 +56,7 @@ This repository contains two master prompt files that act as "instruction manual
 | **Plan gate** | A checkpoint: no code edits until you approve a written plan with exact files and edits. |
 | **Planning contract** | The plan must include: file list, code snippets (before/after), reasons, and verification steps. |
 | **Auto-routing** | (Cursor only) The system figures out which rules and docs apply to your request without you specifying them. |
-| **copilot-instructions.md** | (VS Code) `.github/copilot-instructions.md` auto-loads for every chat. After setup, you just prompt—no @ references needed. |
+| **copilot-instructions.md** | (VS Code) `.github/copilot-instructions.md` auto-loads for every chat. Instructs AI to read `.github/docs/` (file-index, rules, architecture). Same behavior as Cursor entry-point. |
 | **File-index** | A catalog of your project’s files (components, hooks, routes, etc.) so the AI knows where things live. |
 | **Quality gates** | Automated checks (compile, lint, tests) that run after changes to catch errors early. |
 <!-- markdownlint-enable MD060 -->
@@ -138,6 +139,8 @@ flowchart TD
 
 ### Context Loading: Cursor vs VS Code + Copilot
 
+After setup, both work the same way. Before setup, Copilot requires explicit references.
+
 ```mermaid
 flowchart TB
     subgraph cursor [Cursor Path]
@@ -147,10 +150,10 @@ flowchart TB
         C4 --> C5[Plan generated]
     end
 
-    subgraph copilot [VS Code + Copilot Path]
-        P1[User references master prompt] --> P2[User adds file or path refs]
-        P2 --> P3[Explicit rule references in prompt]
-        P3 --> P4[Prompt templates for plan/verify]
+    subgraph copilot [VS Code + Copilot Path - After Setup]
+        P1[User describes intent] --> P2[copilot-instructions auto-loads]
+        P2 --> P3[Reads .github/docs/file-index + rules + architecture]
+        P3 --> P4[Auto-routing based on detected intent]
         P4 --> P5[Plan generated]
     end
 
@@ -167,7 +170,7 @@ flowchart TD
     Start([User starts task]) --> LoadMaster[Load integration file]
     LoadMaster --> Context{Context loading}
     Context -->|Cursor| Auto[Auto: entry-point loads rules, file-index, architecture]
-    Context -->|Copilot| Explicit[Explicit: user references files and rules in prompts]
+    Context -->|Copilot| Explicit[After setup: copilot-instructions + .github/docs/ used automatically]
 
     Auto --> DetectIntent[Detect intent: bug/feature/enhancement/refactor/review]
     Explicit --> DetectIntent
@@ -230,11 +233,12 @@ Both integrations follow the same four-phase workflow. Each phase has a clear pu
 
 **Goal**: Keep docs in sync with code.
 
-**When to update**:
+**When to update** (see Update Triggers in each integration file):
 
-- New files → Update file-index (components, hooks, routes, etc.)
-- New features or patterns → Update architecture docs
-- Bug fixes → Add to common-issues if it’s a recurring problem
+- **New files**: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index
+- **New features or patterns** → Update architecture docs (module-structure, routing, state-management, etc.)
+- **Breaking changes** → Update overview, tech-stack, add to common-issues if migration needed
+- **Bug fixes** → Add to common-issues if it's a recurring problem
 
 ---
 
@@ -314,7 +318,7 @@ Refactor the API client to use fetch instead of axios.
 cursor-automation-files/
 ├── README.md                      # This file – onboarding and usage
 ├── CURSOR_INTEGRATION.mdc         # Cursor master prompt (entry-point, .cursor/ structure)
-└── VSCODE_COPILOT_INTEGRATION.mdc  # VS Code + Copilot master prompt (prompt-first, plan-before-implement)
+└── VSCODE_COPILOT_INTEGRATION.mdc  # VS Code + Copilot master prompt (full structure same as Cursor)
 ```
 
 ### CURSOR_INTEGRATION.mdc
@@ -334,7 +338,7 @@ cursor-automation-files/
 | Attribute | Details |
 |-----------|---------|
 | **Audience** | VS Code + GitHub Copilot users |
-| **Assumes** | VS Code, Copilot extension, explicit prompt orchestration |
+| **Assumes** | VS Code, Copilot extension; after setup: `.github/docs/` (same structure as `.cursor/`) |
 | **Setup** | One-time: prompt AI to regenerate all `.github/` files (copilot-instructions + full docs structure) |
 | **Workflow** | After setup: just prompt; same as Cursor—file-index, rules, architecture used automatically |
 <!-- markdownlint-enable MD060 -->
@@ -394,13 +398,13 @@ If you switch editors, use the **Migration Map** in `VSCODE_COPILOT_INTEGRATION.
 
 ## Tips for Success
 
-1. **Always load the master prompt first** – Start every new workflow by referencing the integration file. This sets the AI’s behavior for the session.
+1. **Run setup first** – For Cursor, use the setup script or regenerate `.cursor/`. For Copilot, prompt the AI to regenerate all `.github/` files. Full structure enables "just prompt" workflow.
 2. **Never skip the plan** – Approve a concrete plan before any code edits. It reduces errors and keeps changes focused.
 3. **Be specific about intent** – "Add pagination to the user list" is better than "improve the list." Specificity improves plan quality.
 4. **Verify after changes** – Run compile, lint, and tests. Don’t assume the AI got everything right.
-5. **For Copilot: add context explicitly** – Reference files, paths, or rules when the AI needs them. Copilot does not auto-load.
+5. **After setup, just prompt** – Both Cursor and Copilot use file-index and rules automatically. No need to reference files or rules manually.
 6. **For complex changes: go step by step** – Approve and implement one phase at a time instead of the full plan in one shot.
-7. **Update docs when code changes** – Keep file-index and architecture docs in sync so future prompts have accurate context.
+7. **Update docs when code changes** – Prompt the AI to update file-index and architecture per the Update Triggers. Keeps future prompts accurate.
 
 ---
 
@@ -416,7 +420,7 @@ A: Yes. For Cursor, reference `CURSOR_INTEGRATION.mdc` directly. For Copilot, re
 A: Pause and ask for a revised step. The integration files specify: if code drifts from the plan, stop and request approval before continuing.
 
 **Q: How do I know which rules apply to my request?**  
-A: In Cursor, the entry-point auto-routes. In Copilot, check the integration file for rule names and reference them explicitly in your prompt (e.g., "Following the bug-fix rules...").
+A: After setup, both auto-route: the AI detects intent (bug/feature/enhancement/refactor/review) and applies the relevant rules automatically. Before Copilot setup, reference `@VSCODE_COPILOT_INTEGRATION.mdc` and use the prompt templates.
 
 **Q: Are these files only for JavaScript/TypeScript projects?**  
 A: No. They support frontend, backend, full-stack, mobile, and CLI projects. Project detection adapts to your stack (React, Vue, Python, Go, etc.).
