@@ -17,6 +17,13 @@
 - Copilot Chat should be used for planning; Inline Chat or manual edits follow the approved plan.
 - Never implement changes without a concrete, file-specific plan artifact.
 
+### Hard Rule C: Update File Indexers After Code Change
+
+- **MANDATORY**: After ANY code change (add, modify, rename, delete, move), the relevant file-index files MUST be updated before the workflow is complete.
+- Use the Update Triggers mapping: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index.
+- Do not skip this step. Stale file-index causes knowledge drift and degrades AI accuracy on future prompts.
+- Plans MUST include an explicit "Update file-index" step when source files are added or modified.
+
 ### Verification Checklist
 
 Before considering any workflow complete:
@@ -25,6 +32,7 @@ Before considering any workflow complete:
 - [ ] Plan artifact was created with exact files, edits, reasons, and verification steps
 - [ ] Implementation followed the approved plan strictly
 - [ ] Verification steps were run
+- [ ] File-index was updated when source files were added, modified, renamed, deleted, or moved (see Update Triggers)
 
 ### Non-Compliance
 
@@ -32,6 +40,7 @@ When non-compliance is detected:
 
 - **If plan is bypassed**: Do not proceed; require a plan artifact before any edits.
 - **If edits drift from plan**: Pause, report mismatch, request revised-step approval.
+- **If file-index not updated after code change**: Do not consider the workflow complete; update the relevant `.github/docs/file-index/` files per Update Triggers before finishing.
 
 ## Quick Setup
 
@@ -102,14 +111,15 @@ The AI will automatically: detect intent, find relevant files, apply the plannin
 1. **Plan-Before-Implement**: Never make code edits without an approved execution plan.
 2. **Fact-Based Planning**: Plans must be grounded in existing files and code only. Verify file existence before finalizing.
 3. **Strict Adherence**: Execute exactly against the approved plan. If code drifts, pause and request revised-step approval.
+4. **Update File-Index After Code Change (MANDATORY)**: After ANY code change (add, modify, rename, delete, move), you MUST update the relevant `.github/docs/file-index/` files before finishing. Use: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Do not skip. Stale indexes cause knowledge drift.
 
 ## Workflow (Same as Cursor Entry-Point)
 
-For every request: (1) Detect intent from keywords and context (bug/feature/enhancement/refactor/review). (2) Find relevant files: read [.github/docs/file-index/](.github/docs/file-index/) when it exists—use src-index, components-index, hooks-index, routes-index, stores-index, utils-index, controllers-index, services-index, models-index (adapt to what exists); otherwise use workspace search. (3) Apply rules: read [.github/docs/rules/](.github/docs/rules/) for the detected intent (bug-fix, feature-implementation, enhancement, refactoring, code-review, testing). (4) Include architecture: read [.github/docs/architecture/](.github/docs/architecture/) for patterns. (5) Create plan with exact files, snippets, reasons, verification steps. (6) Wait for approval. (7) Implement strictly per plan. (8) Verify (compile, lint, tests). (9) Update docs when adding or modifying files: see Update Triggers in VSCODE_COPILOT_INTEGRATION.mdc (component→components-index+src-index; hook→hooks-index+src-index; etc.).
+For every request: (1) Detect intent from keywords and context (bug/feature/enhancement/refactor/review). (2) Find relevant files: read [.github/docs/file-index/](.github/docs/file-index/) when it exists—use src-index, components-index, hooks-index, routes-index, stores-index, utils-index, controllers-index, services-index, models-index (adapt to what exists); otherwise use workspace search. (3) Apply rules: read [.github/docs/rules/](.github/docs/rules/) for the detected intent (bug-fix, feature-implementation, enhancement, refactoring, code-review, testing). (4) Include architecture: read [.github/docs/architecture/](.github/docs/architecture/) for patterns. (5) Create plan with exact files, snippets, reasons, verification steps, **and an explicit "Update file-index" step** when source files will be added or modified. (6) Wait for approval. (7) Implement strictly per plan. (8) Verify (compile, lint, tests). (9) **MANDATORY**: Update `.github/docs/file-index/` per the mapping above when you added, modified, renamed, deleted, or moved any source file. Do not consider the workflow complete until file-index is updated.
 
 ## Planning Contract
 
-Plans must include: exact file list, exact code sections, before/after snippets, reason for each edit, verification steps, doc update step when needed. Ask clarifying questions until gaps are closed.
+Plans must include: exact file list, exact code sections, before/after snippets, reason for each edit, verification steps, **and an explicit file-index update step** when adding or modifying source files (component→components-index+src-index; hook→hooks-index+src-index; etc.). Ask clarifying questions until gaps are closed.
 
 ## When to Ask Questions vs. Proceed
 
@@ -126,6 +136,10 @@ After implementing: compile/type-check, lint, run tests, follow project patterns
 ## Hallucination Prevention
 
 Verify files exist. Verify patterns exist. Verify APIs from existing code. Use existing types. Do not invent paths or APIs. When detected: stop, report, ask for clarification.
+
+## Update Triggers (File-Index Mapping)
+
+When you add, modify, rename, delete, or move source files, update these `.github/docs/file-index/` files: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Adapt to what exists in the project.
 
 ## Project Context
 
@@ -618,7 +632,7 @@ See `maintenance/update-workflow.md` for detailed workflow.
 - Mention specific documentation files
 - Intervene unless AI hallucinates or many files need review
 
-**copilot-instructions.md is the entry point**: It automatically instructs the AI to detect intent, find files via file-index, apply rules, include architecture docs, create plans, implement, verify, and update docs.
+**copilot-instructions.md is the entry point**: It automatically instructs the AI to detect intent, find files via file-index, apply rules, include architecture docs, create plans, implement, verify, and **mandatorily update file-index** when code changes (Hard Rule C).
 
 **Users can simply describe what they need**—the system handles everything automatically, from planning to implementation to verification, while requiring a complete plan artifact before edits.
 
@@ -681,6 +695,10 @@ After implementing changes:
    - ✅ Uses established components
    - ✅ Follows naming conventions
 
+4. **File-Index Update (MANDATORY when code changed)**:
+   - ✅ Relevant `.github/docs/file-index/` files updated per Update Triggers
+   - ✅ Workflow not complete until file-index reflects all code changes
+
 ### Hallucination Prevention
 
 **Detect and prevent hallucinations**:
@@ -708,7 +726,7 @@ After implementing changes:
 4. **Close Gaps**: Ask clarifying questions until execution-critical gaps are closed
 5. **Implement**: Make changes strictly according to approved plan
 6. **Verify**: Run quality checks
-7. **Update Docs**: Update documentation if applicable
+7. **Update File-Index (MANDATORY)**: When source files were added, modified, renamed, deleted, or moved, update `.github/docs/file-index/` per Update Triggers. Do not skip.
 8. **Show Summary**: Display what was done
 
 ### Workflow with Checkpoint
