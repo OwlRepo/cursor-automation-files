@@ -6,10 +6,12 @@
 
 **These rules MUST be followed. Non-compliance must be flagged and corrected.**
 
-### Hard Rule A: Context Loading
+### Hard Rule A: Entry-Point-First
 
-- **After one-time setup**: `.github/copilot-instructions.md` is auto-loaded for every chat. No `@` references needed—just prompt.
-- **Before setup**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc` at conversation start, or run the one-time setup first.
+- **Every prompt MUST enter through the entry-point**. No planning, implementing, or applying rules without it.
+- **After one-time setup**: `.github/copilot-instructions.md` is the entry-point. VS Code auto-loads it for every chat—every prompt enters through it. No `@` references needed.
+- **Before setup**: `@VSCODE_COPILOT_INTEGRATION.mdc` is the entry-point. Reference it as the first context at conversation start, or run the one-time setup first.
+- Usage and workflow sections must explicitly mention entry-point-first behavior.
 
 ### Hard Rule B: Plan-Before-Implement
 
@@ -29,7 +31,7 @@
 
 Before considering any workflow complete:
 
-- [ ] Context was loaded (auto via `.github/copilot-instructions.md` after setup, or via `@VSCODE_COPILOT_INTEGRATION.mdc` before setup)
+- [ ] Entry-point was used (auto via `.github/copilot-instructions.md` after setup, or `@VSCODE_COPILOT_INTEGRATION.mdc` before setup)
 - [ ] Plan artifact was created with exact files, edits, reasons, and verification steps
 - [ ] Implementation followed the approved plan strictly
 - [ ] Verification steps were run
@@ -39,6 +41,7 @@ Before considering any workflow complete:
 
 When non-compliance is detected:
 
+- **If entry-point is bypassed**: Do not proceed; require `.github/copilot-instructions.md` (after setup) or `@VSCODE_COPILOT_INTEGRATION.mdc` (before setup) as the first context for the prompt.
 - **If plan is bypassed**: Do not proceed; require a plan artifact before any edits.
 - **If edits drift from plan**: Pause, report mismatch, request revised-step approval.
 - **If file-index not updated after code change**: Do not consider the workflow complete; update the relevant `.github/docs/file-index/` files per Update Triggers before finishing.
@@ -93,9 +96,9 @@ The AI will automatically: detect intent, find relevant files, apply the plannin
 Create this file in your project root. VS Code will auto-load it for every chat.
 
 ```markdown
-# Copilot Workspace Instructions (Auto-Loaded)
+# Copilot Workspace Instructions (Auto-Loaded Entry-Point)
 
-This file is automatically applied to all Copilot Chat requests. You can simply describe what you need—no need to reference files, rules, or context manually.
+This file is the **entry-point**. Every Copilot Chat prompt MUST enter through this file. VS Code auto-loads it for every chat—do not proceed without it. No planning, implementing, or applying rules without these instructions.
 
 ## How to Use
 
@@ -109,10 +112,11 @@ The AI will automatically: detect intent, find relevant files, apply the plannin
 
 ## Hard Rules
 
-1. **Plan-Before-Implement**: Never make code edits without an approved execution plan.
-2. **Fact-Based Planning**: Plans must be grounded in existing files and code only. Verify file existence before finalizing.
-3. **Strict Adherence**: Execute exactly against the approved plan. If code drifts, pause and request revised-step approval.
-4. **Update File-Index After Code Change (MANDATORY)**: After ANY code change (add, modify, rename, delete, move), you MUST update the relevant `.github/docs/file-index/` files before finishing. **You (the AI) perform the update**—do not delegate to scripts or external tools. You already know what you changed. Use: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Do not skip. Stale indexes cause knowledge drift.
+1. **Entry-Point-First**: This file is the entry-point. Every prompt enters through it. Do not bypass. No work without these instructions.
+2. **Plan-Before-Implement**: Never make code edits without an approved execution plan.
+3. **Fact-Based Planning**: Plans must be grounded in existing files and code only. Verify file existence before finalizing.
+4. **Strict Adherence**: Execute exactly against the approved plan. If code drifts, pause and request revised-step approval.
+5. **Update File-Index After Code Change (MANDATORY)**: After ANY code change (add, modify, rename, delete, move), you MUST update the relevant `.github/docs/file-index/` files before finishing. **You (the AI) perform the update**—do not delegate to scripts or external tools. You already know what you changed. Use: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Do not skip. Stale indexes cause knowledge drift.
 
 ## Workflow (Same as Cursor Entry-Point)
 
@@ -199,7 +203,7 @@ Before planning, read [.github/docs/architecture/](.github/docs/architecture/) w
 
 ## Prompt Orchestration (Before Setup, or When .github/copilot-instructions.md Is Not Used)
 
-**If you have not run the one-time setup**, you must explicitly reference this file and add context. After setup, `.github/copilot-instructions.md` is auto-loaded—you can just prompt.
+**If you have not run the one-time setup**, you must use `@VSCODE_COPILOT_INTEGRATION.mdc` as the entry-point (Hard Rule A)—reference it as the first context at conversation start. After setup, `.github/copilot-instructions.md` is the entry-point and auto-loads—every prompt enters through it.
 
 ### Prompt Templates
 
@@ -237,7 +241,7 @@ Run verification for the changes we just made:
 
 ### Checklist for Prompt Orchestration
 
-- [ ] Load master prompt at start of conversation
+- [ ] Load entry-point at start (Hard Rule A: `@VSCODE_COPILOT_INTEGRATION.mdc` before setup, or `.github/copilot-instructions.md` auto-loaded after setup)
 - [ ] Detect intent (bug/feature/enhancement/refactor/review)
 - [ ] Include relevant file paths or `@file` references for context
 - [ ] Request plan artifact before implementation
@@ -633,7 +637,7 @@ See `maintenance/update-workflow.md` for detailed workflow.
 - Mention specific documentation files
 - Intervene unless AI hallucinates or many files need review
 
-**copilot-instructions.md is the entry point**: It automatically instructs the AI to detect intent, find files via file-index, apply rules, include architecture docs, create plans, implement, verify, and **mandatorily update file-index** when code changes (Hard Rule C).
+**copilot-instructions.md is the entry-point (Hard Rule A)**: Every prompt must enter through it. It automatically instructs the AI to detect intent, find files via file-index, apply rules, include architecture docs, create plans, implement, verify, and **mandatorily update file-index** when code changes (Hard Rule C).
 
 **Users can simply describe what they need**—the system handles everything automatically, from planning to implementation to verification, while requiring a complete plan artifact before edits.
 
@@ -661,7 +665,7 @@ data and store it in IndexedDB for the live-data-table component
 
 ## Key Principles
 
-- **Entry-Point Equivalent**: `.github/copilot-instructions.md` auto-loads; no need to reference files, rules, or context
+- **Entry-Point-First (Hard Rule A)**: `.github/copilot-instructions.md` is the entry-point; every prompt must enter through it. VS Code auto-loads it.
 - **Plan-Before-Implement**: Always produce and approve a plan artifact before any code edits
 - **Fully Automatic**: File-index, rules, and architecture are used automatically when planning
 - **Cross-Functional**: Rules work together; copilot-instructions orchestrates routing
@@ -721,7 +725,7 @@ After implementing changes:
 
 ### Standard Workflow
 
-1. **Load Master Prompt**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc` at conversation start
+1. **Load Entry-Point (Hard Rule A)**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc` as the first context at conversation start (before setup); after setup, `.github/copilot-instructions.md` auto-loads
 2. **Analyze Request**: Detect intent, find files, apply rules (explicitly)
 3. **Create Plan (Required Gate)**: Comprehensive, file-specific, step-by-step plan with targeted before/after snippets and reasons
 4. **Close Gaps**: Ask clarifying questions until execution-critical gaps are closed
@@ -732,7 +736,7 @@ After implementing changes:
 
 ### Workflow with Checkpoint
 
-1. **Load Master Prompt**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc`
+1. **Load Entry-Point (Hard Rule A)**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc` as first context
 2. **Analyze Request**: Detect intent, find files
 3. **Create Plan (Required Gate)**: Comprehensive implementation plan
 4. **Implement**: Make changes strictly according to approved plan

@@ -14,6 +14,7 @@
 
 ### Hard Rule B: Entry-Point-First
 
+- **Every prompt MUST enter through the entry-point**. No planning, implementing, or applying rules without it.
 - `@.cursor/entry-point.mdc` MUST always be used as the first prompt entrypoint for any workflow.
 - Before planning, implementing, or applying rules, the entry point must be loaded.
 - Usage and workflow sections must explicitly mention entrypoint-first behavior.
