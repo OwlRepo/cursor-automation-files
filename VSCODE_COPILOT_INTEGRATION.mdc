@@ -20,6 +20,7 @@
 ### Hard Rule C: Update File Indexers After Code Change
 
 - **MANDATORY**: After ANY code change (add, modify, rename, delete, move), the relevant file-index files MUST be updated before the workflow is complete.
+- **AI performs the update**: The AI that made the code changes MUST update the file-index files directly. Do not delegate to scripts, pre-commit hooks, or external tools. The AI already knows what it changed and which index files to update.
 - Use the Update Triggers mapping: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index.
 - Do not skip this step. Stale file-index causes knowledge drift and degrades AI accuracy on future prompts.
 - Plans MUST include an explicit "Update file-index" step when source files are added or modified.
@@ -111,7 +112,7 @@ The AI will automatically: detect intent, find relevant files, apply the plannin
 1. **Plan-Before-Implement**: Never make code edits without an approved execution plan.
 2. **Fact-Based Planning**: Plans must be grounded in existing files and code only. Verify file existence before finalizing.
 3. **Strict Adherence**: Execute exactly against the approved plan. If code drifts, pause and request revised-step approval.
-4. **Update File-Index After Code Change (MANDATORY)**: After ANY code change (add, modify, rename, delete, move), you MUST update the relevant `.github/docs/file-index/` files before finishing. Use: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Do not skip. Stale indexes cause knowledge drift.
+4. **Update File-Index After Code Change (MANDATORY)**: After ANY code change (add, modify, rename, delete, move), you MUST update the relevant `.github/docs/file-index/` files before finishing. **You (the AI) perform the update**—do not delegate to scripts or external tools. You already know what you changed. Use: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Do not skip. Stale indexes cause knowledge drift.
 
 ## Workflow (Same as Cursor Entry-Point)
 
@@ -139,7 +140,7 @@ Verify files exist. Verify patterns exist. Verify APIs from existing code. Use e
 
 ## Update Triggers (File-Index Mapping)
 
-When you add, modify, rename, delete, or move source files, update these `.github/docs/file-index/` files: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Adapt to what exists in the project.
+When you add, modify, rename, delete, or move source files, **you (the AI) must update** these `.github/docs/file-index/` files directly—do not use scripts or external tools. Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Adapt to what exists in the project.
 
 ## Project Context
 
@@ -571,7 +572,7 @@ Use this split to keep planning and execution efficient:
 
 ## Update Triggers & Maintenance
 
-Same as CURSOR_INTEGRATION.mdc. When adding or modifying code, update the relevant `.github/docs/` files.
+Same as CURSOR_INTEGRATION.mdc. When adding or modifying code, update the relevant `.github/docs/` files. **Hard rule**: The AI performs all file-index updates directly—no scripts, pre-commit hooks, or external tools. The AI knows what it changed.
 
 ### Automatic Update Triggers
 
@@ -696,8 +697,8 @@ After implementing changes:
    - ✅ Follows naming conventions
 
 4. **File-Index Update (MANDATORY when code changed)**:
-   - ✅ Relevant `.github/docs/file-index/` files updated per Update Triggers
-   - ✅ Workflow not complete until file-index reflects all code changes
+   - ✅ AI updated `.github/docs/file-index/` directly (no scripts)
+   - ✅ Relevant index files reflect all code changes; workflow not complete until done
 
 ### Hallucination Prevention
 
@@ -726,7 +727,7 @@ After implementing changes:
 4. **Close Gaps**: Ask clarifying questions until execution-critical gaps are closed
 5. **Implement**: Make changes strictly according to approved plan
 6. **Verify**: Run quality checks
-7. **Update File-Index (MANDATORY)**: When source files were added, modified, renamed, deleted, or moved, update `.github/docs/file-index/` per Update Triggers. Do not skip.
+7. **Update File-Index (MANDATORY)**: When source files were added, modified, renamed, deleted, or moved, the AI must update `.github/docs/file-index/` directly—no scripts or external tools. Do not skip.
 8. **Show Summary**: Display what was done
 
 ### Workflow with Checkpoint
@@ -763,7 +764,7 @@ System is successful when:
 | `.cursor/` (architecture, file-index, rules, etc.) | `.github/docs/` (same structure: architecture/, file-index/, debugging/, rules/, maintenance/) |
 | Auto-context from file-index                  | copilot-instructions instructs AI to read .github/docs/file-index/ when planning |
 | Auto-routing to rules                         | copilot-instructions instructs AI to read .github/docs/rules/ based on detected intent |
-| Pre-commit indexer script                     | Prompt AI to update indexes when adding/modifying files; see Update Triggers |
+| AI updates file-index directly (no script)    | AI performs index updates; see Update Triggers                               |
 | Cursor Composer                               | Copilot Chat + Inline Chat                                          |
 <!-- markdownlint-enable MD060 -->
 

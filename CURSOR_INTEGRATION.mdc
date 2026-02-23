@@ -18,6 +18,14 @@
 - Before planning, implementing, or applying rules, the entry point must be loaded.
 - Usage and workflow sections must explicitly mention entrypoint-first behavior.
 
+### Hard Rule C: Update File Indexers After Code Change
+
+- **MANDATORY**: After ANY code change (add, modify, rename, delete, move), the relevant file-index files MUST be updated before the workflow is complete.
+- **AI performs the update**: The AI that made the code changes MUST update the file-index files directly. Do not delegate to scripts, pre-commit hooks, or external tools. The AI already knows what it changed and which index files to update.
+- Use the Update Triggers mapping: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index.
+- Do not skip this step. Stale file-index causes knowledge drift and degrades AI accuracy on future prompts.
+- Plans MUST include an explicit "Update file-index" step when source files are added or modified.
+
 ### Verification Checklist
 
 Before considering any `.cursor` regeneration or update complete:
@@ -25,6 +33,7 @@ Before considering any `.cursor` regeneration or update complete:
 - [ ] No `.md` files exist in `.cursor` docs structure (only `.mdc`)
 - [ ] Entrypoint-first mention is present in usage/workflow sections
 - [ ] All internal path references point to `.mdc` files
+- [ ] File-index was updated when source files were added, modified, renamed, deleted, or moved (see Update Triggers)
 
 ### Non-Compliance
 
@@ -32,6 +41,7 @@ When non-compliance is detected:
 
 - **If `.md` is produced** in `.cursor` doc outputs: Reject the output, flag the violation, and regenerate using `.mdc` extension only.
 - **If entry-point is bypassed**: Do not proceed; require `@.cursor/entry-point.mdc` to be used as the first context for the prompt.
+- **If file-index not updated after code change**: Do not consider the workflow complete; the AI must update the relevant `.cursor/file-index/` files per Update Triggers before finishing. Do not delegate to scripts.
 
 ## Quick Setup
 
@@ -60,7 +70,9 @@ If you need to regenerate all files manually, follow the detection steps below a
 
 ## Auto-Update System
 
-File indexes are automatically updated on every commit via git hooks:
+**Hard Rule C (AI performs updates)**: When the AI makes code changes, the AI MUST update file-index directly—do not delegate to scripts. The script below is optional and may be used only for commits where the AI did not participate (e.g., manual edits). For AI-assisted workflows, the AI updates file-index per Update Triggers.
+
+File indexes may also be updated on every commit via git hooks (optional supplement):
 
 ### Pre-Commit Hook
 
@@ -240,7 +252,7 @@ The `entry-point.mdc` automatically:
 - Enforces a required execution-plan artifact before implementation
 - **Implements changes automatically** (when safe and plan-complete)
 - **Verifies implementation** automatically
-- **Updates documentation** automatically
+- **Updates file-index** automatically (AI performs directly per Hard Rule C—no scripts)
 
 **Users can simply describe what they need** - the system handles everything automatically, from planning to implementation to verification, while requiring a complete plan artifact before edits.
 
@@ -299,7 +311,7 @@ Use this split to keep planning and execution efficient:
    - Clear requirements
    - Well-defined patterns exist
    - Low risk changes
-   - **Action**: Create required plan artifact, implement approved steps, verify, update docs/indexes
+   - **Action**: Create required plan artifact, implement approved steps, verify, AI updates file-index directly (Hard Rule C)
 
 2. **Auto with Verification (Proceed + Verify)**:
    - Multiple files (3-10 files)
@@ -625,6 +637,8 @@ When generating `CURSOR_USAGE_GUIDE.mdc`, always tailor content to the detected 
 
 ## Update Triggers & Maintenance
 
+**Hard Rule C**: The AI performs all file-index updates directly—no scripts, pre-commit hooks, or external tools. The AI knows what it changed.
+
 ### Automatic Update Triggers
 
 **New Files Added**:
@@ -741,6 +755,7 @@ See `maintenance/update-workflow.mdc` for detailed workflow.
 - **Minimal Prompting**: Just describe what you need - system handles the rest automatically
 - **Self-Updating**: System evolves with project; documentation reflects current state
 - **Always Current**: Files updated automatically when code changes
+- **AI Updates Indexes (Hard Rule C)**: The AI performs file-index updates directly after code changes—no scripts
 
 ## Implementation Requirements
 
@@ -749,7 +764,7 @@ See `maintenance/update-workflow.mdc` for detailed workflow.
 - **Git**: `.cursor/` excluded from git (local AI assistance only)
 - **Naming**: Use kebab-case, descriptive names, logical grouping
 - **Standards**: Clear, concise docs with code examples and mermaid diagrams where helpful
-- **Maintenance**: Update files when code changes (see Update Triggers above)
+- **Maintenance**: AI updates file-index when code changes (Hard Rule C; see Update Triggers above)
 - **Adaptation**: Files must adapt to detected project type, tech stack, and structure
 - **Detection**: Always detect project type and tech stack before generating files
 
@@ -864,11 +879,9 @@ After implementing changes, automatically:
    - ✅ Matches existing code style
 
 4. **Documentation Updates**:
-   - ✅ Updated file-index if new files
+   - ✅ AI updated file-index directly when source files changed (Hard Rule C—no scripts)
    - ✅ Updated architecture docs if patterns change
    - ✅ Updated common-issues if bug fixed
-   - ✅ Ran `bun run scripts/update-cursor-indexes.ts` after execution when source files changed
-   - ✅ Kept pre-commit hook as safety net for index consistency
 
 ### Checkpoint: When to Pause for Review
 
@@ -944,7 +957,7 @@ After implementing changes, automatically:
 4. **Close Gaps**: Ask clarifying questions until execution-critical gaps are closed
 5. **Implement**: Make changes strictly according to approved plan
 6. **Verify**: Run quality checks automatically
-7. **Update Docs and Indexes**: Update `.cursor/` files (`.mdc` only) and run hybrid index update flow when source files changed
+7. **Update File-Index (MANDATORY)**: When source files were added, modified, renamed, deleted, or moved, the AI must update `.cursor/file-index/` directly per Update Triggers—no scripts. Do not skip.
 8. **Show Summary**: Display what was done
 
 ### Workflow with Checkpoint
@@ -956,7 +969,7 @@ After implementing changes, automatically:
 5. **Pause**: Show summary when drift, complexity, or risk requires review
 6. **Wait**: User reviews and confirms
 7. **Verify**: Run quality checks
-8. **Update Docs and Indexes**: Update `.cursor/` files (`.mdc` only) and run hybrid index update flow when source files changed
+8. **Update File-Index (MANDATORY)**: When source files were added, modified, renamed, deleted, or moved, the AI must update `.cursor/file-index/` directly per Update Triggers—no scripts. Do not skip.
 9. **Finalize**: Complete implementation
 
 ### Workflow with Questions
