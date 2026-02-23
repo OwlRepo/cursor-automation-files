@@ -763,7 +763,7 @@ System is successful when:
 <!-- markdownlint-disable MD060 -->
 | Cursor Concept                                | VS Code + Copilot Equivalent                                       |
 | --------------------------------------------- | ------------------------------------------------------------------- |
-| `@.cursor/entry-point.mdc`                     | `.github/copilot-instructions.md` (auto-loaded after one-time setup) |
+| `@.cursor/rules/entry-point.mdc`              | `.github/copilot-instructions.md` (auto-loaded after one-time setup) |
 | `bun run scripts/setup-cursor-integration.ts` | Prompt AI: "Analyze codebase and regenerate all .github/ files per VSCODE_COPILOT_INTEGRATION.mdc" |
 | `.cursor/` (architecture, file-index, rules, etc.) | `.github/docs/` (same structure: architecture/, file-index/, debugging/, rules/, maintenance/) |
 | Auto-context from file-index                  | copilot-instructions instructs AI to read .github/docs/file-index/ when planning |

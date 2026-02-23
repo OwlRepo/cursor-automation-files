@@ -15,7 +15,7 @@
 ### Hard Rule B: Entry-Point-First
 
 - **Every prompt MUST enter through the entry-point**. No planning, implementing, or applying rules without it.
-- `@.cursor/entry-point.mdc` MUST always be used as the first prompt entrypoint for any workflow.
+- `@.cursor/rules/entry-point.mdc` MUST always be used as the first prompt entrypoint for any workflow.
 - Before planning, implementing, or applying rules, the entry point must be loaded.
 - Usage and workflow sections must explicitly mention entrypoint-first behavior.
 
@@ -41,8 +41,43 @@ Before considering any `.cursor` regeneration or update complete:
 When non-compliance is detected:
 
 - **If `.md` is produced** in `.cursor` doc outputs: Reject the output, flag the violation, and regenerate using `.mdc` extension only.
-- **If entry-point is bypassed**: Do not proceed; require `@.cursor/entry-point.mdc` to be used as the first context for the prompt.
+- **If entry-point is bypassed**: Do not proceed; require `@.cursor/rules/entry-point.mdc` to be used as the first context for the prompt.
 - **If file-index not updated after code change**: Do not consider the workflow complete; the AI must update the relevant `.cursor/file-index/` files per Update Triggers before finishing. Do not delegate to scripts.
+
+## Ensuring Entry-Point Is Used (Maximized Reliability)
+
+**Location issue**: Cursor may only auto-apply rules from `.cursor/rules/`. An entry-point at `.cursor/entry-point.mdc` (root of `.cursor`) might not be auto-included in every new chat.
+
+**Required setup** (all three for maximum reliability):
+
+### 1. Entry-Point in `.cursor/rules/` (Primary)
+
+- Generate **`.cursor/rules/entry-point.mdc`** (inside `rules/`, where Cursor explicitly supports rules).
+- Include frontmatter:
+```yaml
+---
+alwaysApply: true
+---
+```
+- This ensures Cursor includes the entry-point in every chat when it scans `.cursor/rules/` for `.mdc` files with `alwaysApply`.
+
+### 2. AGENTS.md in Project Root (Reliable Trigger)
+
+- Generate **`AGENTS.md`** in the project root. AGENTS.md is Cursor's built-in entry point for agent behavior—the reliable trigger. Your `entry-point.mdc` is the custom workflow doc with the full details. Keep AGENTS.md short; it points to entry-point.mdc.
+
+**AGENTS.md content** (short pointer only):
+```markdown
+For any task, load @.cursor/rules/entry-point.mdc first and follow its workflow.
+```
+
+### 3. Manual Fallback
+
+- If auto-apply does not work: start each new chat by typing `@.cursor/rules/entry-point.mdc` in the prompt so it is always added.
+
+### Verification
+
+- Open a new chat and ask: "What's your primary entry point for this project?"
+- The model should mention or follow the entry-point logic. If not, ensure `.cursor/rules/entry-point.mdc` exists with `alwaysApply: true` and `AGENTS.md` exists in the project root.
 
 ## Quick Setup
 
@@ -60,14 +95,15 @@ This script will:
 2. Detect tech stack from `package.json` files
 3. Detect file structure from directories
 4. Update `CURSOR_INTEGRATION.mdc` with detection results
-5. Generate/update all `.cursor/` files accordingly
+5. Generate/update all `.cursor/` files accordingly, including `rules/entry-point.mdc` with `alwaysApply: true`
 6. Generate `CURSOR_USAGE_GUIDE.mdc` with project-tailored examples and workflows
+7. Generate `AGENTS.md` in project root (short pointer: "For any task, load @.cursor/rules/entry-point.mdc first and follow its workflow")
 
 ### Manual Regeneration
 
 If you need to regenerate all files manually, follow the detection steps below and use this command:
 
-**Command**: Analyze the entire codebase and regenerate all `.cursor/` files according to the specifications below.
+**Command**: Analyze the entire codebase and regenerate all `.cursor/` files according to the specifications below. Include: (1) `.cursor/rules/entry-point.mdc` with `alwaysApply: true` frontmatter; (2) `AGENTS.md` in project root with: "For any task, load @.cursor/rules/entry-point.mdc first and follow its workflow."
 
 ## Auto-Update System
 
@@ -241,7 +277,7 @@ Analyze directory structure to identify:
 - Reference documentation files
 - Intervene unless AI hallucinates or many files need review
 
-**Entry-point-first (Hard Rule B)**: For any prompt, `@.cursor/entry-point.mdc` MUST be loaded first. The entry point is the gateway to intent detection, file discovery, rule application, and planning.
+**Entry-point-first (Hard Rule B)**: For any prompt, `@.cursor/rules/entry-point.mdc` MUST be loaded first. The entry point is the gateway to intent detection, file discovery, rule application, and planning.
 
 The `entry-point.mdc` automatically:
 
@@ -525,7 +561,12 @@ Use this split to keep planning and execution efficient:
    - Plan structure
    - Implementation checklist
 
-### Rules System (6 files)
+### Rules System (8 files)
+
+0. **rules/entry-point.mdc** - PRIMARY (Always first)
+   - **MUST include frontmatter**: `---\nalwaysApply: true\n---`
+   - Prompt routing: detects intent, finds files via file-index, applies rules, creates plans
+   - Gateway to all other rules; Cursor auto-includes when in `rules/` with `alwaysApply: true`
 
 1. **rules/bug-fix.mdc**
    - Bug fixing guidelines (reproduce first, use RCA, test thoroughly, follow patterns)
@@ -595,7 +636,9 @@ Use this split to keep planning and execution efficient:
 
 ### Core Files (4 files)
 
-1. **entry-point.mdc** - PRIMARY ENTRY POINT (Always check first)
+1. **rules/entry-point.mdc** - PRIMARY ENTRY POINT (Always check first)
+   - **Location**: `.cursor/rules/entry-point.mdc` (Cursor applies rules from `rules/`; ensures auto-include)
+   - **Frontmatter**: MUST include `alwaysApply: true` so Cursor includes it in every chat
    - **Fully automatic** - No need to reference command files or rules
    - Automatically analyzes prompts to identify intent (bug/feature/enhancement/refactor/review)
    - Automatically finds relevant files mentioned in prompts using file-index
@@ -698,7 +741,6 @@ See `maintenance/update-workflow.mdc` for detailed workflow.
 ├── README.mdc                          # System overview
 ├── CURSOR_INTEGRATION.mdc             # This file (master prompt)
 ├── CURSOR_USAGE_GUIDE.mdc             # Project-tailored usage handbook
-├── entry-point.mdc                    # Prompt routing system
 ├── architecture/                     # Adaptive architecture docs (8-10 files)
 │   ├── overview.mdc                   # Always generated
 │   ├── tech-stack.mdc                # Always generated
@@ -725,7 +767,8 @@ See `maintenance/update-workflow.mdc` for detailed workflow.
 │   ├── root-cause-analysis.mdc
 │   ├── common-issues.mdc
 │   └── fix-plan-template.mdc
-├── rules/                           # 7 rule files
+├── rules/                           # 8 rule files (entry-point first)
+│   ├── entry-point.mdc              # PRIMARY: Prompt routing, alwaysApply: true
 │   ├── bug-fix.mdc
 │   ├── feature-implementation.mdc
 │   ├── enhancement.mdc
@@ -747,7 +790,7 @@ See `maintenance/update-workflow.mdc` for detailed workflow.
 
 ## Key Principles
 
-- **Entry-Point-First**: Always use `@.cursor/entry-point.mdc` as the first prompt entrypoint (Hard Rule B)
+- **Entry-Point-First**: Always use `@.cursor/rules/entry-point.mdc` as the first prompt entrypoint (Hard Rule B)
 - **`.mdc` Only**: All `.cursor` docs use `.mdc` extension; never produce `.md` in `.cursor` (Hard Rule A)
 - **Fully Automatic**: No need to reference command files or rules - system detects everything automatically
 - **Cross-Functional**: Rules work together automatically; entry point handles routing automatically
@@ -952,7 +995,7 @@ After implementing changes, automatically:
 
 ### Standard Workflow (Automatic)
 
-1. **Load Entry Point**: Use `@.cursor/entry-point.mdc` as the first context (Hard Rule B)
+1. **Load Entry Point**: Use `@.cursor/rules/entry-point.mdc` as the first context (Hard Rule B)
 2. **Analyze Request**: Detect intent, find files, apply rules
 3. **Create Plan (Required Gate)**: Comprehensive, file-specific, step-by-step plan with targeted before/after snippets and reasons
 4. **Close Gaps**: Ask clarifying questions until execution-critical gaps are closed
@@ -963,7 +1006,7 @@ After implementing changes, automatically:
 
 ### Workflow with Checkpoint
 
-1. **Load Entry Point**: Use `@.cursor/entry-point.mdc` as the first context (Hard Rule B)
+1. **Load Entry Point**: Use `@.cursor/rules/entry-point.mdc` as the first context (Hard Rule B)
 2. **Analyze Request**: Detect intent, find files, apply rules
 3. **Create Plan (Required Gate)**: Comprehensive implementation plan with exact files/edits/reasons/snippets
 4. **Implement**: Make changes strictly according to approved plan
@@ -975,7 +1018,7 @@ After implementing changes, automatically:
 
 ### Workflow with Questions
 
-1. **Load Entry Point**: Use `@.cursor/entry-point.mdc` as the first context (Hard Rule B)
+1. **Load Entry Point**: Use `@.cursor/rules/entry-point.mdc` as the first context (Hard Rule B)
 2. **Analyze Request**: Detect intent, find files
 3. **Identify Gaps**: Find missing information
 4. **Ask Questions**: 1-2 specific clarifying questions
@@ -1037,7 +1080,7 @@ System is successful when:
 
 ### What Gets Generated
 
-- **Always Generated**: `overview.mdc`, `tech-stack.mdc`, `module-structure.mdc`, `src-index.mdc`, `utils-index.mdc`, `CURSOR_USAGE_GUIDE.mdc`
+- **Always Generated**: `overview.mdc`, `tech-stack.mdc`, `module-structure.mdc`, `src-index.mdc`, `utils-index.mdc`, `CURSOR_USAGE_GUIDE.mdc`, `rules/entry-point.mdc` (with `alwaysApply: true`), `AGENTS.md`
 - **Frontend Only**: `routing.mdc`, `state-management.mdc`, `data-fetching.mdc`, `component-patterns.mdc`, `components-index.mdc`, `hooks-index.mdc`, `routes-index.mdc`, `stores-index.mdc`
 - **Backend Only**: `database.mdc`, `service-patterns.mdc`, `controllers-index.mdc`, `services-index.mdc`, `models-index.mdc`
 - **Full-Stack**: All files from both frontend and backend

@@ -71,7 +71,7 @@ Research shows that structured prompts (plan-first, context-aware, rule-grounded
 | Term | What It Means |
 |------|---------------|
 | **Master prompt** | A document that tells the AI how to behave for your project: what to plan, how to implement, and how to verify. |
-| **Entry-point** | (Cursor only) The first file you load. It automatically pulls in rules, file indexes, and docs based on your request. |
+| **Entry-point** | (Cursor only) `.cursor/rules/entry-point.mdc`—the detailed workflow. `AGENTS.md` is the reliable trigger (short pointer: "Load @.cursor/rules/entry-point.mdc first"). Both ensure it's used. |
 | **Plan gate** | A checkpoint: no code edits until you approve a written plan with exact files and edits. |
 | **Planning contract** | The plan must include: file list, code snippets (before/after), reasons, and verification steps. |
 | **Auto-routing** | (Cursor only) The system figures out which rules and docs apply to your request without you specifying them. |
@@ -112,7 +112,7 @@ Research shows that structured prompts (plan-first, context-aware, rule-grounded
 **Prerequisites**: Cursor IDE installed.
 
 1. Copy `CURSOR_INTEGRATION.mdc` to `.cursor/` in your project (or keep at root).
-2. **If you have a full `.cursor/` setup**: Start every new chat with `@.cursor/entry-point.mdc` as the first context.
+2. **If you have a full `.cursor/` setup**: The entry-point at `.cursor/rules/entry-point.mdc` (with `alwaysApply: true`) and `AGENTS.md` ensure it is used in every chat. If not auto-applied, type `@.cursor/rules/entry-point.mdc` at the start of each new chat.
 3. **If you only have the integration file**: Reference `@CURSOR_INTEGRATION.mdc` and ask the AI to analyze the codebase and follow its specifications.
 4. Describe what you need in plain language. The AI will detect intent, load context, and produce a plan.
 5. Approve the plan, then let the AI implement, verify, and update docs.
@@ -272,7 +272,7 @@ Both integrations follow the same four-phase workflow. Each phase has a clear pu
 **Step-by-step**:
 
 1. Copy `CURSOR_INTEGRATION.mdc` into your project (e.g. `.cursor/` or project root).
-2. **If you have a full `.cursor/` setup**: Start every new chat with `@.cursor/entry-point.mdc` as the first context.
+2. **If you have a full `.cursor/` setup**: `.cursor/rules/entry-point.mdc` (with `alwaysApply: true`) and `AGENTS.md` ensure the entry-point is used. If not auto-applied, type `@.cursor/rules/entry-point.mdc` at chat start.
 3. **If you only have the integration file**: Reference `@CURSOR_INTEGRATION.mdc` explicitly.
 4. Describe what you need in plain language. The system detects intent (bug, feature, enhancement, refactor, review).
 5. The AI automatically loads relevant rules, file-indexes, and architecture docs.
@@ -405,7 +405,7 @@ If you switch editors, use the **Migration Map** in `VSCODE_COPILOT_INTEGRATION.
 <!-- markdownlint-disable MD060 -->
 | Cursor                         | VS Code + Copilot                    |
 | ------------------------------ | ------------------------------------ |
-| `@.cursor/entry-point.mdc`     | `@VSCODE_COPILOT_INTEGRATION.mdc`    |
+| `@.cursor/rules/entry-point.mdc`     | `@VSCODE_COPILOT_INTEGRATION.mdc`    |
 | Auto-context from file-index   | Explicit `@file` or path references  |
 | Auto-routing to rules          | Explicit rule references in prompts  |
 | Cursor Composer                | Copilot Chat + Inline Chat           |
