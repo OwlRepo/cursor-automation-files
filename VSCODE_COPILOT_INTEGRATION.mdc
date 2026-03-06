@@ -1,792 +1,464 @@
-# Visual Studio Code + GitHub Copilot Integration - Master Prompt
+# AI Development System Bootstrap for VS Code + GitHub Copilot
 
-**Purpose**: Complete master prompt for the Visual Studio Code + GitHub Copilot workflow. Use this file as a standalone prompt to guide AI-assisted development with Copilot Chat and Inline Chat.
+BOOTSTRAP NOTICE
 
-## Hard Rules (Non-Negotiable)
+This file is a one-time bootstrap specification used to generate an AI development support system for VS Code with GitHub Copilot.
 
-**These rules MUST be followed. Non-compliance must be flagged and corrected.**
+After generation, the repository will contain documentation and navigation structures that allow Copilot to reason about the project architecture and development workflows.
 
-### Hard Rule A: Entry-Point-First
+The system enables AI to:
 
-- **Every prompt MUST enter through the entry-point**. No planning, implementing, or applying rules without it.
-- **After one-time setup**: `.github/copilot-instructions.md` is the entry-point. VS Code auto-loads it for every chat—every prompt enters through it. No `@` references needed.
-- **Before setup**: `@VSCODE_COPILOT_INTEGRATION.mdc` is the entry-point. Reference it as the first context at conversation start, or run the one-time setup first.
-- Usage and workflow sections must explicitly mention entry-point-first behavior.
+• Understand architecture automatically
+• Navigate large repositories safely
+• Avoid hallucinations
+• Identify correct files before editing
+• Respect architecture patterns
+• Select relevant documentation context automatically
 
-### Hard Rule B: Plan-Before-Implement
+---------------------------------------------------------------------
 
-- An execution plan with required contents (see Planning Contract) MUST be produced and approved before any code edits.
-- Copilot Chat should be used for planning; Inline Chat or manual edits follow the approved plan.
-- Never implement changes without a concrete, file-specific plan artifact.
+GLOBAL DOCUMENT FORMAT
 
-### Hard Rule C: Update File Indexers After Code Change
+All generated documentation files must use `.md`.
 
-- **MANDATORY**: After ANY code change (add, modify, rename, delete, move), the relevant file-index files MUST be updated before the workflow is complete.
-- **AI performs the update**: The AI that made the code changes MUST update the file-index files directly. Do not delegate to scripts, pre-commit hooks, or external tools. The AI already knows what it changed and which index files to update.
-- Use the Update Triggers mapping: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index.
-- Do not skip this step. Stale file-index causes knowledge drift and degrades AI accuracy on future prompts.
-- Plans MUST include an explicit "Update file-index" step when source files are added or modified.
+---------------------------------------------------------------------
 
-### Verification Checklist
+ROOT AGENT ENTRY FILE
 
-Before considering any workflow complete:
+Create a file at repository root:
 
-- [ ] Entry-point was used (auto via `.github/copilot-instructions.md` after setup, or `@VSCODE_COPILOT_INTEGRATION.mdc` before setup)
-- [ ] Plan artifact was created with exact files, edits, reasons, and verification steps
-- [ ] Implementation followed the approved plan strictly
-- [ ] Verification steps were run
-- [ ] File-index was updated when source files were added, modified, renamed, deleted, or moved (see Update Triggers)
+AGENTS.md
 
-### Non-Compliance
+Content:
 
-When non-compliance is detected:
+For any development task, consult the project AI documentation inside `.ai/`.
 
-- **If entry-point is bypassed**: Do not proceed; require `.github/copilot-instructions.md` (after setup) or `@VSCODE_COPILOT_INTEGRATION.mdc` (before setup) as the first context for the prompt.
-- **If plan is bypassed**: Do not proceed; require a plan artifact before any edits.
-- **If edits drift from plan**: Pause, report mismatch, request revised-step approval.
-- **If file-index not updated after code change**: Do not consider the workflow complete; update the relevant `.github/docs/file-index/` files per Update Triggers before finishing.
+Follow the workflows defined there before planning or implementing changes.
 
-## Quick Setup
+This ensures all AI interactions follow the structured system.
 
-### Prerequisites
+---------------------------------------------------------------------
 
-1. **Visual Studio Code** (latest stable)
-   - Install from [code.visualstudio.com](https://code.visualstudio.com/)
+COPILOT CONTEXT FILE
 
-2. **GitHub Copilot Extension**
-   - Install "GitHub Copilot" from the VS Code Extensions marketplace
-   - Sign in with a GitHub account that has Copilot access (subscription required)
+Create:
 
-3. **Optional but Recommended**
-   - **GitHub Copilot Chat**: For conversational AI assistance (often bundled with Copilot)
+.github/copilot-instructions.md
 
-### One-Time Setup (Same as Cursor—Full Structure)
+Content must instruct Copilot to:
 
-VS Code automatically loads `.github/copilot-instructions.md` for every chat. The setup creates the full `.github/docs/` structure (architecture, file-index, debugging, rules) so the AI works the same as Cursor: detects intent, finds files via index, applies rules, creates plans—all automatically.
+• Read architecture documentation
+• Use file indexes to locate files
+• Follow development workflows
+• Respect architecture patterns
+• Avoid editing files outside feature boundaries
 
-**Command** (run once per project):
+---------------------------------------------------------------------
 
-1. Copy this file (`VSCODE_COPILOT_INTEGRATION.mdc`) into your project.
-2. Open Copilot Chat (`Ctrl+Shift+I` / `Cmd+Shift+I`).
-3. Reference the file: `@VSCODE_COPILOT_INTEGRATION.mdc`
-4. Prompt: **"Analyze the entire codebase and regenerate all `.github/` files according to the specifications in this document. Follow Project Detection & Adaptation first. Create: (1) .github/copilot-instructions.md using the 'File to Create' section. (2) .github/docs/ with the full Directory Structure: architecture/, file-index/, debugging/, rules/, maintenance/. Generate only the files that apply to the detected project type (frontend/backend/full-stack). Adapt paths for monorepo if detected."**
+PRIMARY OBJECTIVE
 
-**Manual fallback**: Create `.github/copilot-instructions.md` manually and paste the content from the "File to Create" section. For full parity, also create `.github/docs/` per the Directory Structure below.
+Analyze the repository and generate an AI knowledge system containing:
 
-### After Setup: Just Prompt
+Architecture documentation  
+Navigation maps  
+Feature boundaries  
+Dependency graphs  
+File indexes  
+Debugging guides  
+Development rules  
+Maintenance guides  
 
-Once `.github/copilot-instructions.md` exists, open Copilot Chat and describe your intent. No `@` references needed. Examples:
+The AI should automatically determine which documentation is relevant.
 
-- "Add pagination to the user list component"
-- "Fix the login form validation bug"
-- "Refactor the API client to use fetch instead of axios"
+---------------------------------------------------------------------
 
-The AI will automatically: detect intent, find relevant files, apply the planning contract, and guide you through plan → implement → verify.
+PROJECT DETECTION
 
-### Recommended Chat Modes (Before or After Setup)
+Analyze the repository to detect:
 
-1. **Planning Prompt**: Use Copilot Chat to produce an execution plan
-2. **Implementation Prompt**: Use Copilot Chat or Inline Chat to apply edits per plan
-3. **Verification Prompt**: Use Copilot Chat to run verification steps and summarize results
+Project type
 
----
+Frontend  
+Backend  
+Fullstack  
+Mobile  
+Desktop  
+CLI  
 
-## File to Create: .github/copilot-instructions.md
+Detect technology stack
 
-Create this file in your project root. VS Code will auto-load it for every chat.
+Frameworks  
+Languages  
+Libraries  
+Database  
+ORM  
+State management  
+Routing  
 
-```markdown
-# Copilot Workspace Instructions (Auto-Loaded Entry-Point)
+Sources:
 
-This file is the **entry-point**. Every Copilot Chat prompt MUST enter through this file. VS Code auto-loads it for every chat—do not proceed without it. No planning, implementing, or applying rules without these instructions.
+package.json  
+requirements.txt  
+go.mod  
+Cargo.toml  
+pom.xml  
 
-## How to Use
+---------------------------------------------------------------------
 
-**Just prompt.** Open Copilot Chat and describe your intent. Examples:
+MONOREPO DETECTION
 
-- "Add pagination to the user list component"
-- "Fix the login form validation bug"
-- "Refactor the API client to use fetch instead of axios"
+Check for:
 
-The AI will automatically: detect intent, find relevant files, apply the planning contract, and guide you through plan → implement → verify.
+turbo.json  
+workspaces  
+apps/  
+packages/  
 
-## Hard Rules
+If detected document workspace boundaries.
 
-1. **Entry-Point-First**: This file is the entry-point. Every prompt enters through it. Do not bypass. No work without these instructions.
-2. **Plan-Before-Implement**: Never make code edits without an approved execution plan.
-3. **Fact-Based Planning**: Plans must be grounded in existing files and code only. Verify file existence before finalizing.
-4. **Strict Adherence**: Execute exactly against the approved plan. If code drifts, pause and request revised-step approval.
-5. **Update File-Index After Code Change (MANDATORY)**: After ANY code change (add, modify, rename, delete, move), you MUST update the relevant `.github/docs/file-index/` files before finishing. **You (the AI) perform the update**—do not delegate to scripts or external tools. You already know what you changed. Use: Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Do not skip. Stale indexes cause knowledge drift.
+---------------------------------------------------------------------
 
-## Workflow (Same as Cursor Entry-Point)
+DOCUMENTATION DIRECTORY
 
-For every request: (1) Detect intent from keywords and context (bug/feature/enhancement/refactor/review). (2) Find relevant files: read [.github/docs/file-index/](.github/docs/file-index/) when it exists—use src-index, components-index, hooks-index, routes-index, stores-index, utils-index, controllers-index, services-index, models-index (adapt to what exists); otherwise use workspace search. (3) Apply rules: read [.github/docs/rules/](.github/docs/rules/) for the detected intent (bug-fix, feature-implementation, enhancement, refactoring, code-review, testing). (4) Include architecture: read [.github/docs/architecture/](.github/docs/architecture/) for patterns. (5) Create plan with exact files, snippets, reasons, verification steps, **and an explicit "Update file-index" step** when source files will be added or modified. (6) Wait for approval. (7) Implement strictly per plan. (8) Verify (compile, lint, tests). (9) **MANDATORY**: Update `.github/docs/file-index/` per the mapping above when you added, modified, renamed, deleted, or moved any source file. Do not consider the workflow complete until file-index is updated.
+Create:
 
-## Planning Contract
+.ai/
 
-Plans must include: exact file list, exact code sections, before/after snippets, reason for each edit, verification steps, **and an explicit file-index update step** when adding or modifying source files (component→components-index+src-index; hook→hooks-index+src-index; etc.). Ask clarifying questions until gaps are closed.
+Structure:
 
-## When to Ask Questions vs. Proceed
+.ai/architecture/
+.ai/file-index/
+.ai/debugging/
+.ai/workflows/
 
-**Ask questions when**: Ambiguous requirements; missing critical info (API endpoint, data structure, user flow); high-risk changes (breaking, security); pattern conflicts or multiple valid approaches. **Proceed when**: Clear requirements; low-risk changes; well-defined patterns; standard tasks (bug fix with root cause, feature following patterns).
+---------------------------------------------------------------------
 
-## Intent-Specific Rules
+ARCHITECTURE DOCUMENTATION
 
-**Bug fix**: Reproduce first, use root-cause analysis, test thoroughly. **Feature**: Follow architecture, use patterns, create types, handle errors. **Enhancement**: Maintain backward compatibility. **Refactor**: Maintain functionality, follow style, run tests. **Code review**: Check patterns, error handling, performance, accessibility.
+Generate inside:
 
-## Quality Gates
+.ai/architecture/
 
-After implementing: compile/type-check, lint, run tests, follow project patterns.
+Files:
 
-## Hallucination Prevention
+overview.md  
+tech-stack.md  
+module-structure.md  
+api-integration.md  
 
-Verify files exist. Verify patterns exist. Verify APIs from existing code. Use existing types. Do not invent paths or APIs. When detected: stop, report, ask for clarification.
+Conditional:
 
-## Update Triggers (File-Index Mapping)
+routing.md  
+state-management.md  
+data-fetching.md  
+component-patterns.md  
+database.md  
+service-patterns.md  
 
-When you add, modify, rename, delete, or move source files, **you (the AI) must update** these `.github/docs/file-index/` files directly—do not use scripts or external tools. Component→components-index+src-index; Hook→hooks-index+src-index; Route→routes-index+src-index; Store→stores-index+src-index; Controller→controllers-index+src-index; Service→services-index+src-index; Model→models-index+src-index; Utility→utils-index+src-index. Adapt to what exists in the project.
+---------------------------------------------------------------------
 
-## Project Context
+SEMANTIC CODE MAP
 
-Before planning, read [.github/docs/architecture/](.github/docs/architecture/) when it exists (overview, tech-stack, module-structure). Analyze codebase for project type, tech stack, directory structure, monorepo. Adapt plans to match.
-```
+Generate:
 
----
+.ai/architecture/code-map.md
 
-## Directory Structure (Same as Cursor)
+Purpose:
 
-```text
-.github/
-├── copilot-instructions.md           # Auto-loaded entry point (this file)
-└── docs/                             # Same structure as .cursor/
-    ├── architecture/                 # Adaptive (8-10 files)
-    │   ├── overview.md               # Always generated
-    │   ├── tech-stack.md             # Always generated
-    │   ├── routing.md               # Frontend/Full-Stack only
-    │   ├── state-management.md      # Frontend/Full-Stack only
-    │   ├── data-fetching.md         # Frontend/Full-Stack only
-    │   ├── api-integration.md       # Always generated
-    │   ├── component-patterns.md    # Frontend/Full-Stack only
-    │   ├── module-structure.md     # Always generated
-    │   ├── database.md             # Backend/Full-Stack only
-    │   └── service-patterns.md     # Backend/Full-Stack only
-    ├── file-index/                  # Adaptive (6-9 files)
-    │   ├── src-index.md             # Always generated
-    │   ├── components-index.md      # Frontend/Full-Stack only
-    │   ├── hooks-index.md           # React Frontend/Full-Stack only
-    │   ├── routes-index.md          # Frontend/Full-Stack only
-    │   ├── stores-index.md          # Frontend/Full-Stack only
-    │   ├── utils-index.md           # Always generated
-    │   ├── controllers-index.md     # Backend/Full-Stack only
-    │   ├── services-index.md        # Backend/Full-Stack only
-    │   └── models-index.md          # Backend/Full-Stack only
-    ├── debugging/                   # 4 files
-    │   ├── workflow.md
-    │   ├── root-cause-analysis.md
-    │   ├── common-issues.md
-    │   └── fix-plan-template.md
-    ├── rules/                       # 7 files
-    │   ├── bug-fix.md
-    │   ├── feature-implementation.md
-    │   ├── enhancement.md
-    │   ├── refactoring.md
-    │   ├── code-review.md
-    │   ├── testing.md
-    │   └── automation-guidelines.md
-    └── maintenance/                 # 3 files
-        ├── update-workflow.md
-        ├── update-checklist.md
-        └── auto-update-guide.md
-```
+Provide high-level navigation for the codebase.
 
----
+Include:
 
-## Prompt Orchestration (Before Setup, or When .github/copilot-instructions.md Is Not Used)
+System entry points  
+Application flows  
+Core modules  
+External integrations  
 
-**If you have not run the one-time setup**, you must use `@VSCODE_COPILOT_INTEGRATION.mdc` as the entry-point (Hard Rule A)—reference it as the first context at conversation start. After setup, `.github/copilot-instructions.md` is the entry-point and auto-loads—every prompt enters through it.
+---------------------------------------------------------------------
 
-### Prompt Templates
+FEATURE BOUNDARY MAP
 
-Use these templates when starting a Copilot Chat session:
+Generate:
 
-**Planning Template**:
+.ai/architecture/feature-boundaries.md
 
-```text
-@VSCODE_COPILOT_INTEGRATION.mdc
+Defines system feature boundaries.
 
-I need to [describe task]. Following the Planning Contract, produce an execution plan with:
-1. Exact file list to update
-2. Exact code sections and before/after snippets
-3. Reason for each edit
-4. Verification steps
-5. Any index/doc update requirements
-```
+Prevents editing unrelated modules.
 
-**Implementation Template** (after plan approved):
+---------------------------------------------------------------------
 
-```text
-Here is the approved plan: [paste plan or reference]
+DEPENDENCY GRAPH
 
-Implement step 1: [exact step from plan]. Apply only this step.
-```
+Generate:
 
-**Verification Template**:
+.ai/architecture/dependency-graph.md
 
-```text
-Run verification for the changes we just made:
-- [ ] Compile/type check
-- [ ] Lint
-- [ ] Follow project patterns
-```
+Document relationships:
 
-### Checklist for Prompt Orchestration
+Component → Hook → Service → Utility → API
 
-- [ ] Load entry-point at start (Hard Rule A: `@VSCODE_COPILOT_INTEGRATION.mdc` before setup, or `.github/copilot-instructions.md` auto-loaded after setup)
-- [ ] Detect intent (bug/feature/enhancement/refactor/review)
-- [ ] Include relevant file paths or `@file` references for context
-- [ ] Request plan artifact before implementation
-- [ ] Apply edits in steps, not all at once for complex changes
-- [ ] Run verification after implementation
+Used for impact analysis.
 
-## Project Detection & Adaptation
+---------------------------------------------------------------------
 
-**CRITICAL FIRST STEP**: Before generating any files or plans, analyze the codebase to detect and adapt to the project:
+ARCHITECTURAL DECISION RECORDS
 
-### 1. Detect Project Type
+Create:
 
-Analyze the codebase to determine project type:
+.ai/architecture/adr/
 
-- **Frontend**: React, Vue, Angular, Svelte, etc.
-- **Backend**: Node.js/Express, Python/Django/Flask, Go, Java/Spring, Ruby/Rails, etc.
-- **Full-Stack**: Contains both frontend and backend
-- **Mobile**: React Native, Flutter, Swift, Kotlin, etc.
-- **Desktop**: Electron, Tauri, etc.
-- **CLI/Tool**: Command-line applications
+Example files:
 
-**Detection Methods**:
+0001-state-management.md  
+0002-api-pattern.md  
 
-- Check `package.json`, `requirements.txt`, `go.mod`, `pom.xml`, `Cargo.toml`, etc.
-- Analyze directory structure (`src/`, `app/`, `components/`, `routes/`, `controllers/`, etc.)
-- Check for framework-specific files (e.g., `vite.config.js`, `next.config.js`, `django/settings.py`)
+Purpose:
 
-### 2. Detect Tech Stack
+Document architecture decisions.
 
-Read dependency files and analyze code to identify:
+---------------------------------------------------------------------
 
-**Frontend Detection**:
+RISK MATRIX
 
-- Framework: React, Vue, Angular, Svelte, etc.
-- Build Tool: Vite, Webpack, Next.js, etc.
-- State Management: Redux, Zustand, Pinia, Context API, etc.
-- Routing: React Router, TanStack Router, Vue Router, etc.
-- UI Library: Tailwind, Material-UI, shadcn/ui, Chakra UI, etc.
-- Data Fetching: TanStack Query, SWR, Apollo, etc.
-- Language: TypeScript, JavaScript, etc.
+Generate:
 
-**Backend Detection**:
+.ai/architecture/risk-matrix.md
 
-- Runtime: Node.js, Python, Go, Java, Ruby, etc.
-- Framework: Express, FastAPI, Django, Flask, Gin, Spring Boot, Rails, etc.
-- Database: PostgreSQL, MySQL, MongoDB, Redis, etc.
-- ORM/ODM: Prisma, Sequelize, Mongoose, SQLAlchemy, etc.
-- API Style: REST, GraphQL, gRPC, etc.
-- Authentication: JWT, OAuth, etc.
+LOW RISK
+UI components
+styles
+utilities
 
-### 3. Detect Monorepo Structure
+MEDIUM RISK
+hooks
+routes
+services
 
-**CRITICAL**: Check for monorepo setup before analyzing project structure:
+HIGH RISK
+authentication
+database
+global state
+shared utilities
 
-- **Turborepo**: Check for `turbo.json` in root
-- **Workspaces**: Check root `package.json` for `workspaces` field
-- **Workspace Structure**: Look for `apps/` and `packages/` directories
-- **Workspace Types**: Identify frontend apps, backend apps, and shared packages
+HIGH RISK changes require confirmation.
 
-**Monorepo Adaptation**:
+---------------------------------------------------------------------
 
-- If Turborepo detected, adapt all paths to use workspace structure
-- Update file indexes to reflect workspace locations
-- Generate workspace-specific rules (frontend vs backend)
-- Update import patterns to use workspace package names (e.g., `@myorg/shared`)
-- Adapt file discovery to check multiple workspace locations
+DEV COMMAND DETECTION
 
-### 4. Detect Project Structure
+Generate:
 
-Analyze directory structure to identify:
+.ai/architecture/dev-commands.md
 
-- **Modules/Features**: List all modules/features from directory structure
-- **File Organization**: Component-based, feature-based, MVC, etc.
-- **Patterns**: File-based routing, config-based routing, etc.
-- **Conventions**: Naming conventions, file organization patterns
+Detect commands:
 
-**For Monorepos**: Check each workspace separately (`apps/frontend/src/`, `apps/backend/src/`, etc.)
+build  
+lint  
+test  
+type-check  
 
-### 5. Adapt File Specifications
+Examples:
 
-**After detection, adapt the plan**:
+npm run build  
+npm run lint  
+npm run test  
 
-- **Frontend Projects**: Focus on components, hooks, routes, state management, UI patterns
-- **Backend Projects**: Focus on controllers, services, models, API patterns, database patterns
-- **Full-Stack Projects**: Include both frontend and backend patterns
-- **Monorepo Projects**: Use workspace paths (`apps/frontend/src/`, `apps/backend/src/`, `packages/shared/src/`), generate separate rules for frontend and backend workspaces, update import examples to use workspace package names
+---------------------------------------------------------------------
 
-## Planning Contract (Canonical)
+PERFORMANCE GUIDELINES
 
-Before any implementation, create an execution plan that is specific enough for any LLM to follow without additional searching.
+Generate:
 
-### Required plan contents
+.ai/architecture/performance-guidelines.md
 
-1. Exact file list to update
-2. Exact code sections to update in each file
-3. Reason for every planned edit
-4. Targeted before/after code snippet pairs for every edit
-5. Verification steps and commands
-6. Post-execution index update step when required
+Guidelines:
 
-### Fact-only planning rule
+Avoid unnecessary rerenders  
+Avoid large websocket payloads  
+Prefer pagination for large datasets  
+Cache expensive computations  
 
-- Plans must be based on existing files and code only.
-- Verify file existence and current implementation before finalizing plan steps.
-- Avoid theory-first or hypothetical edits that are not grounded in repository state.
+---------------------------------------------------------------------
 
-### Clarification and recommendation rule
+FILE INDEX SYSTEM
 
-- Ask clarifying questions until execution-critical gaps are closed.
-- Ask one recommendation question only when multiple materially different valid implementations exist.
+Generate:
 
-### Strict adherence rule
+.ai/file-index/
 
-- Execute strictly against the approved plan.
-- If real code differs from the plan, pause at a checkpoint, report mismatch, and request approval for a revised step.
+src-index.md  
+components-index.md  
+hooks-index.md  
+routes-index.md  
+stores-index.md  
+utils-index.md  
+controllers-index.md  
+services-index.md  
+models-index.md  
 
-## Model Split: Planning vs. Execution
+Each index must contain:
 
-Use this split to keep planning and execution efficient:
+file path  
+purpose  
+relationships  
+usage patterns  
 
-1. **Planning (Copilot Chat)**:
-   - Produces the execution-plan artifact with required contents above.
-   - Confirms facts from files before finalizing.
-2. **Execution (Copilot Inline Chat or manual edits)**:
-   - Validates plan anchors before edits (files exist, snippets still match, no unanswered gaps).
-   - Executes exact approved steps.
-   - Raises checkpoint on drift or contradictions.
+---------------------------------------------------------------------
 
-### Required handoff add-ons
+FILE ANCHOR VERIFICATION
 
-- **Plan artifact contract**: exact files, exact edits, reasons, before/after snippets, verification, index step
-- **Execution handoff checklist**: file existence, snippet anchor validity, zero unresolved gaps
-- **Deviation protocol**: stop, report mismatch, request revised-step approval
-- **Plan version stamp**: `plan_version`, `planned_files_count`, `planned_steps_count`
+Before editing a file:
 
-### Automation Levels
+1. Confirm file path exists
+2. Verify code anchor
+3. Ensure correct function/class/component
 
-1. **Full Auto (Proceed Automatically)**:
-   - Single file changes (< 3 files)
-   - Clear requirements
-   - Well-defined patterns exist
-   - Low risk changes
-   - **Action**: Create required plan artifact, implement approved steps, verify, update docs/indexes
+---------------------------------------------------------------------
 
-2. **Auto with Verification (Proceed + Verify)**:
-   - Multiple files (3-10 files)
-   - Moderate complexity
-   - Some ambiguity but resolvable
-   - **Action**: Create required plan artifact, implement approved steps, run verification checks, show summary
+IMPACT ANALYSIS
 
-3. **Auto with Checkpoint (Proceed + Pause for Review)**:
-   - Many files (10+ files)
-   - High complexity
-   - Breaking changes
-   - Architecture changes
-   - **Action**: Create required plan artifact, implement approved steps, pause before final commit, show review summary
+Before modifying code:
 
-4. **Ask First (Clarify Before Proceeding)**:
-   - Ambiguous requirements
-   - Conflicting patterns
-   - Missing critical information
-   - High-risk changes
-   - **Action**: Ask clarifying questions before plan approval and implementation
+1. Check dependency graph
+2. Identify downstream modules
+3. Document impact
 
-## When to Ask Questions vs. Proceed Automatically
+---------------------------------------------------------------------
 
-### Ask Questions When
+CHANGE SCOPE LIMITER
 
-1. **Ambiguous Requirements**:
-   - User request is unclear or has multiple interpretations
-   - Missing critical details (e.g., "add a button" - where? what does it do?)
-   - Conflicting requirements mentioned
-   - **Action**: Ask 1-2 specific questions to clarify
+Small change → 1 file  
+Medium change → ≤ 5 files  
+Large change → require confirmation  
 
-2. **Missing Critical Information**:
-   - API endpoint not specified
-   - Data structure unknown
-   - User flow unclear
-   - **Action**: Ask for missing information before proceeding
+---------------------------------------------------------------------
 
-3. **High-Risk Changes**:
-   - Breaking changes to core architecture
-   - Changes affecting multiple modules
-   - Security-related changes
-   - **Action**: Confirm approach before implementing
+CRITICAL MODULE PROTECTION
 
-4. **Pattern Conflicts**:
-   - Request conflicts with existing patterns
-   - Multiple valid approaches exist
-   - **Action**: Ask which approach to use
+Critical modules:
 
-### Proceed Automatically When
+Authentication  
+Database access  
+Global state  
+Shared utilities  
 
-1. **Clear Requirements**:
-   - User request is specific and clear
-   - All necessary information is present
-   - Pattern is well-established
-   - **Action**: Implement immediately
+Changes require additional review.
 
-2. **Low-Risk Changes**:
-   - Single file modifications
-   - Following established patterns
-   - Non-breaking changes
-   - **Action**: Implement, verify, update docs
+---------------------------------------------------------------------
 
-3. **Well-Defined Patterns**:
-   - Similar implementations exist
-   - Architecture patterns are clear
-   - File structure is standard
-   - **Action**: Follow patterns automatically
+LARGE REPOSITORY NAVIGATION
 
-4. **Standard Tasks**:
-   - Bug fixes with clear root cause
-   - Feature additions following patterns
-   - Enhancements to existing features
-   - **Action**: Implement automatically
+Before scanning repository:
 
-## File Specifications
+1. Use code-map
+2. Use file-index
+3. Use dependency graph
 
-**IMPORTANT**: Adapt these specifications based on detected project type and tech stack. Same as CURSOR_INTEGRATION.mdc—generate only relevant files.
+Avoid scanning entire repository unnecessarily.
 
-### Architecture Documentation (Adaptive - Generate Only Relevant Files)
+---------------------------------------------------------------------
 
-1. **architecture/overview.md** (Always generate)
-   - System architecture with mermaid diagrams (application flow, module relationships, data flow)
-   - Key architectural decisions
-   - Directory structure
-   - Development patterns
-   - **Adapt**: Include detected project type, tech stack, and modules
+DEBUGGING SYSTEM
 
-2. **architecture/tech-stack.md** (Always generate)
-   - **Adapt**: Complete technology stack based on detected dependencies
-   - **Frontend**: Framework, build tool, state management, routing, UI library, data fetching, language
-   - **Backend**: Runtime, framework, database, ORM/ODM, API style, authentication
-   - **Full-Stack**: Include both frontend and backend
-   - Version information from dependency files
-   - Package management (npm, yarn, pnpm, pip, go mod, etc.)
-   - Environment variables
+Generate:
 
-3. **architecture/routing.md** (Generate for Frontend/Full-Stack only)
-   - **Adapt**: Routing patterns based on detected framework
-   - **Skip**: For backend-only projects
+.ai/debugging/
 
-4. **architecture/state-management.md** (Generate for Frontend/Full-Stack only)
-   - **Adapt**: State management patterns based on detected library
-   - **Skip**: For backend-only projects
+workflow.md  
+root-cause-analysis.md  
+common-issues.md  
+fix-plan-template.md  
 
-5. **architecture/data-fetching.md** (Generate for Frontend/Full-Stack only)
-   - **Adapt**: Data fetching patterns based on detected library
-   - **Skip**: For backend-only projects
+---------------------------------------------------------------------
 
-6. **architecture/api-integration.md** (Generate for Frontend/Full-Stack or Backend)
-   - **Frontend**: HTTP client configuration
-   - **Backend**: API patterns (REST, GraphQL, gRPC)
+WORKFLOWS
 
-7. **architecture/component-patterns.md** (Generate for Frontend/Full-Stack only)
-   - **Adapt**: Component architecture based on detected framework
-   - **Skip**: For backend-only projects
+Generate:
 
-8. **architecture/module-structure.md** (Always generate)
-   - **Adapt**: List all detected modules/features from directory structure
+.ai/workflows/
 
-9. **architecture/database.md** (Generate for Backend/Full-Stack only)
-   - **Adapt**: Database patterns based on detected database and ORM/ODM
-   - **Skip**: For frontend-only projects
+feature-development.md  
+bug-fix.md  
+refactoring.md  
+code-review.md  
 
-10. **architecture/service-patterns.md** (Generate for Backend/Full-Stack only)
-    - **Adapt**: Service layer patterns based on detected framework
-    - **Skip**: For frontend-only projects
+---------------------------------------------------------------------
 
-### File Indexes (Adaptive - Generate Based on Project Structure)
+EXECUTION PLAN CONTRACT
 
-1. **file-index/src-index.md** (Always generate)
-   - Complete directory tree based on actual project structure
-   - File purposes and relationships
-   - Directory structure with descriptions
+Before implementing changes create a plan containing:
 
-2. **file-index/components-index.md** (Generate for Frontend/Full-Stack only)
-   - Component categorization (UI, dialogs, forms, layouts, inputs, etc.)
-   - Component descriptions and purposes
-   - **Skip**: For backend-only projects
+Exact files  
+Exact code sections  
+Reasons  
+Before/after snippets  
+Verification steps  
 
-3. **file-index/hooks-index.md** (Generate for React Frontend/Full-Stack only)
-   - Hooks categorized (query, mutation, socket, custom)
-   - **Skip**: For non-React projects or backend-only projects
+---------------------------------------------------------------------
 
-4. **file-index/routes-index.md** (Generate for Frontend/Full-Stack only)
-   - Routes with paths, purposes, auth requirements, related components
-   - **Skip**: For backend-only projects
+STAFF ENGINEER REVIEW GUARD
 
-5. **file-index/stores-index.md** (Generate for Frontend/Full-Stack only)
-   - State management stores with structures, actions, usage patterns
-   - **Skip**: For backend-only projects or projects without state management
+Before large changes evaluate:
 
-6. **file-index/utils-index.md** (Always generate)
-   - Utility functions with purposes and usage examples
+Architecture consistency  
+Dependency impact  
+Security implications  
+Performance impact  
 
-7. **file-index/controllers-index.md** (Generate for Backend/Full-Stack only)
-   - Controllers/routes with purposes and endpoints
-   - **Skip**: For frontend-only projects
+---------------------------------------------------------------------
 
-8. **file-index/services-index.md** (Generate for Backend/Full-Stack only)
-   - Service purposes and business logic patterns
-   - **Skip**: For frontend-only projects
+QUALITY VERIFICATION
 
-9. **file-index/models-index.md** (Generate for Backend/Full-Stack only)
-   - Models/schemas with purposes and relationships
-   - **Skip**: For frontend-only projects
+Verify automatically:
 
-### Debugging Files (4 files)
+Compilation success  
+Imports resolve  
+Types valid  
+Lint passes  
+Tests pass  
+Build succeeds  
 
-1. **debugging/workflow.md** – Step-by-step debugging process (reproduce → identify → RCA → fix → test)
-2. **debugging/root-cause-analysis.md** – RCA template (problem, affected areas, root cause, impact, solution)
-3. **debugging/common-issues.md** – Known issues database with solutions and prevention strategies
-4. **debugging/fix-plan-template.md** – Standardized fix plan format
+---------------------------------------------------------------------
 
-### Rules System (7 files)
+HALLUCINATION PREVENTION
 
-1. **rules/bug-fix.md** – Bug fixing guidelines (reproduce first, use RCA, test thoroughly, follow patterns)
-2. **rules/feature-implementation.md** – Feature rules (follow architecture, use patterns, create types, error handling, tests)
-3. **rules/enhancement.md** – Enhancement guidelines (understand current, identify improvements, maintain compatibility, document)
-4. **rules/refactoring.md** – Refactoring rules (maintain functionality, follow style, update related files, test)
-5. **rules/code-review.md** – Review guidelines (check patterns, error handling, performance, accessibility)
-6. **rules/testing.md** – Testing rules (happy paths, error cases, edge cases, integration)
-7. **rules/automation-guidelines.md** – When to proceed automatically vs ask questions, quality gates, hallucination prevention
+Before referencing files:
 
-### Maintenance (3 files)
+Verify existence  
+Verify architecture patterns  
+Verify APIs  
+Verify types  
 
-1. **maintenance/update-workflow.md** – When and how to update files
-2. **maintenance/update-checklist.md** – Maintenance checklist
-3. **maintenance/auto-update-guide.md** – AI auto-update instructions
+---------------------------------------------------------------------
 
-## Update Triggers & Maintenance
+FINAL UPGRADE — CONTEXT COMPRESSION LAYER
 
-Same as CURSOR_INTEGRATION.mdc. When adding or modifying code, update the relevant `.github/docs/` files. **Hard rule**: The AI performs all file-index updates directly—no scripts, pre-commit hooks, or external tools. The AI knows what it changed.
+Large documentation sets should not be loaded entirely.
 
-### Automatic Update Triggers
+Prioritize context loading in this order:
 
-**New Files Added**:
+1 code-map.md  
+2 feature-boundaries.md  
+3 relevant file-index docs  
+4 architecture docs  
+5 debugging docs  
 
-- **Frontend**: Component → Update `file-index/components-index.md`, `file-index/src-index.md`
-- **Frontend**: Hook → Update `file-index/hooks-index.md`, `file-index/src-index.md`
-- **Frontend**: Route → Update `file-index/routes-index.md`, `file-index/src-index.md`
-- **Frontend**: Store → Update `file-index/stores-index.md`, `file-index/src-index.md`
-- **Backend**: Controller → Update `file-index/controllers-index.md`, `file-index/src-index.md`
-- **Backend**: Service → Update `file-index/services-index.md`, `file-index/src-index.md`
-- **Backend**: Model → Update `file-index/models-index.md`, `file-index/src-index.md`
-- **All**: Utility → Update `file-index/utils-index.md`, `file-index/src-index.md`
+Only load minimal required context.
 
-**New Features**:
+---------------------------------------------------------------------
 
-- New module → Update `architecture/module-structure.md`, relevant file-index files
-- New pattern → Update relevant `architecture/` files
-- **Frontend**: New component pattern → Update `architecture/component-patterns.md`
-- **Frontend**: New route pattern → Update `architecture/routing.md`
-- **Frontend**: New state pattern → Update `architecture/state-management.md`
-- **Backend**: New service pattern → Update `architecture/service-patterns.md`
-- **Backend**: New database pattern → Update `architecture/database.md`
-- **All**: New API pattern → Update `architecture/api-integration.md`
+SUCCESS CRITERIA
 
-**Breaking Changes**:
+AI understands architecture  
+Files located correctly  
+Plans precede edits  
+Architecture respected  
+Hallucinations minimized  
+Context optimized  
 
-- Architecture change → Update `architecture/overview.md`
-- Tech stack change → Update `architecture/tech-stack.md`
-- Pattern change → Update relevant `architecture/` files
-- Add to `debugging/common-issues.md` if migration needed
+---------------------------------------------------------------------
 
-**Bug Fixes**:
+FINAL INSTRUCTION
 
-- Common bug → Add to `debugging/common-issues.md`
-- New bug pattern → Update `debugging/workflow.md` if needed
-
-**Code Changes**:
-
-- File renamed → Update relevant `file-index/` files
-- File deleted → Remove from `file-index/` files
-- File moved → Update `file-index/src-index.md`
-
-### Maintenance Workflow
-
-1. **Detect Change**: Identify type of change (new file, modified, deleted, pattern change)
-2. **Identify Affected Files**: Determine which `.github/docs/` files need updates
-3. **Update Files**: Apply changes to relevant documentation
-4. **Verify**: Check that updates are complete and accurate
-
-See `maintenance/update-workflow.md` for detailed workflow.
-
-## Fully Automatic Development System (Same as Cursor)
-
-**IMPORTANT**: The system is designed for **fully automated development with a mandatory planning gate**. Users do NOT need to:
-
-- Reference command files or rules
-- Mention specific documentation files
-- Intervene unless AI hallucinates or many files need review
-
-**copilot-instructions.md is the entry-point (Hard Rule A)**: Every prompt must enter through it. It automatically instructs the AI to detect intent, find files via file-index, apply rules, include architecture docs, create plans, implement, verify, and **mandatorily update file-index** when code changes (Hard Rule C).
-
-**Users can simply describe what they need**—the system handles everything automatically, from planning to implementation to verification, while requiring a complete plan artifact before edits.
-
-## Automatic Workflow Example
-
-**User Prompt** (No command file, no rules mentioned):
-
-```text
-I need usePaginatedTableSocket to handle 100k records from socket 
-data and store it in IndexedDB for the live-data-table component
-```
-
-**System Automatically** (when .github/docs/ exists):
-
-1. **Detects Intent**: Keywords "need", "handle", "store" → Feature/Enhancement intent
-2. **Finds Files**:
-   - `usePaginatedTableSocket` → Found in `file-index/hooks-index.md`
-   - `live-data-table` → Found in `file-index/components-index.md`
-   - `IndexedDB` → Found in `file-index/utils-index.md`
-3. **Applies Rules**: `rules/feature-implementation.md`, `rules/enhancement.md`, `rules/testing.md`
-4. **Includes Documentation**: `architecture/data-fetching.md`, `architecture/component-patterns.md`, relevant file-index files
-5. **Creates Plan**: Comprehensive implementation plan with all details
-
-**Result**: User gets complete plan without mentioning any command files or rules!
-
-## Key Principles
-
-- **Entry-Point-First (Hard Rule A)**: `.github/copilot-instructions.md` is the entry-point; every prompt must enter through it. VS Code auto-loads it.
-- **Plan-Before-Implement**: Always produce and approve a plan artifact before any code edits
-- **Fully Automatic**: File-index, rules, and architecture are used automatically when planning
-- **Cross-Functional**: Rules work together; copilot-instructions orchestrates routing
-- **Auto-Context**: System provides relevant context from architecture, indexes, common issues, patterns
-- **Intelligent Detection**: Uses keywords, file references, and context clues to detect intent
-- **Minimal Prompting**: Just describe what you need—system handles the rest
-- **Self-Updating**: Update `.github/docs/` when code changes (see Update Triggers)
-
-## Quality Gates & Checkpoints
-
-### Automatic Verification Steps
-
-After implementing changes:
-
-1. **Code Quality Checks**:
-   - ✅ **TypeScript/JavaScript**: Compiles without errors
-   - ✅ **Python**: No syntax errors, passes type checking (if mypy/pyright used)
-   - ✅ **Go**: Compiles without errors
-   - ✅ **Java**: Compiles without errors
-   - ✅ No linting errors (ESLint, Pylint, golint, etc.)
-   - ✅ Follows project patterns
-   - ✅ Matches code style
-
-2. **Functional Verification**:
-   - ✅ Files are syntactically correct
-   - ✅ Imports are valid
-   - ✅ Types are properly defined
-   - ✅ No obvious logic errors
-
-3. **Pattern Compliance**:
-   - ✅ Follows architecture patterns
-   - ✅ Uses established components
-   - ✅ Follows naming conventions
-
-4. **File-Index Update (MANDATORY when code changed)**:
-   - ✅ AI updated `.github/docs/file-index/` directly (no scripts)
-   - ✅ Relevant index files reflect all code changes; workflow not complete until done
-
-### Hallucination Prevention
-
-**Detect and prevent hallucinations**:
-
-1. **File Existence Check**: Verify files exist before referencing
-2. **Pattern Verification**: Verify patterns exist in architecture docs
-3. **API Verification**: Verify API endpoints from existing code
-4. **Type Safety**: Use existing types when possible
-5. **Cross-Reference Check**: Verify imports and file relationships
-
-**When hallucination detected**:
-
-- Stop implementation
-- Show what was detected
-- Ask for clarification
-- Verify with user before proceeding
-
-## Implementation Workflow
-
-### Standard Workflow
-
-1. **Load Entry-Point (Hard Rule A)**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc` as the first context at conversation start (before setup); after setup, `.github/copilot-instructions.md` auto-loads
-2. **Analyze Request**: Detect intent, find files, apply rules (explicitly)
-3. **Create Plan (Required Gate)**: Comprehensive, file-specific, step-by-step plan with targeted before/after snippets and reasons
-4. **Close Gaps**: Ask clarifying questions until execution-critical gaps are closed
-5. **Implement**: Make changes strictly according to approved plan
-6. **Verify**: Run quality checks
-7. **Update File-Index (MANDATORY)**: When source files were added, modified, renamed, deleted, or moved, the AI must update `.github/docs/file-index/` directly—no scripts or external tools. Do not skip.
-8. **Show Summary**: Display what was done
-
-### Workflow with Checkpoint
-
-1. **Load Entry-Point (Hard Rule A)**: Reference `@VSCODE_COPILOT_INTEGRATION.mdc` as first context
-2. **Analyze Request**: Detect intent, find files
-3. **Create Plan (Required Gate)**: Comprehensive implementation plan
-4. **Implement**: Make changes strictly according to approved plan
-5. **Pause**: Show summary when drift, complexity, or risk requires review
-6. **Wait**: User reviews and confirms
-7. **Verify**: Run quality checks
-8. **Update Docs**: Update documentation if applicable
-9. **Finalize**: Complete implementation
-
-## Success Criteria
-
-System is successful when:
-
-- ✅ AI understands project context when master prompt is loaded
-- ✅ Plans are produced with exact files, edits, and verification steps
-- ✅ Implementation follows approved plans strictly
-- ✅ Code follows consistent patterns (rules applied via explicit prompts)
-- ✅ Quality gates prevent errors
-- ✅ Hallucination prevention catches invalid references
-- ✅ Developer intervenes when hallucination detected or many files changed
-
-## Migration Map: Cursor → VS Code + Copilot
-
-<!-- markdownlint-disable MD060 -->
-| Cursor Concept                                | VS Code + Copilot Equivalent                                       |
-| --------------------------------------------- | ------------------------------------------------------------------- |
-| `@.cursor/rules/entry-point.mdc`              | `.github/copilot-instructions.md` (auto-loaded after one-time setup) |
-| `bun run scripts/setup-cursor-integration.ts` | Prompt AI: "Analyze codebase and regenerate all .github/ files per VSCODE_COPILOT_INTEGRATION.mdc" |
-| `.cursor/` (architecture, file-index, rules, etc.) | `.github/docs/` (same structure: architecture/, file-index/, debugging/, rules/, maintenance/) |
-| Auto-context from file-index                  | copilot-instructions instructs AI to read .github/docs/file-index/ when planning |
-| Auto-routing to rules                         | copilot-instructions instructs AI to read .github/docs/rules/ based on detected intent |
-| AI updates file-index directly (no script)    | AI performs index updates; see Update Triggers                               |
-| Cursor Composer                               | Copilot Chat + Inline Chat                                          |
-<!-- markdownlint-enable MD060 -->
-
-## Cross-Project Usage
-
-**This file is designed to work across different project types!**
-
-### How to Use in a New Project
-
-1. **Copy this file** to your project root or a `.vscode/` or docs folder
-2. **Open Copilot Chat** and reference this file
-3. **Prompt**: "Analyze the codebase and produce an execution plan for [task] according to @VSCODE_COPILOT_INTEGRATION.mdc"
-4. **Adapt**: The plan will adapt to detected project type, tech stack, and structure
-
-### Supported Project Types
-
-- ✅ **Frontend**: React, Vue, Angular, Svelte, etc.
-- ✅ **Backend**: Node.js, Python, Go, Java, Ruby, etc.
-- ✅ **Full-Stack**: Any combination of frontend + backend
-- ✅ **Mobile**: React Native, Flutter, etc.
-- ✅ **CLI/Tools**: Command-line applications
+Analyze the repository and generate the AI development documentation system according to this specification.
