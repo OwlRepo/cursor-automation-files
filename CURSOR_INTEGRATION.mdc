@@ -1,146 +1,205 @@
-# Cursor AI Integration — Complete Autonomous Development Bootstrap (Final)
+# Cursor AI Integration — Autonomous Development System
+# Ultimate Edition + Smart Environment Detection + Autonomous Task Routing + Dynamic Context Loading
 
 BOOTSTRAP NOTICE
 
 This file is a one-time bootstrap specification used to generate the full `.cursor` AI development system for a project.
 
-After generation, development workflows rely on the generated `.cursor` documentation instead of this bootstrap file.
+After generation development workflows rely on the generated `.cursor` documentation instead of this bootstrap file.
 
 The generated system enables AI to:
 
-• Understand project architecture automatically  
-• Navigate large repositories safely  
-• Avoid hallucinations  
-• Identify correct files before editing  
-• Respect architecture patterns  
-• Automatically choose the correct documentation context  
-• Perform structured development workflows  
-
-The system must function **without users referencing specific documentation files manually**.
+• Understand project architecture automatically
+• Navigate large repositories safely
+• Avoid hallucinations
+• Identify correct files before editing
+• Respect architecture patterns
+• Automatically choose correct documentation context
+• Execute deterministic development workflows
+• Dynamically load only necessary documentation for each task
 
 ---------------------------------------------------------------------
 
 GLOBAL OUTPUT FORMAT
 
-All generated documentation files inside `.cursor/` MUST use `.md` extension.
+All generated documentation inside `.cursor/` MUST use `.md`.
 
-Never generate `.mdc` files.
+Never generate `.mdc`.
 
 ---------------------------------------------------------------------
 
 ROOT AGENT ENTRY FILE
 
-Always generate this file at project root:
+Generate at repository root:
 
 AGENTS.md
 
-Content must be:
+Content:
 
-"For any task, always start by loading:
+For any task always start by loading:
 
 @.cursor/rules/entry-point.md
 
-Follow the workflow defined in that file before performing analysis, planning, or implementation."
+Follow the workflow defined in that file before performing analysis, planning, or implementation.
 
-This ensures all prompts always enter the structured system.
+Always prioritize `.cursor` documentation before scanning repository files.
 
 ---------------------------------------------------------------------
 
 PRIMARY OBJECTIVE
 
-Analyze the repository and generate a `.cursor` system containing:
+Analyze the repository and generate a `.cursor` AI development system containing:
 
-Architecture documentation  
-Semantic navigation maps  
-Feature boundaries  
-Dependency graphs  
-File indexes  
-Debugging frameworks  
-Automation rules  
-Maintenance guides  
+Architecture documentation
+Semantic navigation maps
+Feature boundaries
+Dependency graphs
+File indexes
+Debugging frameworks
+Automation rules
+Maintenance guides
 
-The resulting system must allow AI to automatically determine which documentation files to use.
-
----------------------------------------------------------------------
-
-HARD RULES
-
-ENTRY POINT FIRST
-
-Every prompt must start with:
-
-@.cursor/rules/entry-point.md
-
-No planning or implementation occurs before this step.
-
----------------------------------------------------------------------
-
-SAFE FILE EDITING
-
-Before editing any file:
-
-1. Verify file exists
-2. Confirm relevance via file-index
-3. Confirm file belongs to feature boundary
-4. Verify code anchor
-
----------------------------------------------------------------------
-
-FILE INDEX MAINTENANCE
-
-Whenever code changes occur update file indexes.
-
-Component → components-index + src-index  
-Hook → hooks-index + src-index  
-Route → routes-index + src-index  
-Store → stores-index + src-index  
-Controller → controllers-index + src-index  
-Service → services-index + src-index  
-Model → models-index + src-index  
-Utility → utils-index + src-index  
+The system must allow AI to automatically determine which documentation files to load.
 
 ---------------------------------------------------------------------
 
 PROJECT DETECTION
 
-Detect:
+Detect project type:
 
-Project type
-Frontend  
-Backend  
-Fullstack  
-Mobile  
-Desktop  
-CLI  
+Frontend
+Backend
+Fullstack
+Mobile
+Desktop
+CLI
 
 Detect technology stack:
 
-Frameworks  
-Languages  
-Libraries  
-Database  
-ORM  
-State management  
-Routing  
+Frameworks
+Languages
+Libraries
+Database
+ORM
+State management
+Routing
 
 Use:
 
-package.json  
-requirements.txt  
-go.mod  
-Cargo.toml  
-pom.xml  
+package.json
+requirements.txt
+go.mod
+Cargo.toml
+pom.xml
+
+---------------------------------------------------------------------
+
+SMART ENVIRONMENT DETECTION
+
+Detect development environment automatically.
+
+Detect:
+
+Runtime
+Node
+Bun
+Deno
+Python
+Java
+Go
+Rust
+
+Package Manager
+npm
+pnpm
+yarn
+bun
+
+Framework Versions
+Next.js
+React
+Vue
+Angular
+Express
+NestJS
+FastAPI
+Spring
+
+Build Systems
+Vite
+Webpack
+Turbopack
+Parcel
+Rollup
+
+Testing Framework
+Jest
+Vitest
+Mocha
+Cypress
+Playwright
+
+Linting / Formatting
+ESLint
+Prettier
+Biome
+
+Containerization
+Dockerfile
+docker-compose
+Kubernetes
+
+CI/CD
+GitHub Actions
+GitLab CI
+CircleCI
+Jenkins
+
+Environment files
+
+.env
+.env.local
+.env.production
+.env.development
+
+Generate:
+
+.cursor/architecture/environment-detection.md
+
+---------------------------------------------------------------------
+
+SEMANTIC SEARCH PROTOCOL
+
+Before scanning repository perform semantic search.
+
+Search targets:
+
+function names
+services
+API routes
+components
+hooks
+database models
+
+Search order:
+
+1 file-index
+2 code-map
+3 semantic repo search
+4 direct inspection
+
+Avoid brute force scans.
 
 ---------------------------------------------------------------------
 
 MONOREPO DETECTION
 
-Check for:
+Detect:
 
-turbo.json  
-workspaces  
-apps/  
-packages/  
+turbo.json
+workspaces
+apps/
+packages/
 
 If detected document workspace boundaries.
 
@@ -152,21 +211,153 @@ Generate:
 
 .cursor/architecture/
 
-Files:
-
-overview.md  
-tech-stack.md  
-module-structure.md  
-api-integration.md  
+overview.md
+tech-stack.md
+module-structure.md
+api-integration.md
 
 Conditional:
 
-routing.md  
-state-management.md  
-data-fetching.md  
-component-patterns.md  
-database.md  
-service-patterns.md  
+routing.md
+state-management.md
+data-fetching.md
+component-patterns.md
+database.md
+service-patterns.md
+
+---------------------------------------------------------------------
+
+WEB + REST API INTELLIGENCE
+
+Generate specialized REST API documentation.
+
+---------------------------------------------------------------------
+
+API ROUTE DISCOVERY
+
+Automatically detect API endpoints.
+
+Examples:
+
+Next.js → app/api
+Express → router files
+NestJS → controllers
+FastAPI → decorators
+Spring → @RestController
+
+Generate:
+
+.cursor/architecture/api-routes.md
+
+Document:
+
+method
+route
+request schema
+response schema
+controller
+auth requirements
+
+---------------------------------------------------------------------
+
+SCHEMA DISCOVERY
+
+Detect request and response schemas from:
+
+TypeScript interfaces
+Zod
+Joi
+DTO classes
+OpenAPI
+JSON schemas
+
+Generate:
+
+.cursor/architecture/schema-map.md
+
+---------------------------------------------------------------------
+
+AUTHENTICATION FLOW
+
+Detect:
+
+JWT
+Session cookies
+OAuth
+API keys
+Passport strategies
+Auth middleware
+
+Generate:
+
+.cursor/architecture/auth-flow.md
+
+Authentication modules considered HIGH RISK.
+
+---------------------------------------------------------------------
+
+MIDDLEWARE MAP
+
+Identify middleware layers.
+
+Examples:
+
+authentication
+authorization
+validation
+rate limiting
+logging
+error middleware
+
+Generate:
+
+.cursor/architecture/middleware-map.md
+
+---------------------------------------------------------------------
+
+ERROR HANDLING SYSTEM
+
+Generate:
+
+.cursor/architecture/error-handling.md
+
+Document:
+
+error types
+response mapping
+logging behavior
+
+---------------------------------------------------------------------
+
+EXTERNAL SERVICE MAP
+
+Detect external integrations.
+
+Examples:
+
+payments
+email
+analytics
+third-party APIs
+auth providers
+
+Generate:
+
+.cursor/architecture/external-services.md
+
+---------------------------------------------------------------------
+
+ENVIRONMENT CONFIGURATION
+
+Generate:
+
+.cursor/architecture/environment.md
+
+Document:
+
+environment variables
+usage
+affected modules
 
 ---------------------------------------------------------------------
 
@@ -176,16 +367,12 @@ Generate:
 
 .cursor/architecture/code-map.md
 
-Purpose:
-
-Provide high-level navigation map.
-
 Include:
 
-System entry points  
-Application flows  
-Core modules  
-External integrations  
+system entry points
+application flows
+core modules
+external integrations
 
 ---------------------------------------------------------------------
 
@@ -195,9 +382,7 @@ Generate:
 
 .cursor/architecture/feature-boundaries.md
 
-Defines logical boundaries between system features.
-
-Prevents unrelated edits.
+Defines logical boundaries between features.
 
 ---------------------------------------------------------------------
 
@@ -207,11 +392,24 @@ Generate:
 
 .cursor/architecture/dependency-graph.md
 
-Document relationships:
+Example chain:
 
-Component → Hook → Service → Utility → API
+Component → Hook → Service → Utility → API → Database
 
-Used for impact analysis.
+---------------------------------------------------------------------
+
+MODULE OWNERSHIP MAP
+
+Document global modules.
+
+Examples:
+
+authentication
+database
+configuration
+shared utilities
+
+These modules are global dependencies.
 
 ---------------------------------------------------------------------
 
@@ -221,14 +419,10 @@ Create:
 
 .cursor/architecture/adr/
 
-Example files:
+Example:
 
-0001-state-management.md  
-0002-api-pattern.md  
-
-Purpose:
-
-Preserve architecture reasoning.
+0001-state-management.md
+0002-api-pattern.md
 
 ---------------------------------------------------------------------
 
@@ -238,23 +432,46 @@ Generate:
 
 .cursor/architecture/risk-matrix.md
 
-LOW RISK
+LOW
 UI components
 styles
 utilities
 
-MEDIUM RISK
+MEDIUM
 hooks
 routes
 services
 
-HIGH RISK
+HIGH
 authentication
 database
 global state
 shared utilities
 
-HIGH RISK edits require checkpoint.
+---------------------------------------------------------------------
+
+API CONTRACT PROTECTION
+
+Before modifying APIs:
+
+verify request schema
+verify response schema
+check consumers
+ensure backward compatibility
+
+Breaking changes require confirmation.
+
+---------------------------------------------------------------------
+
+DATABASE MIGRATION SAFETY
+
+If schema change required:
+
+generate migration plan
+maintain backward compatibility
+avoid destructive operations
+update models
+update queries
 
 ---------------------------------------------------------------------
 
@@ -264,18 +481,12 @@ Generate:
 
 .cursor/architecture/dev-commands.md
 
-Detect commands such as:
+Detect commands:
 
-build  
-lint  
-test  
-type-check  
-
-Examples:
-
-npm run build  
-npm run lint  
-npm run test  
+build
+lint
+test
+type-check
 
 ---------------------------------------------------------------------
 
@@ -285,12 +496,10 @@ Generate:
 
 .cursor/architecture/performance-guidelines.md
 
-Guidelines:
-
-Avoid unnecessary rerenders  
-Avoid large websocket payloads  
-Prefer pagination for large datasets  
-Cache expensive computations  
+Avoid unnecessary rerenders
+avoid large payloads
+prefer pagination
+cache heavy computations
 
 ---------------------------------------------------------------------
 
@@ -300,164 +509,173 @@ Generate:
 
 .cursor/file-index/
 
-src-index.md  
-components-index.md  
-hooks-index.md  
-routes-index.md  
-stores-index.md  
-utils-index.md  
-controllers-index.md  
-services-index.md  
-models-index.md  
+src-index.md
+components-index.md
+hooks-index.md
+routes-index.md
+stores-index.md
+utils-index.md
+controllers-index.md
+services-index.md
+models-index.md
 
-Each index contains:
+Each entry must include:
 
-file path  
-purpose  
-relationships  
-usage patterns  
+file path
+purpose
+dependencies
+usage patterns
 
 ---------------------------------------------------------------------
 
 FILE ANCHOR VERIFICATION
 
-Before editing a file:
+Before editing file:
 
-1. Confirm file path exists
-2. Extract code anchor
-3. Verify anchor matches expected function/class/component
-
-Example:
-
-File: src/hooks/useAuth.ts
-
-Anchor:
-export function useAuth()
+confirm path exists
+extract code anchor
+verify expected function/class
 
 ---------------------------------------------------------------------
 
-IMPACT ANALYSIS
+TEST DISCOVERY
 
-Before modifying code:
+Before modifying modules locate tests.
 
-1. Check dependency graph
-2. Identify downstream modules
-3. Document impact
+Search:
+
+__tests__/
+tests/
+*.test.ts
+*.spec.ts
 
 ---------------------------------------------------------------------
 
 CHANGE SCOPE LIMITER
 
-Small change → 1 file  
-Medium change → ≤ 5 files  
-Large change → checkpoint required  
+Small → 1 file
+Medium → ≤5 files
+Large → confirmation required
 
 ---------------------------------------------------------------------
 
 CRITICAL MODULE PROTECTION
 
-Critical modules:
+Protected modules:
 
-Authentication  
-Database access  
-Global state stores  
-Shared utilities  
-
-Changes require additional verification.
+authentication
+database
+global state
+shared utilities
 
 ---------------------------------------------------------------------
 
-MONOREPO SAFETY
+DYNAMIC CONTEXT LOADING (NEW)
 
-If monorepo detected:
+To prevent context overload the system must dynamically load documentation.
 
-Respect workspace boundaries.
+Step 1 — Identify task scope
 
-Avoid editing outside relevant workspace.
+Determine feature/module involved.
 
----------------------------------------------------------------------
+Step 2 — Load minimal architecture context
 
-LARGE REPOSITORY NAVIGATION
+Load only:
 
-Before scanning repository:
+code-map
+feature-boundaries
 
-1. Consult code-map
-2. Use file-index
-3. Use dependency graph
+Step 3 — Load relevant feature docs
 
-Avoid full repository scans.
+Load only documentation related to the feature being modified.
 
----------------------------------------------------------------------
+Examples:
 
-DEBUGGING SYSTEM
+Auth feature → load auth-flow.md
+API feature → load api-routes.md
+Database feature → load database.md
 
-Generate:
+Step 4 — Load file indexes
 
-.cursor/debugging/
+Load only indexes relevant to target files.
 
-workflow.md  
-root-cause-analysis.md  
-common-issues.md  
-fix-plan-template.md  
+Step 5 — Load debugging docs if task is bug fix.
 
----------------------------------------------------------------------
-
-RULE SYSTEM
-
-Generate:
-
-.cursor/rules/
-
-entry-point.md  
-bug-fix.md  
-feature-implementation.md  
-enhancement.md  
-refactoring.md  
-code-review.md  
-testing.md  
-automation-guidelines.md  
-architecture-compliance.md  
-
-entry-point.md must route prompts automatically.
+This system ensures minimal context usage while maintaining reasoning accuracy.
 
 ---------------------------------------------------------------------
 
-AUTOMATIC CONTEXT ROUTING
+AUTONOMOUS TASK ROUTING
 
-Entry-point must detect:
+entry-point.md must classify tasks automatically.
 
-User intent  
-Relevant modules  
-Relevant docs  
-Relevant rules  
+Task types:
 
-Users never manually reference `.cursor` docs.
+Bug Fix
+Feature Implementation
+Enhancement
+Refactor
+Code Review
+Debugging
+
+Routing rules:
+
+Bug → debugging workflow
+Feature → feature workflow
+Refactor → dependency graph + refactor workflow
+Review → architecture + review workflow
 
 ---------------------------------------------------------------------
 
-EXECUTION PLAN CONTRACT
+DETERMINISTIC IMPLEMENTATION PLAYBOOK
 
-Before edits create plan containing:
+Before implementing code the AI must generate a deterministic execution plan.
 
-Exact files  
-Exact code sections  
-Reasons  
-Before/after snippets  
-Verification steps  
-Index updates  
+Plan must include:
+
+WHAT
+exact functionality
+
+WHY
+problem solved
+
+WHERE
+exact files modified
+
+WHEN
+implementation order
+
+HOW
+code-level implementation
+
+BEFORE / AFTER CODE
+code snippets
+
+DEPENDENCY IMPACT
+
+RISK LEVEL
+
+VERIFICATION STEPS
+
+Commands:
+
+build
+lint
+test
+typecheck
+
+ROLLBACK STRATEGY
 
 ---------------------------------------------------------------------
 
 STAFF ENGINEER REVIEW GUARD
 
-Before large changes perform review:
+Before high risk changes evaluate:
 
-Architecture consistency  
-Dependency impact  
-Security implications  
-Performance impact  
-
-If risk exists request confirmation.
+architecture consistency
+dependency impact
+security
+performance
 
 ---------------------------------------------------------------------
 
@@ -465,12 +683,10 @@ QUALITY VERIFICATION
 
 Verify automatically:
 
-Compilation success  
-Imports resolve  
-Types valid  
-Lint passes  
-Tests pass  
-Build succeeds  
+build success
+lint success
+tests pass
+types valid
 
 ---------------------------------------------------------------------
 
@@ -478,61 +694,48 @@ HALLUCINATION PREVENTION
 
 Before referencing files:
 
-Verify existence  
-Verify architecture patterns  
-Verify APIs  
-Verify types  
+verify file exists
+verify architecture patterns
+verify APIs
+verify types
 
-Ask user if uncertain.
-
----------------------------------------------------------------------
-
-FINAL UPGRADE — CONTEXT COMPRESSION LAYER
-
-Large repositories contain too many documentation files to load simultaneously.
-
-To maintain reasoning quality implement context compression.
-
-Entry-point must prioritize loading docs in this order:
-
-1. code-map.md  
-2. feature-boundaries.md  
-3. relevant file-index docs  
-4. relevant architecture docs  
-5. debugging docs if needed  
-
-Only load minimal required context.
-
-This prevents token overload and improves reasoning accuracy.
+If uncertain request clarification.
 
 ---------------------------------------------------------------------
 
-DIRECTORY STRUCTURE
+LEARNING SYSTEM
 
-.cursor/
+When patterns appear repeatedly update architecture docs.
 
-README.md  
-CURSOR_INTEGRATION.md  
-CURSOR_USAGE_GUIDE.md  
+Examples:
 
-architecture/  
-file-index/  
-debugging/  
-rules/  
-commands/  
-maintenance/  
+new service pattern
+new component pattern
+new API structure
+
+---------------------------------------------------------------------
+
+CONTEXT COMPRESSION
+
+Load context in order:
+
+1 code-map
+2 feature-boundaries
+3 relevant file-index
+4 relevant architecture docs
+5 debugging docs
 
 ---------------------------------------------------------------------
 
 SUCCESS CRITERIA
 
-AI understands architecture automatically  
-Correct files identified before editing  
-Plans precede edits  
-Architecture patterns respected  
-Indexes stay updated  
-Hallucinations minimized  
-Context loading optimized  
+AI understands architecture automatically
+Correct files identified before editing
+Plans precede edits
+Architecture patterns respected
+Indexes updated
+Hallucinations minimized
+Context optimized
 
 ---------------------------------------------------------------------
 
