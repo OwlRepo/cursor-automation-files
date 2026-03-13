@@ -1,4 +1,4 @@
-# Cline Autonomous AI Development System Bootstrap (Ultimate Deterministic Edition)
+# Cline Autonomous AI Development System Bootstrap (Ultimate Deterministic Edition + Smart Environment Detection)
 
 BOOTSTRAP NOTICE
 
@@ -97,6 +97,91 @@ pom.xml
 
 ---------------------------------------------------------------------
 
+SMART ENVIRONMENT DETECTION
+
+The AI must automatically detect the runtime environment and development tooling used by the repository.
+
+Detect:
+
+Runtime Environment
+Node.js
+Bun
+Deno
+Python
+Java
+Go
+Rust
+
+Package Manager
+npm
+pnpm
+yarn
+bun
+
+Framework Versions
+Next.js
+React
+Vue
+Angular
+Express
+NestJS
+FastAPI
+Spring
+
+Build Systems
+Vite
+Webpack
+Turbopack
+Parcel
+Rollup
+
+Testing Framework
+Jest
+Vitest
+Mocha
+Cypress
+Playwright
+Testing Library
+
+Linting and Formatting
+ESLint
+Prettier
+Biome
+StandardJS
+
+Containerization
+Dockerfile
+docker-compose.yml
+Kubernetes manifests
+
+CI/CD Systems
+GitHub Actions
+GitLab CI
+CircleCI
+Jenkins
+
+Environment Configuration
+.env
+.env.local
+.env.production
+.env.development
+
+Generate documentation:
+
+.ai/architecture/environment-detection.md
+
+Document:
+
+runtime
+package manager
+framework versions
+build system
+test framework
+CI/CD
+container setup
+
+---------------------------------------------------------------------
+
 MONOREPO DETECTION
 
 Check for:
@@ -116,19 +201,19 @@ Before scanning directories manually, perform semantic search.
 
 Search targets:
 
-function names
-service names
-API routes
-component names
-hooks
-database models
+function names  
+service names  
+API routes  
+component names  
+hooks  
+database models  
 
 Search order:
 
-1. file-index docs
-2. code-map.md
-3. semantic search across repository
-4. direct file inspection
+1. file-index docs  
+2. code-map.md  
+3. semantic search across repository  
+4. direct file inspection  
 
 Avoid brute force repository scans.
 
@@ -170,11 +255,11 @@ Automatically identify all API endpoints.
 
 Possible locations:
 
-Next.js → /app/api or /pages/api
-Express → router definitions
-NestJS → @Controller decorators
-FastAPI → @app.get/post
-Spring → @RestController
+Next.js → /app/api or /pages/api  
+Express → router definitions  
+NestJS → @Controller decorators  
+FastAPI → @app.get/post  
+Spring → @RestController  
 
 Generate:
 
@@ -182,12 +267,12 @@ Generate:
 
 Each endpoint must document:
 
-HTTP method
-route path
-request schema
-response schema
-controller/service handling
-authentication requirements
+HTTP method  
+route path  
+request schema  
+response schema  
+controller/service handling  
+authentication requirements  
 
 ---------------------------------------------------------------------
 
@@ -197,12 +282,12 @@ Identify request and response schemas used by APIs.
 
 Possible schema sources:
 
-TypeScript interfaces
-Zod schemas
-Joi validation
-DTO classes
-OpenAPI definitions
-JSON schemas
+TypeScript interfaces  
+Zod schemas  
+Joi validation  
+DTO classes  
+OpenAPI definitions  
+JSON schemas  
 
 Generate:
 
@@ -210,10 +295,10 @@ Generate:
 
 Each schema must document:
 
-fields
-types
-validation rules
-where it is used
+fields  
+types  
+validation rules  
+where it is used  
 
 ---------------------------------------------------------------------
 
@@ -223,13 +308,13 @@ Detect authentication mechanisms.
 
 Examples:
 
-JWT
-Session cookies
-OAuth
-API keys
-Bearer tokens
-Passport strategies
-Auth middleware
+JWT  
+Session cookies  
+OAuth  
+API keys  
+Bearer tokens  
+Passport strategies  
+Auth middleware  
 
 Generate:
 
@@ -237,11 +322,11 @@ Generate:
 
 Document:
 
-login flow
-token validation
-middleware guards
-authorization checks
-role based access
+login flow  
+token validation  
+middleware guards  
+authorization checks  
+role based access  
 
 Authentication modules are HIGH RISK.
 
@@ -253,12 +338,12 @@ Identify middleware layers.
 
 Examples:
 
-authentication middleware
-authorization middleware
-request validation
-rate limiting
-logging
-error handling
+authentication middleware  
+authorization middleware  
+request validation  
+rate limiting  
+logging  
+error handling  
 
 Generate:
 
@@ -274,10 +359,10 @@ Identify how errors propagate through the system.
 
 Examples:
 
-global error middleware
-try/catch patterns
-error classes
-HTTP response mapping
+global error middleware  
+try/catch patterns  
+error classes  
+HTTP response mapping  
 
 Generate:
 
@@ -285,9 +370,9 @@ Generate:
 
 Document:
 
-error types
-response formatting
-logging behavior
+error types  
+response formatting  
+logging behavior  
 
 ---------------------------------------------------------------------
 
@@ -297,11 +382,11 @@ Detect integrations with external services.
 
 Examples:
 
-payment providers
-email services
-auth providers
-analytics
-third party APIs
+payment providers  
+email services  
+auth providers  
+analytics  
+third party APIs  
 
 Generate:
 
@@ -309,11 +394,11 @@ Generate:
 
 Each integration must document:
 
-service name
-client library
-API wrapper location
-retry strategy
-error handling
+service name  
+client library  
+API wrapper location  
+retry strategy  
+error handling  
 
 ---------------------------------------------------------------------
 
@@ -327,10 +412,10 @@ Generate:
 
 Document:
 
-variable name
-purpose
-default behavior
-affected modules
+variable name  
+purpose  
+default behavior  
+affected modules  
 
 ---------------------------------------------------------------------
 
@@ -431,11 +516,11 @@ Critical modules must be identified and documented.
 
 Examples:
 
-authentication
-authorization
-database access
-configuration
-shared utilities
+authentication  
+authorization  
+database access  
+configuration  
+shared utilities  
 
 These modules are global dependencies.
 
@@ -447,10 +532,10 @@ API CONTRACT PROTECTION
 
 Before modifying any API layer:
 
-1. Identify request schema
-2. Identify response schema
-3. Verify dependent consumers
-4. Verify backward compatibility
+1. Identify request schema  
+2. Identify response schema  
+3. Verify dependent consumers  
+4. Verify backward compatibility  
 
 If breaking change detected:
 
@@ -462,11 +547,11 @@ DATABASE MIGRATION SAFETY
 
 If database schema changes are required:
 
-1. Generate migration plan
-2. Preserve backward compatibility
-3. Avoid destructive operations unless confirmed
-4. Update related models
-5. Update dependent queries
+1. Generate migration plan  
+2. Preserve backward compatibility  
+3. Avoid destructive operations unless confirmed  
+4. Update related models  
+5. Update dependent queries  
 
 Schema changes require confirmation.
 
@@ -614,10 +699,10 @@ Locate related tests.
 
 Search locations:
 
-__tests__/
-tests/
-*.test.ts
-*.spec.ts
+__tests__/  
+tests/  
+*.test.ts  
+*.spec.ts  
 
 Understand expected behavior before editing.
 
@@ -688,16 +773,13 @@ It must include precise technical implementation details.
 
 Each plan must include the following sections:
 
-1. WHAT
-
+1. WHAT  
 Exact functionality or change being implemented.
 
-2. WHY
-
+2. WHY  
 Reason for the change including problem being solved.
 
-3. WHERE
-
+3. WHERE  
 Exact files to be modified.
 
 Example:
@@ -705,49 +787,26 @@ Example:
 src/controllers/userController.ts  
 src/services/userService.ts  
 
-4. WHEN
-
+4. WHEN  
 Execution order of implementation steps.
 
-5. HOW
+5. HOW  
+Exact code-level modifications including functions, imports, data structures, and API calls.
 
-Exact code-level modifications.
+6. BEFORE / AFTER CODE  
+Concrete code snippets showing current implementation and new implementation.
 
-Include:
-
-function names
-class names
-imports
-data structures
-API calls
-
-6. BEFORE / AFTER CODE
-
-Provide concrete code snippets showing:
-
-existing implementation
-new implementation
-
-7. DEPENDENCY IMPACT
-
+7. DEPENDENCY IMPACT  
 Modules affected downstream.
 
-8. RISK ASSESSMENT
-
+8. RISK ASSESSMENT  
 Risk level based on risk matrix.
 
-9. VERIFICATION STEPS
+9. VERIFICATION STEPS  
+Commands to validate build, lint, tests, and type checking.
 
-Commands to validate:
-
-build
-lint
-test
-type check
-
-10. ROLLBACK STRATEGY
-
-Steps to revert if implementation fails.
+10. ROLLBACK STRATEGY  
+Steps to revert changes if implementation fails.
 
 ---------------------------------------------------------------------
 
@@ -796,9 +855,9 @@ Update architecture documentation.
 
 Examples:
 
-new service pattern
-new component pattern
-new API structure
+new service pattern  
+new component pattern  
+new API structure  
 
 Architecture documentation must evolve with the repository.
 
