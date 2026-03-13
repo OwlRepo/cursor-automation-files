@@ -1,4 +1,4 @@
-# Cline Autonomous AI Development System Bootstrap (Final Corrected)
+# Cline Autonomous AI Development System Bootstrap (Ultimate Deterministic Edition)
 
 BOOTSTRAP NOTICE
 
@@ -7,6 +7,8 @@ This file is a one-time bootstrap specification used to generate the full AI dev
 After generation, the repository will contain an AI knowledge system allowing Cline to understand the architecture, navigate safely, and implement changes with minimal hallucinations.
 
 The generated system must allow Cline to automatically determine which documentation to load without requiring the user to reference specific files.
+
+The system must also produce deterministic implementation plans that describe in precise detail what code will change and why.
 
 ---------------------------------------------------------------------
 
@@ -29,6 +31,8 @@ For any task always start by loading:
 @.clinerules/entry-point.md
 
 Follow the workflow defined in that file before performing analysis, planning, or implementation.
+
+Always prioritize documentation inside `.ai/` before performing repository scans.
 
 ---------------------------------------------------------------------
 
@@ -56,6 +60,7 @@ Analyze the repository and generate an AI development system that enables Cline 
 • Identify correct files before editing  
 • Respect architecture patterns  
 • Automatically load relevant documentation context  
+• Produce deterministic implementation plans  
 
 ---------------------------------------------------------------------
 
@@ -105,6 +110,30 @@ If detected document workspace boundaries.
 
 ---------------------------------------------------------------------
 
+SEMANTIC SEARCH PROTOCOL
+
+Before scanning directories manually, perform semantic search.
+
+Search targets:
+
+function names
+service names
+API routes
+component names
+hooks
+database models
+
+Search order:
+
+1. file-index docs
+2. code-map.md
+3. semantic search across repository
+4. direct file inspection
+
+Avoid brute force repository scans.
+
+---------------------------------------------------------------------
+
 ARCHITECTURE DOCUMENTATION
 
 Generate inside:
@@ -126,6 +155,182 @@ data-fetching.md
 component-patterns.md  
 database.md  
 service-patterns.md  
+
+---------------------------------------------------------------------
+
+WEB + REST API ARCHITECTURE INTELLIGENCE
+
+Generate specialized documentation for web applications and REST APIs.
+
+---------------------------------------------------------------------
+
+API ROUTE DISCOVERY
+
+Automatically identify all API endpoints.
+
+Possible locations:
+
+Next.js → /app/api or /pages/api
+Express → router definitions
+NestJS → @Controller decorators
+FastAPI → @app.get/post
+Spring → @RestController
+
+Generate:
+
+.ai/architecture/api-routes.md
+
+Each endpoint must document:
+
+HTTP method
+route path
+request schema
+response schema
+controller/service handling
+authentication requirements
+
+---------------------------------------------------------------------
+
+SCHEMA DISCOVERY
+
+Identify request and response schemas used by APIs.
+
+Possible schema sources:
+
+TypeScript interfaces
+Zod schemas
+Joi validation
+DTO classes
+OpenAPI definitions
+JSON schemas
+
+Generate:
+
+.ai/architecture/schema-map.md
+
+Each schema must document:
+
+fields
+types
+validation rules
+where it is used
+
+---------------------------------------------------------------------
+
+AUTHENTICATION FLOW DOCUMENTATION
+
+Detect authentication mechanisms.
+
+Examples:
+
+JWT
+Session cookies
+OAuth
+API keys
+Bearer tokens
+Passport strategies
+Auth middleware
+
+Generate:
+
+.ai/architecture/auth-flow.md
+
+Document:
+
+login flow
+token validation
+middleware guards
+authorization checks
+role based access
+
+Authentication modules are HIGH RISK.
+
+---------------------------------------------------------------------
+
+MIDDLEWARE MAP
+
+Identify middleware layers.
+
+Examples:
+
+authentication middleware
+authorization middleware
+request validation
+rate limiting
+logging
+error handling
+
+Generate:
+
+.ai/architecture/middleware-map.md
+
+Document execution order and scope.
+
+---------------------------------------------------------------------
+
+ERROR HANDLING SYSTEM
+
+Identify how errors propagate through the system.
+
+Examples:
+
+global error middleware
+try/catch patterns
+error classes
+HTTP response mapping
+
+Generate:
+
+.ai/architecture/error-handling.md
+
+Document:
+
+error types
+response formatting
+logging behavior
+
+---------------------------------------------------------------------
+
+EXTERNAL SERVICE MAP
+
+Detect integrations with external services.
+
+Examples:
+
+payment providers
+email services
+auth providers
+analytics
+third party APIs
+
+Generate:
+
+.ai/architecture/external-services.md
+
+Each integration must document:
+
+service name
+client library
+API wrapper location
+retry strategy
+error handling
+
+---------------------------------------------------------------------
+
+ENVIRONMENT CONFIGURATION
+
+Identify environment variables used by the system.
+
+Generate:
+
+.ai/architecture/environment.md
+
+Document:
+
+variable name
+purpose
+default behavior
+affected modules
 
 ---------------------------------------------------------------------
 
@@ -217,6 +422,53 @@ global state
 shared utilities  
 
 HIGH RISK edits must trigger confirmation.
+
+---------------------------------------------------------------------
+
+MODULE OWNERSHIP MAP
+
+Critical modules must be identified and documented.
+
+Examples:
+
+authentication
+authorization
+database access
+configuration
+shared utilities
+
+These modules are global dependencies.
+
+Changes require deeper impact analysis.
+
+---------------------------------------------------------------------
+
+API CONTRACT PROTECTION
+
+Before modifying any API layer:
+
+1. Identify request schema
+2. Identify response schema
+3. Verify dependent consumers
+4. Verify backward compatibility
+
+If breaking change detected:
+
+Require explicit user confirmation.
+
+---------------------------------------------------------------------
+
+DATABASE MIGRATION SAFETY
+
+If database schema changes are required:
+
+1. Generate migration plan
+2. Preserve backward compatibility
+3. Avoid destructive operations unless confirmed
+4. Update related models
+5. Update dependent queries
+
+Schema changes require confirmation.
 
 ---------------------------------------------------------------------
 
@@ -354,6 +606,27 @@ Avoid scanning entire repository unnecessarily.
 
 ---------------------------------------------------------------------
 
+TEST DISCOVERY
+
+Before modifying a module:
+
+Locate related tests.
+
+Search locations:
+
+__tests__/
+tests/
+*.test.ts
+*.spec.ts
+
+Understand expected behavior before editing.
+
+After modification:
+
+Update failing tests only if behavior intentionally changes.
+
+---------------------------------------------------------------------
+
 DEBUGGING SYSTEM
 
 Generate inside:
@@ -405,15 +678,76 @@ entry-point.md must:
 
 ---------------------------------------------------------------------
 
-EXECUTION PLAN CONTRACT
+DETERMINISTIC IMPLEMENTATION PLAYBOOK
 
-Before implementing any change create a plan including:
+Before implementing any change the AI must generate a deterministic execution plan.
 
-Exact files  
-Exact code sections  
-Reasons for changes  
-Before/after snippets  
-Verification steps  
+The plan must NOT be high level.
+
+It must include precise technical implementation details.
+
+Each plan must include the following sections:
+
+1. WHAT
+
+Exact functionality or change being implemented.
+
+2. WHY
+
+Reason for the change including problem being solved.
+
+3. WHERE
+
+Exact files to be modified.
+
+Example:
+
+src/controllers/userController.ts  
+src/services/userService.ts  
+
+4. WHEN
+
+Execution order of implementation steps.
+
+5. HOW
+
+Exact code-level modifications.
+
+Include:
+
+function names
+class names
+imports
+data structures
+API calls
+
+6. BEFORE / AFTER CODE
+
+Provide concrete code snippets showing:
+
+existing implementation
+new implementation
+
+7. DEPENDENCY IMPACT
+
+Modules affected downstream.
+
+8. RISK ASSESSMENT
+
+Risk level based on risk matrix.
+
+9. VERIFICATION STEPS
+
+Commands to validate:
+
+build
+lint
+test
+type check
+
+10. ROLLBACK STRATEGY
+
+Steps to revert if implementation fails.
 
 ---------------------------------------------------------------------
 
@@ -451,6 +785,22 @@ Verify APIs from code
 Verify types  
 
 If uncertain request clarification.
+
+---------------------------------------------------------------------
+
+LEARNING SYSTEM
+
+When patterns are repeatedly observed:
+
+Update architecture documentation.
+
+Examples:
+
+new service pattern
+new component pattern
+new API structure
+
+Architecture documentation must evolve with the repository.
 
 ---------------------------------------------------------------------
 
