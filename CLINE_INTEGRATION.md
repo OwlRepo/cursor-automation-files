@@ -1,4 +1,5 @@
-# Cline Autonomous AI Development System Bootstrap (Ultimate Deterministic Edition + Smart Environment Detection)
+# Cline Autonomous AI Development System Bootstrap
+# Ultimate Deterministic Edition + Smart Environment Detection + Autonomous Task Routing
 
 BOOTSTRAP NOTICE
 
@@ -99,7 +100,7 @@ pom.xml
 
 SMART ENVIRONMENT DETECTION
 
-The AI must automatically detect the runtime environment and development tooling used by the repository.
+Automatically detect development environment and tooling.
 
 Detect:
 
@@ -143,7 +144,7 @@ Cypress
 Playwright
 Testing Library
 
-Linting and Formatting
+Linting / Formatting
 ESLint
 Prettier
 Biome
@@ -152,33 +153,23 @@ StandardJS
 Containerization
 Dockerfile
 docker-compose.yml
-Kubernetes manifests
+Kubernetes
 
-CI/CD Systems
+CI/CD
 GitHub Actions
 GitLab CI
 CircleCI
 Jenkins
 
-Environment Configuration
+Environment Files
 .env
 .env.local
 .env.production
 .env.development
 
-Generate documentation:
+Generate:
 
 .ai/architecture/environment-detection.md
-
-Document:
-
-runtime
-package manager
-framework versions
-build system
-test framework
-CI/CD
-container setup
 
 ---------------------------------------------------------------------
 
@@ -191,31 +182,31 @@ package.json workspaces
 apps/  
 packages/  
 
-If detected document workspace boundaries.
+Document workspace boundaries if detected.
 
 ---------------------------------------------------------------------
 
 SEMANTIC SEARCH PROTOCOL
 
-Before scanning directories manually, perform semantic search.
+Before scanning directories manually perform semantic search.
 
 Search targets:
 
-function names  
-service names  
-API routes  
-component names  
-hooks  
-database models  
+function names
+services
+API routes
+components
+hooks
+database models
 
 Search order:
 
-1. file-index docs  
-2. code-map.md  
-3. semantic search across repository  
-4. direct file inspection  
+1 file-index
+2 code-map.md
+3 semantic repo search
+4 direct file inspection
 
-Avoid brute force repository scans.
+Avoid brute-force repo scans.
 
 ---------------------------------------------------------------------
 
@@ -224,8 +215,6 @@ ARCHITECTURE DOCUMENTATION
 Generate inside:
 
 .ai/architecture/
-
-Files:
 
 overview.md  
 tech-stack.md  
@@ -243,126 +232,91 @@ service-patterns.md
 
 ---------------------------------------------------------------------
 
-WEB + REST API ARCHITECTURE INTELLIGENCE
-
-Generate specialized documentation for web applications and REST APIs.
+WEB + REST API INTELLIGENCE
 
 ---------------------------------------------------------------------
 
 API ROUTE DISCOVERY
 
-Automatically identify all API endpoints.
+Detect all API endpoints.
 
-Possible locations:
+Locations:
 
-Next.js → /app/api or /pages/api  
-Express → router definitions  
-NestJS → @Controller decorators  
-FastAPI → @app.get/post  
+Next.js → app/api or pages/api  
+Express → router files  
+NestJS → @Controller  
+FastAPI → decorators  
 Spring → @RestController  
 
 Generate:
 
 .ai/architecture/api-routes.md
 
-Each endpoint must document:
+Document:
 
-HTTP method  
-route path  
+method  
+route  
 request schema  
 response schema  
-controller/service handling  
-authentication requirements  
+controller  
+auth requirements
 
 ---------------------------------------------------------------------
 
 SCHEMA DISCOVERY
 
-Identify request and response schemas used by APIs.
+Detect schemas from:
 
-Possible schema sources:
-
-TypeScript interfaces  
-Zod schemas  
-Joi validation  
-DTO classes  
-OpenAPI definitions  
-JSON schemas  
+TypeScript interfaces
+Zod
+Joi
+DTO classes
+OpenAPI
+JSON schema
 
 Generate:
 
 .ai/architecture/schema-map.md
 
-Each schema must document:
-
-fields  
-types  
-validation rules  
-where it is used  
-
 ---------------------------------------------------------------------
 
-AUTHENTICATION FLOW DOCUMENTATION
+AUTHENTICATION FLOW
 
-Detect authentication mechanisms.
+Detect:
 
-Examples:
-
-JWT  
-Session cookies  
-OAuth  
-API keys  
-Bearer tokens  
-Passport strategies  
-Auth middleware  
+JWT
+Session cookies
+OAuth
+API keys
+Passport
+Auth middleware
 
 Generate:
 
 .ai/architecture/auth-flow.md
 
-Document:
-
-login flow  
-token validation  
-middleware guards  
-authorization checks  
-role based access  
-
-Authentication modules are HIGH RISK.
+Authentication is HIGH RISK.
 
 ---------------------------------------------------------------------
 
 MIDDLEWARE MAP
 
-Identify middleware layers.
+Detect:
 
-Examples:
-
-authentication middleware  
-authorization middleware  
-request validation  
-rate limiting  
-logging  
-error handling  
+authentication
+authorization
+validation
+rate limiting
+logging
+error middleware
 
 Generate:
 
 .ai/architecture/middleware-map.md
 
-Document execution order and scope.
-
 ---------------------------------------------------------------------
 
-ERROR HANDLING SYSTEM
-
-Identify how errors propagate through the system.
-
-Examples:
-
-global error middleware  
-try/catch patterns  
-error classes  
-HTTP response mapping  
+ERROR HANDLING
 
 Generate:
 
@@ -370,41 +324,29 @@ Generate:
 
 Document:
 
-error types  
-response formatting  
-logging behavior  
+error classes
+HTTP responses
+logging strategy
 
 ---------------------------------------------------------------------
 
 EXTERNAL SERVICE MAP
 
-Detect integrations with external services.
+Detect integrations:
 
-Examples:
-
-payment providers  
-email services  
-auth providers  
-analytics  
-third party APIs  
+payments
+email
+analytics
+auth providers
+third party APIs
 
 Generate:
 
 .ai/architecture/external-services.md
 
-Each integration must document:
-
-service name  
-client library  
-API wrapper location  
-retry strategy  
-error handling  
-
 ---------------------------------------------------------------------
 
 ENVIRONMENT CONFIGURATION
-
-Identify environment variables used by the system.
 
 Generate:
 
@@ -412,10 +354,9 @@ Generate:
 
 Document:
 
-variable name  
-purpose  
-default behavior  
-affected modules  
+env variables
+usage
+affected modules
 
 ---------------------------------------------------------------------
 
@@ -425,16 +366,12 @@ Generate:
 
 .ai/architecture/code-map.md
 
-Purpose:
-
-Provide a navigation map for the repository.
-
 Include:
 
-System entry points  
-Application flows  
-Core modules  
-External integrations  
+entry points
+system flows
+core modules
+external integrations
 
 ---------------------------------------------------------------------
 
@@ -444,9 +381,7 @@ Generate:
 
 .ai/architecture/feature-boundaries.md
 
-Purpose:
-
-Define boundaries between system features to prevent unrelated edits.
+Define feature ownership boundaries.
 
 ---------------------------------------------------------------------
 
@@ -456,28 +391,22 @@ Generate:
 
 .ai/architecture/dependency-graph.md
 
-Document relationships:
+Example chain:
 
-Component → Hook → Service → Utility → API
-
-Used for impact analysis.
+Component → Hook → Service → Utility → API → Database
 
 ---------------------------------------------------------------------
 
 ARCHITECTURAL DECISION RECORDS
 
-Create directory:
+Directory:
 
 .ai/architecture/adr/
 
-Example files:
+Examples:
 
 0001-state-management.md  
 0002-api-pattern.md  
-
-Purpose:
-
-Preserve architecture decisions.
 
 ---------------------------------------------------------------------
 
@@ -487,73 +416,55 @@ Generate:
 
 .ai/architecture/risk-matrix.md
 
-LOW RISK
+LOW
+UI components
+styles
+utilities
 
-UI components  
-styles  
-utilities  
+MEDIUM
+hooks
+routes
+services
 
-MEDIUM RISK
-
-hooks  
-routes  
-services  
-
-HIGH RISK
-
-authentication  
-database  
-global state  
-shared utilities  
-
-HIGH RISK edits must trigger confirmation.
+HIGH
+authentication
+database
+global state
+shared utilities
 
 ---------------------------------------------------------------------
 
 MODULE OWNERSHIP MAP
 
-Critical modules must be identified and documented.
+Document global modules:
 
-Examples:
-
-authentication  
-authorization  
-database access  
-configuration  
-shared utilities  
-
-These modules are global dependencies.
-
-Changes require deeper impact analysis.
+authentication
+authorization
+database
+configuration
+shared utilities
 
 ---------------------------------------------------------------------
 
 API CONTRACT PROTECTION
 
-Before modifying any API layer:
+Before editing APIs:
 
-1. Identify request schema  
-2. Identify response schema  
-3. Verify dependent consumers  
-4. Verify backward compatibility  
-
-If breaking change detected:
-
-Require explicit user confirmation.
+verify request schema
+verify response schema
+check dependent consumers
+ensure backward compatibility
 
 ---------------------------------------------------------------------
 
 DATABASE MIGRATION SAFETY
 
-If database schema changes are required:
+If schema changes required:
 
-1. Generate migration plan  
-2. Preserve backward compatibility  
-3. Avoid destructive operations unless confirmed  
-4. Update related models  
-5. Update dependent queries  
-
-Schema changes require confirmation.
+generate migration plan
+maintain compatibility
+avoid destructive operations
+update models and queries
 
 ---------------------------------------------------------------------
 
@@ -563,18 +474,12 @@ Generate:
 
 .ai/architecture/dev-commands.md
 
-Detect commands such as:
+Detect:
 
-build  
-lint  
-test  
-type-check  
-
-Examples:
-
-npm run build  
-npm run lint  
-npm run test  
+build
+lint
+test
+type-check
 
 ---------------------------------------------------------------------
 
@@ -584,12 +489,10 @@ Generate:
 
 .ai/architecture/performance-guidelines.md
 
-Guidelines:
-
-Avoid unnecessary rerenders  
-Avoid large websocket payloads  
-Prefer pagination for large datasets  
-Cache expensive computations  
+Avoid unnecessary rerenders
+limit large payloads
+use pagination
+cache heavy computations
 
 ---------------------------------------------------------------------
 
@@ -599,36 +502,34 @@ Generate inside:
 
 .ai/file-index/
 
-src-index.md  
-components-index.md  
-hooks-index.md  
-routes-index.md  
-stores-index.md  
-utils-index.md  
-controllers-index.md  
-services-index.md  
-models-index.md  
+src-index.md
+components-index.md
+hooks-index.md
+routes-index.md
+stores-index.md
+utils-index.md
+controllers-index.md
+services-index.md
+models-index.md
 
-Each index must include:
+Each entry includes:
 
-file path  
-purpose  
-relationships  
-usage patterns  
+file path
+purpose
+dependencies
+usage patterns
 
 ---------------------------------------------------------------------
 
 FILE ANCHOR VERIFICATION
 
-Before editing a file:
+Before editing files:
 
-1. Confirm file path exists  
-2. Extract code anchor  
-3. Verify anchor matches expected function/class/component  
+confirm path exists
+extract code anchor
+verify expected function/class
 
 Example:
-
-File:
 
 src/hooks/useAuth.ts
 
@@ -642,79 +543,68 @@ IMPACT ANALYSIS
 
 Before modifying code:
 
-1. Check dependency graph  
-2. Identify downstream modules  
-3. Document impact  
+check dependency graph
+identify downstream modules
+document impact
 
 ---------------------------------------------------------------------
 
 CHANGE SCOPE LIMITER
 
-Small change → single file  
-Medium change → ≤5 files  
-Large change → confirmation required  
+Small → 1 file  
+Medium → ≤5 files  
+Large → confirmation required  
 
 ---------------------------------------------------------------------
 
 CRITICAL MODULE PROTECTION
 
-Critical modules include:
+Protected modules:
 
-Authentication  
-Database access  
-Global state stores  
-Shared utilities  
-
-Changes require additional verification.
+authentication
+database
+global state
+shared utilities
 
 ---------------------------------------------------------------------
 
 MONOREPO SAFETY
 
-If monorepo detected:
-
 Respect workspace boundaries.
-
-Avoid editing outside the relevant workspace.
 
 ---------------------------------------------------------------------
 
-LARGE REPOSITORY NAVIGATION
+LARGE REPO NAVIGATION
 
-Before scanning repository:
+Always consult:
 
-1. Consult code-map.md  
-2. Use file-index docs  
-3. Use dependency graph  
+1 code-map.md
+2 feature-boundaries.md
+3 file-index
+4 architecture docs
 
-Avoid scanning entire repository unnecessarily.
+Avoid scanning entire repo.
 
 ---------------------------------------------------------------------
 
 TEST DISCOVERY
 
-Before modifying a module:
+Before modifying modules locate tests.
 
-Locate related tests.
+Search:
 
-Search locations:
+__tests__/
+tests/
+*.test.ts
+*.spec.ts
 
-__tests__/  
-tests/  
-*.test.ts  
-*.spec.ts  
-
-Understand expected behavior before editing.
-
-After modification:
-
-Update failing tests only if behavior intentionally changes.
+Update tests only if behavior intentionally changes.
 
 ---------------------------------------------------------------------
 
 DEBUGGING SYSTEM
 
-Generate inside:
+Generate:
 
 .ai/debugging/
 
@@ -727,7 +617,7 @@ fix-plan-template.md
 
 WORKFLOW SYSTEM
 
-Generate inside:
+Generate:
 
 .ai/workflows/
 
@@ -740,7 +630,7 @@ code-review.md
 
 RULE SYSTEM
 
-Generate inside:
+Generate:
 
 .clinerules/
 
@@ -754,12 +644,34 @@ testing.md
 automation-guidelines.md  
 architecture-compliance.md  
 
-entry-point.md must:
+---------------------------------------------------------------------
 
-• detect user intent  
-• locate relevant files  
-• load architecture docs  
-• route to correct workflow  
+AUTONOMOUS TASK ROUTING SYSTEM
+
+entry-point.md must automatically determine user intent.
+
+Classify task type:
+
+Bug Fix
+Feature Implementation
+Enhancement
+Refactor
+Code Review
+Debugging
+
+Intent detection signals:
+
+keywords
+diff context
+error messages
+user prompt
+
+Routing rules:
+
+Bug Fix → load debugging docs + bug-fix workflow  
+Feature → load architecture + feature workflow  
+Refactor → load dependency graph + refactor workflow  
+Code Review → load architecture + code-review workflow  
 
 ---------------------------------------------------------------------
 
@@ -767,70 +679,62 @@ DETERMINISTIC IMPLEMENTATION PLAYBOOK
 
 Before implementing any change the AI must generate a deterministic execution plan.
 
-The plan must NOT be high level.
+Plan must include:
 
-It must include precise technical implementation details.
+1 WHAT
+Exact feature or fix.
 
-Each plan must include the following sections:
+2 WHY
+Problem being solved.
 
-1. WHAT  
-Exact functionality or change being implemented.
+3 WHERE
+Exact files modified.
 
-2. WHY  
-Reason for the change including problem being solved.
+4 WHEN
+Step order.
 
-3. WHERE  
-Exact files to be modified.
+5 HOW
+Exact code-level implementation.
 
-Example:
+6 BEFORE / AFTER CODE
+Concrete snippets.
 
-src/controllers/userController.ts  
-src/services/userService.ts  
+7 DEPENDENCY IMPACT
 
-4. WHEN  
-Execution order of implementation steps.
+8 RISK LEVEL
 
-5. HOW  
-Exact code-level modifications including functions, imports, data structures, and API calls.
+9 VERIFICATION STEPS
 
-6. BEFORE / AFTER CODE  
-Concrete code snippets showing current implementation and new implementation.
+Commands:
 
-7. DEPENDENCY IMPACT  
-Modules affected downstream.
+build
+lint
+test
+typecheck
 
-8. RISK ASSESSMENT  
-Risk level based on risk matrix.
-
-9. VERIFICATION STEPS  
-Commands to validate build, lint, tests, and type checking.
-
-10. ROLLBACK STRATEGY  
-Steps to revert changes if implementation fails.
+10 ROLLBACK STRATEGY
 
 ---------------------------------------------------------------------
 
 STAFF ENGINEER REVIEW GUARD
 
-Before large or high-risk changes evaluate:
+Before high-risk changes evaluate:
 
-Architecture consistency  
-Dependency impact  
-Security implications  
-Performance impact  
+architecture consistency
+dependency impact
+security
+performance
 
 ---------------------------------------------------------------------
 
 QUALITY VERIFICATION
 
-Verify automatically:
+Verify:
 
-Compilation success  
-Imports resolve  
-Types valid  
-Lint passes  
-Tests pass  
-Build succeeds  
+build success
+lint success
+type correctness
+tests pass
 
 ---------------------------------------------------------------------
 
@@ -838,55 +742,46 @@ HALLUCINATION PREVENTION
 
 Before referencing files:
 
-Verify file existence  
-Verify architecture patterns  
-Verify APIs from code  
-Verify types  
+verify file existence
+verify APIs from code
+verify architecture patterns
 
-If uncertain request clarification.
+If uncertain ask clarification.
 
 ---------------------------------------------------------------------
 
 LEARNING SYSTEM
 
-When patterns are repeatedly observed:
-
-Update architecture documentation.
+When patterns appear repeatedly update architecture docs.
 
 Examples:
 
-new service pattern  
-new component pattern  
-new API structure  
-
-Architecture documentation must evolve with the repository.
+new service pattern
+new component pattern
+new API structure
 
 ---------------------------------------------------------------------
 
-FINAL UPGRADE — CONTEXT COMPRESSION
+CONTEXT COMPRESSION
 
-Large repositories contain too many documentation files to load simultaneously.
+Load context in order:
 
-Prioritize loading context in this order:
-
-1 code-map.md  
-2 feature-boundaries.md  
-3 relevant file-index docs  
-4 architecture docs  
-5 debugging docs  
-
-Only load minimal required context.
+1 code-map.md
+2 feature-boundaries.md
+3 file-index
+4 architecture docs
+5 debugging docs
 
 ---------------------------------------------------------------------
 
 SUCCESS CRITERIA
 
-AI understands architecture automatically  
-Correct files identified before editing  
-Plans precede edits  
-Architecture patterns respected  
-Indexes remain updated  
-Hallucinations minimized  
+AI understands architecture automatically
+Correct files identified before editing
+Plans precede edits
+Architecture patterns respected
+Indexes remain updated
+Hallucinations minimized
 
 ---------------------------------------------------------------------
 
