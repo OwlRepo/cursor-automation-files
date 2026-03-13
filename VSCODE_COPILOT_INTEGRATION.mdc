@@ -1,10 +1,11 @@
 # AI Development System Bootstrap for VS Code + GitHub Copilot
+# Ultimate Edition + Smart Environment Detection + Dynamic Context Loading
 
 BOOTSTRAP NOTICE
 
 This file is a one-time bootstrap specification used to generate an AI development support system for VS Code with GitHub Copilot.
 
-After generation, the repository will contain documentation and navigation structures that allow Copilot to reason about the project architecture and development workflows.
+After generation the repository will contain documentation and navigation structures that allow Copilot to reason about the project architecture and development workflows.
 
 The system enables AI to:
 
@@ -13,7 +14,9 @@ The system enables AI to:
 • Avoid hallucinations
 • Identify correct files before editing
 • Respect architecture patterns
-• Select relevant documentation context automatically
+• Automatically determine relevant documentation
+• Produce deterministic implementation plans
+• Dynamically load only necessary documentation
 
 ---------------------------------------------------------------------
 
@@ -25,17 +28,21 @@ All generated documentation files must use `.md`.
 
 ROOT AGENT ENTRY FILE
 
-Create a file at repository root:
+Create file at repository root:
 
 AGENTS.md
 
 Content:
 
-For any development task, consult the project AI documentation inside `.ai/`.
+For any development task consult the AI documentation inside `.ai/`.
 
-Follow the workflows defined there before planning or implementing changes.
+Before implementing changes:
 
-This ensures all AI interactions follow the structured system.
+1. Understand architecture from `.ai/architecture`
+2. Locate files using `.ai/file-index`
+3. Follow workflows inside `.ai/workflows`
+
+Always produce a deterministic plan before modifying code.
 
 ---------------------------------------------------------------------
 
@@ -47,11 +54,12 @@ Create:
 
 Content must instruct Copilot to:
 
-• Read architecture documentation
+• Load `.ai/architecture/code-map.md` first
+• Respect feature boundaries
 • Use file indexes to locate files
-• Follow development workflows
-• Respect architecture patterns
-• Avoid editing files outside feature boundaries
+• Follow workflows for feature, bug, or refactor tasks
+• Avoid editing unrelated modules
+• Produce deterministic implementation plans
 
 ---------------------------------------------------------------------
 
@@ -59,49 +67,145 @@ PRIMARY OBJECTIVE
 
 Analyze the repository and generate an AI knowledge system containing:
 
-Architecture documentation  
-Navigation maps  
-Feature boundaries  
-Dependency graphs  
-File indexes  
-Debugging guides  
-Development rules  
-Maintenance guides  
+Architecture documentation
+Navigation maps
+Feature boundaries
+Dependency graphs
+File indexes
+Debugging frameworks
+Development workflows
+Maintenance guides
 
-The AI should automatically determine which documentation is relevant.
+The system must allow AI to determine relevant documentation automatically.
 
 ---------------------------------------------------------------------
 
 PROJECT DETECTION
 
-Analyze the repository to detect:
+Detect project type:
 
-Project type
+Frontend
+Backend
+Fullstack
+Mobile
+Desktop
+CLI
 
-Frontend  
-Backend  
-Fullstack  
-Mobile  
-Desktop  
-CLI  
+Detect technology stack:
 
-Detect technology stack
+Frameworks
+Languages
+Libraries
+Database
+ORM
+State management
+Routing
 
-Frameworks  
-Languages  
-Libraries  
-Database  
-ORM  
-State management  
-Routing  
+Use:
 
-Sources:
+package.json
+requirements.txt
+go.mod
+Cargo.toml
+pom.xml
 
-package.json  
-requirements.txt  
-go.mod  
-Cargo.toml  
-pom.xml  
+---------------------------------------------------------------------
+
+SMART ENVIRONMENT DETECTION
+
+Detect development environment automatically.
+
+Detect:
+
+Runtime
+Node
+Bun
+Deno
+Python
+Java
+Go
+Rust
+
+Package manager
+npm
+pnpm
+yarn
+bun
+
+Frameworks
+Next.js
+React
+Vue
+Angular
+Express
+NestJS
+FastAPI
+Spring
+
+Build systems
+Vite
+Webpack
+Turbopack
+Parcel
+Rollup
+
+Testing frameworks
+Jest
+Vitest
+Mocha
+Cypress
+Playwright
+
+Linting / formatting
+ESLint
+Prettier
+Biome
+
+Containerization
+Dockerfile
+docker-compose
+Kubernetes
+
+CI/CD
+GitHub Actions
+GitLab CI
+CircleCI
+Jenkins
+
+Environment files
+
+.env
+.env.local
+.env.production
+.env.development
+
+Generate:
+
+.ai/architecture/environment-detection.md
+
+---------------------------------------------------------------------
+
+SEMANTIC SEARCH PROTOCOL
+
+Before scanning repository perform semantic search.
+
+Search targets:
+
+function names
+services
+API routes
+components
+hooks
+database models
+
+Search order:
+
+1 file-index
+2 code-map
+3 semantic search
+4 direct inspection
+
+Avoid brute-force scanning.
 
 ---------------------------------------------------------------------
 
@@ -109,12 +213,12 @@ MONOREPO DETECTION
 
 Check for:
 
-turbo.json  
-workspaces  
-apps/  
-packages/  
+turbo.json
+workspaces
+apps
+packages
 
-If detected document workspace boundaries.
+Document workspace boundaries.
 
 ---------------------------------------------------------------------
 
@@ -135,25 +239,160 @@ Structure:
 
 ARCHITECTURE DOCUMENTATION
 
-Generate inside:
+Generate:
 
 .ai/architecture/
 
-Files:
-
-overview.md  
-tech-stack.md  
-module-structure.md  
-api-integration.md  
+overview.md
+tech-stack.md
+module-structure.md
+api-integration.md
 
 Conditional:
 
-routing.md  
-state-management.md  
-data-fetching.md  
-component-patterns.md  
-database.md  
-service-patterns.md  
+routing.md
+state-management.md
+data-fetching.md
+component-patterns.md
+database.md
+service-patterns.md
+
+---------------------------------------------------------------------
+
+WEB + REST API INTELLIGENCE
+
+Generate additional documentation for REST systems.
+
+---------------------------------------------------------------------
+
+API ROUTE DISCOVERY
+
+Detect all API endpoints.
+
+Examples:
+
+Next.js → app/api
+Express → router files
+NestJS → controllers
+FastAPI → decorators
+Spring → @RestController
+
+Generate:
+
+.ai/architecture/api-routes.md
+
+Document:
+
+method
+route
+request schema
+response schema
+controller
+authentication requirements
+
+---------------------------------------------------------------------
+
+SCHEMA DISCOVERY
+
+Detect request and response schemas.
+
+Sources:
+
+TypeScript interfaces
+Zod schemas
+Joi validation
+DTO classes
+OpenAPI
+JSON schema
+
+Generate:
+
+.ai/architecture/schema-map.md
+
+---------------------------------------------------------------------
+
+AUTHENTICATION FLOW
+
+Detect authentication systems.
+
+Examples:
+
+JWT
+OAuth
+Session cookies
+API keys
+Auth middleware
+
+Generate:
+
+.ai/architecture/auth-flow.md
+
+Authentication modules are HIGH RISK.
+
+---------------------------------------------------------------------
+
+MIDDLEWARE MAP
+
+Detect middleware layers.
+
+Examples:
+
+authentication
+authorization
+validation
+rate limiting
+logging
+error handling
+
+Generate:
+
+.ai/architecture/middleware-map.md
+
+---------------------------------------------------------------------
+
+ERROR HANDLING SYSTEM
+
+Generate:
+
+.ai/architecture/error-handling.md
+
+Document:
+
+error classes
+response mapping
+logging strategy
+
+---------------------------------------------------------------------
+
+EXTERNAL SERVICE MAP
+
+Detect integrations.
+
+Examples:
+
+payments
+email
+analytics
+third-party APIs
+auth providers
+
+Generate:
+
+.ai/architecture/external-services.md
+
+---------------------------------------------------------------------
+
+ENVIRONMENT CONFIGURATION
+
+Generate:
+
+.ai/architecture/environment.md
+
+Document:
+
+environment variables
+usage
+affected modules
 
 ---------------------------------------------------------------------
 
@@ -163,16 +402,12 @@ Generate:
 
 .ai/architecture/code-map.md
 
-Purpose:
-
-Provide high-level navigation for the codebase.
-
 Include:
 
-System entry points  
-Application flows  
-Core modules  
-External integrations  
+system entry points
+application flows
+core modules
+external integrations
 
 ---------------------------------------------------------------------
 
@@ -182,9 +417,7 @@ Generate:
 
 .ai/architecture/feature-boundaries.md
 
-Defines system feature boundaries.
-
-Prevents editing unrelated modules.
+Defines boundaries between features.
 
 ---------------------------------------------------------------------
 
@@ -194,11 +427,22 @@ Generate:
 
 .ai/architecture/dependency-graph.md
 
-Document relationships:
+Example chain:
 
-Component → Hook → Service → Utility → API
+Component → Hook → Service → Utility → API → Database
 
-Used for impact analysis.
+---------------------------------------------------------------------
+
+MODULE OWNERSHIP MAP
+
+Document global modules.
+
+Examples:
+
+authentication
+database
+configuration
+shared utilities
 
 ---------------------------------------------------------------------
 
@@ -208,14 +452,10 @@ Create:
 
 .ai/architecture/adr/
 
-Example files:
+Example:
 
-0001-state-management.md  
-0002-api-pattern.md  
-
-Purpose:
-
-Document architecture decisions.
+0001-state-management.md
+0002-api-pattern.md
 
 ---------------------------------------------------------------------
 
@@ -225,23 +465,44 @@ Generate:
 
 .ai/architecture/risk-matrix.md
 
-LOW RISK
+LOW
 UI components
 styles
 utilities
 
-MEDIUM RISK
+MEDIUM
 hooks
 routes
 services
 
-HIGH RISK
+HIGH
 authentication
 database
 global state
 shared utilities
 
-HIGH RISK changes require confirmation.
+---------------------------------------------------------------------
+
+API CONTRACT PROTECTION
+
+Before modifying APIs:
+
+verify request schema
+verify response schema
+check dependent consumers
+ensure backward compatibility
+
+---------------------------------------------------------------------
+
+DATABASE MIGRATION SAFETY
+
+If schema change required:
+
+generate migration plan
+maintain compatibility
+avoid destructive operations
+update models
+update queries
 
 ---------------------------------------------------------------------
 
@@ -253,16 +514,10 @@ Generate:
 
 Detect commands:
 
-build  
-lint  
-test  
-type-check  
-
-Examples:
-
-npm run build  
-npm run lint  
-npm run test  
+build
+lint
+test
+type-check
 
 ---------------------------------------------------------------------
 
@@ -272,12 +527,10 @@ Generate:
 
 .ai/architecture/performance-guidelines.md
 
-Guidelines:
-
-Avoid unnecessary rerenders  
-Avoid large websocket payloads  
-Prefer pagination for large datasets  
-Cache expensive computations  
+Avoid unnecessary rerenders
+avoid large payloads
+prefer pagination
+cache expensive computations
 
 ---------------------------------------------------------------------
 
@@ -287,137 +540,147 @@ Generate:
 
 .ai/file-index/
 
-src-index.md  
-components-index.md  
-hooks-index.md  
-routes-index.md  
-stores-index.md  
-utils-index.md  
-controllers-index.md  
-services-index.md  
-models-index.md  
+src-index.md
+components-index.md
+hooks-index.md
+routes-index.md
+stores-index.md
+utils-index.md
+controllers-index.md
+services-index.md
+models-index.md
 
 Each index must contain:
 
-file path  
-purpose  
-relationships  
-usage patterns  
+file path
+purpose
+relationships
+usage patterns
 
 ---------------------------------------------------------------------
 
 FILE ANCHOR VERIFICATION
 
-Before editing a file:
+Before editing file:
 
-1. Confirm file path exists
-2. Verify code anchor
-3. Ensure correct function/class/component
+confirm file path exists
+extract code anchor
+verify expected function/class
 
 ---------------------------------------------------------------------
 
-IMPACT ANALYSIS
+TEST DISCOVERY
 
-Before modifying code:
+Before modifying modules locate tests.
 
-1. Check dependency graph
-2. Identify downstream modules
-3. Document impact
+Search:
+
+__tests__/
+tests/
+*.test.ts
+*.spec.ts
 
 ---------------------------------------------------------------------
 
 CHANGE SCOPE LIMITER
 
-Small change → 1 file  
-Medium change → ≤ 5 files  
-Large change → require confirmation  
+Small → 1 file
+Medium → ≤5 files
+Large → confirmation required
 
 ---------------------------------------------------------------------
 
 CRITICAL MODULE PROTECTION
 
-Critical modules:
+Protected modules:
 
-Authentication  
-Database access  
-Global state  
-Shared utilities  
-
-Changes require additional review.
+authentication
+database
+global state
+shared utilities
 
 ---------------------------------------------------------------------
 
-LARGE REPOSITORY NAVIGATION
+DYNAMIC CONTEXT LOADING
 
-Before scanning repository:
+To prevent context overload dynamically load documentation.
 
-1. Use code-map
-2. Use file-index
-3. Use dependency graph
+Step 1
+Identify task scope.
 
-Avoid scanning entire repository unnecessarily.
+Step 2
+Load minimal architecture docs:
 
----------------------------------------------------------------------
+code-map
+feature-boundaries
 
-DEBUGGING SYSTEM
+Step 3
+Load feature specific docs.
 
-Generate:
+Example:
 
-.ai/debugging/
+Auth → auth-flow.md
+API → api-routes.md
+Database → database.md
 
-workflow.md  
-root-cause-analysis.md  
-common-issues.md  
-fix-plan-template.md  
+Step 4
+Load relevant file indexes.
 
----------------------------------------------------------------------
-
-WORKFLOWS
-
-Generate:
-
-.ai/workflows/
-
-feature-development.md  
-bug-fix.md  
-refactoring.md  
-code-review.md  
+Step 5
+Load debugging docs if needed.
 
 ---------------------------------------------------------------------
 
-EXECUTION PLAN CONTRACT
+DETERMINISTIC IMPLEMENTATION PLAYBOOK
 
-Before implementing changes create a plan containing:
+Before implementing code generate a plan including:
 
-Exact files  
-Exact code sections  
-Reasons  
-Before/after snippets  
-Verification steps  
+WHAT
+functionality implemented
+
+WHY
+problem solved
+
+WHERE
+exact files modified
+
+WHEN
+execution order
+
+HOW
+code-level implementation
+
+BEFORE / AFTER CODE
+
+DEPENDENCY IMPACT
+
+RISK LEVEL
+
+VERIFICATION STEPS
+
+ROLLBACK STRATEGY
 
 ---------------------------------------------------------------------
 
 STAFF ENGINEER REVIEW GUARD
 
-Before large changes evaluate:
+Before high risk changes evaluate:
 
-Architecture consistency  
-Dependency impact  
-Security implications  
-Performance impact  
+architecture consistency
+dependency impact
+security
+performance
 
 ---------------------------------------------------------------------
 
 QUALITY VERIFICATION
 
-Verify automatically:
+Verify:
 
-Compilation success  
-Imports resolve  
-Types valid  
-Lint passes  
-Tests pass  
-Build succeeds  
+build success
+lint success
+tests pass
+types valid
 
 ---------------------------------------------------------------------
 
@@ -425,37 +688,45 @@ HALLUCINATION PREVENTION
 
 Before referencing files:
 
-Verify existence  
-Verify architecture patterns  
-Verify APIs  
-Verify types  
+verify file existence
+verify APIs
+verify architecture patterns
+verify types
 
 ---------------------------------------------------------------------
 
-FINAL UPGRADE — CONTEXT COMPRESSION LAYER
+LEARNING SYSTEM
 
-Large documentation sets should not be loaded entirely.
+When patterns appear repeatedly update architecture docs.
 
-Prioritize context loading in this order:
+Examples:
 
-1 code-map.md  
-2 feature-boundaries.md  
-3 relevant file-index docs  
-4 architecture docs  
-5 debugging docs  
+new service pattern
+new component pattern
+new API structure
 
-Only load minimal required context.
+---------------------------------------------------------------------
+
+CONTEXT COMPRESSION
+
+Load context in order:
+
+1 code-map
+2 feature-boundaries
+3 file-index
+4 architecture docs
+5 debugging docs
 
 ---------------------------------------------------------------------
 
 SUCCESS CRITERIA
 
-AI understands architecture  
-Files located correctly  
-Plans precede edits  
-Architecture respected  
-Hallucinations minimized  
-Context optimized  
+AI understands architecture
+Files located correctly
+Plans precede edits
+Architecture respected
+Hallucinations minimized
+Context optimized
 
 ---------------------------------------------------------------------
 
