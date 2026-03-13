@@ -1,5 +1,5 @@
 # Cline Autonomous AI Development System Bootstrap
-# Ultimate Deterministic Edition + Smart Environment Detection + Autonomous Task Routing
+# Ultimate Deterministic Edition + Smart Environment Detection + Autonomous Task Routing + Dynamic Context Loading
 
 BOOTSTRAP NOTICE
 
@@ -9,7 +9,7 @@ After generation, the repository will contain an AI knowledge system allowing Cl
 
 The generated system must allow Cline to automatically determine which documentation to load without requiring the user to reference specific files.
 
-The system must also produce deterministic implementation plans that describe in precise detail what code will change and why.
+The system must produce deterministic engineering plans and dynamically load only the minimal required context.
 
 ---------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ Create the file at repository root:
 
 AGENTS.md
 
-Content must be:
+Content:
 
 For any task always start by loading:
 
@@ -39,10 +39,10 @@ Always prioritize documentation inside `.ai/` before performing repository scans
 
 DIRECTORY STRUCTURE
 
-Create two main directories.
+Create two directories:
 
-.clinerules/ → AI rules and behavior control  
-.ai/ → architecture documentation and indexes
+.clinerules/
+.ai/
 
 Final structure:
 
@@ -55,56 +55,55 @@ PRIMARY OBJECTIVE
 
 Analyze the repository and generate an AI development system that enables Cline to:
 
-• Understand architecture automatically  
-• Navigate large repositories safely  
-• Avoid hallucinations  
-• Identify correct files before editing  
-• Respect architecture patterns  
-• Automatically load relevant documentation context  
-• Produce deterministic implementation plans  
+• Understand architecture automatically
+• Navigate large repositories safely
+• Avoid hallucinations
+• Identify correct files before editing
+• Respect architecture patterns
+• Automatically load relevant documentation context
+• Produce deterministic implementation plans
+• Dynamically load minimal context for large repositories
 
 ---------------------------------------------------------------------
 
 PROJECT DETECTION
 
-Analyze the repository to detect:
+Detect project type:
 
-Project type
+Frontend
+Backend
+Fullstack
+Mobile
+Desktop
+CLI
 
-Frontend  
-Backend  
-Fullstack  
-Mobile  
-Desktop  
-CLI  
+Detect technology stack:
 
-Detect technology stack
+Frameworks
+Languages
+Libraries
+Database
+ORM
+State management
+Routing
 
-Frameworks  
-Languages  
-Libraries  
-Database  
-ORM  
-State management  
-Routing  
+Use configuration files:
 
-Use configuration files such as:
-
-package.json  
-requirements.txt  
-go.mod  
-Cargo.toml  
-pom.xml  
+package.json
+requirements.txt
+go.mod
+Cargo.toml
+pom.xml
 
 ---------------------------------------------------------------------
 
 SMART ENVIRONMENT DETECTION
 
-Automatically detect development environment and tooling.
+Detect development environment automatically.
 
 Detect:
 
-Runtime Environment
+Runtime
 Node.js
 Bun
 Deno
@@ -142,17 +141,15 @@ Vitest
 Mocha
 Cypress
 Playwright
-Testing Library
 
 Linting / Formatting
 ESLint
 Prettier
 Biome
-StandardJS
 
 Containerization
 Dockerfile
-docker-compose.yml
+docker-compose
 Kubernetes
 
 CI/CD
@@ -162,6 +159,7 @@ CircleCI
 Jenkins
 
 Environment Files
+
 .env
 .env.local
 .env.production
@@ -173,19 +171,6 @@ Generate:
 
 ---------------------------------------------------------------------
 
-MONOREPO DETECTION
-
-Check for:
-
-turbo.json  
-package.json workspaces  
-apps/  
-packages/  
-
-Document workspace boundaries if detected.
-
----------------------------------------------------------------------
-
 SEMANTIC SEARCH PROTOCOL
 
 Before scanning directories manually perform semantic search.
@@ -193,7 +178,7 @@ Before scanning directories manually perform semantic search.
 Search targets:
 
 function names
-services
+service names
 API routes
 components
 hooks
@@ -202,11 +187,24 @@ database models
 Search order:
 
 1 file-index
-2 code-map.md
-3 semantic repo search
+2 code-map
+3 semantic repository search
 4 direct file inspection
 
-Avoid brute-force repo scans.
+Avoid brute-force repository scanning.
+
+---------------------------------------------------------------------
+
+MONOREPO DETECTION
+
+Check for:
+
+turbo.json
+package.json workspaces
+apps/
+packages/
+
+If detected document workspace boundaries.
 
 ---------------------------------------------------------------------
 
@@ -216,63 +214,67 @@ Generate inside:
 
 .ai/architecture/
 
-overview.md  
-tech-stack.md  
-module-structure.md  
-api-integration.md  
+overview.md
+tech-stack.md
+module-structure.md
+api-integration.md
 
 Conditional:
 
-routing.md  
-state-management.md  
-data-fetching.md  
-component-patterns.md  
-database.md  
-service-patterns.md  
+routing.md
+state-management.md
+data-fetching.md
+component-patterns.md
+database.md
+service-patterns.md
 
 ---------------------------------------------------------------------
 
 WEB + REST API INTELLIGENCE
 
+Generate specialized REST architecture documentation.
+
 ---------------------------------------------------------------------
 
 API ROUTE DISCOVERY
 
-Detect all API endpoints.
+Automatically identify all API endpoints.
 
-Locations:
+Possible locations:
 
-Next.js → app/api or pages/api  
-Express → router files  
-NestJS → @Controller  
-FastAPI → decorators  
-Spring → @RestController  
+Next.js → /app/api or /pages/api
+Express → router files
+NestJS → @Controller
+FastAPI → decorators
+Spring → @RestController
 
 Generate:
 
 .ai/architecture/api-routes.md
 
-Document:
+Each endpoint must document:
 
-method  
-route  
-request schema  
-response schema  
-controller  
-auth requirements
+HTTP method
+route path
+request schema
+response schema
+controller
+authentication requirements
 
 ---------------------------------------------------------------------
 
 SCHEMA DISCOVERY
 
-Detect schemas from:
+Detect request and response schemas.
+
+Possible schema sources:
 
 TypeScript interfaces
-Zod
-Joi
+Zod schemas
+Joi validation
 DTO classes
 OpenAPI
-JSON schema
+JSON schemas
 
 Generate:
 
@@ -282,33 +284,37 @@ Generate:
 
 AUTHENTICATION FLOW
 
-Detect:
+Detect authentication mechanisms.
+
+Examples:
 
 JWT
-Session cookies
 OAuth
+Session cookies
 API keys
-Passport
+Passport strategies
 Auth middleware
 
 Generate:
 
 .ai/architecture/auth-flow.md
 
-Authentication is HIGH RISK.
+Authentication modules are HIGH RISK.
 
 ---------------------------------------------------------------------
 
 MIDDLEWARE MAP
 
-Detect:
+Identify middleware layers.
+
+Examples:
 
 authentication
 authorization
 validation
 rate limiting
 logging
-error middleware
+error handling
 
 Generate:
 
@@ -316,7 +322,7 @@ Generate:
 
 ---------------------------------------------------------------------
 
-ERROR HANDLING
+ERROR HANDLING SYSTEM
 
 Generate:
 
@@ -325,20 +331,22 @@ Generate:
 Document:
 
 error classes
-HTTP responses
+response mapping
 logging strategy
 
 ---------------------------------------------------------------------
 
 EXTERNAL SERVICE MAP
 
-Detect integrations:
+Detect integrations.
+
+Examples:
 
 payments
 email
 analytics
+third-party APIs
 auth providers
-third party APIs
 
 Generate:
 
@@ -354,7 +362,7 @@ Generate:
 
 Document:
 
-env variables
+environment variables
 usage
 affected modules
 
@@ -368,8 +376,8 @@ Generate:
 
 Include:
 
-entry points
-system flows
+system entry points
+application flows
 core modules
 external integrations
 
@@ -381,7 +389,7 @@ Generate:
 
 .ai/architecture/feature-boundaries.md
 
-Define feature ownership boundaries.
+Defines logical boundaries between features.
 
 ---------------------------------------------------------------------
 
@@ -397,16 +405,29 @@ Component → Hook → Service → Utility → API → Database
 
 ---------------------------------------------------------------------
 
-ARCHITECTURAL DECISION RECORDS
+MODULE OWNERSHIP MAP
 
-Directory:
-
-.ai/architecture/adr/
+Document global modules.
 
 Examples:
 
-0001-state-management.md  
-0002-api-pattern.md  
+authentication
+database
+configuration
+shared utilities
+
+---------------------------------------------------------------------
+
+ARCHITECTURAL DECISION RECORDS
+
+Create directory:
+
+.ai/architecture/adr/
+
+Example:
+
+0001-state-management.md
+0002-api-pattern.md
 
 ---------------------------------------------------------------------
 
@@ -416,17 +437,20 @@ Generate:
 
 .ai/architecture/risk-matrix.md
 
-LOW
+LOW RISK
+
 UI components
 styles
 utilities
 
-MEDIUM
+MEDIUM RISK
+
 hooks
 routes
 services
 
-HIGH
+HIGH RISK
+
 authentication
 database
 global state
@@ -434,37 +458,28 @@ shared utilities
 
 ---------------------------------------------------------------------
 
-MODULE OWNERSHIP MAP
-
-Document global modules:
-
-authentication
-authorization
-database
-configuration
-shared utilities
-
----------------------------------------------------------------------
-
 API CONTRACT PROTECTION
 
-Before editing APIs:
+Before modifying APIs:
 
 verify request schema
 verify response schema
 check dependent consumers
 ensure backward compatibility
 
+Breaking changes require confirmation.
+
 ---------------------------------------------------------------------
 
 DATABASE MIGRATION SAFETY
 
-If schema changes required:
+If database schema changes required:
 
 generate migration plan
-maintain compatibility
+preserve compatibility
 avoid destructive operations
-update models and queries
+update models
+update queries
 
 ---------------------------------------------------------------------
 
@@ -474,7 +489,7 @@ Generate:
 
 .ai/architecture/dev-commands.md
 
-Detect:
+Detect commands:
 
 build
 lint
@@ -490,9 +505,9 @@ Generate:
 .ai/architecture/performance-guidelines.md
 
 Avoid unnecessary rerenders
-limit large payloads
-use pagination
-cache heavy computations
+avoid large payloads
+prefer pagination
+cache expensive computations
 
 ---------------------------------------------------------------------
 
@@ -512,22 +527,22 @@ controllers-index.md
 services-index.md
 models-index.md
 
-Each entry includes:
+Each index must include:
 
 file path
 purpose
-dependencies
+relationships
 usage patterns
 
 ---------------------------------------------------------------------
 
 FILE ANCHOR VERIFICATION
 
-Before editing files:
+Before editing a file:
 
-confirm path exists
-extract code anchor
-verify expected function/class
+1 confirm file path exists
+2 extract code anchor
+3 verify expected function/class/component
 
 Example:
 
@@ -539,21 +554,24 @@ export function useAuth()
 
 ---------------------------------------------------------------------
 
-IMPACT ANALYSIS
+TEST DISCOVERY
 
-Before modifying code:
+Before modifying modules locate related tests.
 
-check dependency graph
-identify downstream modules
-document impact
+Search locations:
+
+__tests__/
+tests/
+*.test.ts
+*.spec.ts
 
 ---------------------------------------------------------------------
 
 CHANGE SCOPE LIMITER
 
-Small → 1 file  
-Medium → ≤5 files  
-Large → confirmation required  
+Small change → single file
+Medium change → ≤5 files
+Large change → confirmation required
 
 ---------------------------------------------------------------------
 
@@ -568,89 +586,75 @@ shared utilities
 
 ---------------------------------------------------------------------
 
-MONOREPO SAFETY
+LARGE REPOSITORY NAVIGATION
 
-Respect workspace boundaries.
+Before scanning repository:
 
----------------------------------------------------------------------
+1 consult code-map.md
+2 consult feature-boundaries.md
+3 consult file-index docs
+4 consult dependency graph
 
-LARGE REPO NAVIGATION
-
-Always consult:
-
-1 code-map.md
-2 feature-boundaries.md
-3 file-index
-4 architecture docs
-
-Avoid scanning entire repo.
-
----------------------------------------------------------------------
-
-TEST DISCOVERY
-
-Before modifying modules locate tests.
-
-Search:
-
-__tests__/
-tests/
-*.test.ts
-*.spec.ts
-
-Update tests only if behavior intentionally changes.
+Avoid scanning entire repository.
 
 ---------------------------------------------------------------------
 
 DEBUGGING SYSTEM
 
-Generate:
+Generate inside:
 
 .ai/debugging/
 
-workflow.md  
-root-cause-analysis.md  
-common-issues.md  
-fix-plan-template.md  
+workflow.md
+root-cause-analysis.md
+common-issues.md
+fix-plan-template.md
 
 ---------------------------------------------------------------------
 
 WORKFLOW SYSTEM
 
-Generate:
+Generate inside:
 
 .ai/workflows/
 
-feature-development.md  
-bug-fix.md  
-refactoring.md  
-code-review.md  
+feature-development.md
+bug-fix.md
+refactoring.md
+code-review.md
 
 ---------------------------------------------------------------------
 
 RULE SYSTEM
 
-Generate:
+Generate inside:
 
 .clinerules/
 
-entry-point.md  
-bug-fix.md  
-feature-implementation.md  
-enhancement.md  
-refactoring.md  
-code-review.md  
-testing.md  
-automation-guidelines.md  
-architecture-compliance.md  
+entry-point.md
+bug-fix.md
+feature-implementation.md
+enhancement.md
+refactoring.md
+code-review.md
+testing.md
+automation-guidelines.md
+architecture-compliance.md
+
+entry-point.md must:
+
+• detect user intent
+• identify relevant modules
+• load architecture docs
+• route to correct workflow
 
 ---------------------------------------------------------------------
 
-AUTONOMOUS TASK ROUTING SYSTEM
+AUTONOMOUS TASK ROUTING
 
-entry-point.md must automatically determine user intent.
+Entry-point must classify tasks automatically.
 
-Classify task type:
+Task types:
 
 Bug Fix
 Feature Implementation
@@ -659,51 +663,102 @@ Refactor
 Code Review
 Debugging
 
-Intent detection signals:
-
-keywords
-diff context
-error messages
-user prompt
-
 Routing rules:
 
-Bug Fix → load debugging docs + bug-fix workflow  
-Feature → load architecture + feature workflow  
-Refactor → load dependency graph + refactor workflow  
-Code Review → load architecture + code-review workflow  
+Bug → debugging workflow
+Feature → feature workflow
+Refactor → dependency graph + refactor workflow
+Review → architecture + code-review workflow
+
+---------------------------------------------------------------------
+
+DYNAMIC CONTEXT LOADING (DCL)
+
+Large repositories contain too many documentation files to load simultaneously.
+
+Dynamic Context Loading ensures only necessary documentation is loaded.
+
+Stage 1 — Task Classification
+
+Determine task type and load workflow.
+
+Stage 2 — Minimal Architecture Context
+
+Load only:
+
+.ai/architecture/code-map.md
+.ai/architecture/feature-boundaries.md
+
+Stage 3 — Feature Scope Detection
+
+Determine feature module using:
+
+route names
+service names
+component names
+file index
+
+Stage 4 — Targeted Documentation Loading
+
+Load only documentation related to that feature.
+
+Examples:
+
+Auth feature
+
+.ai/architecture/auth-flow.md
+.ai/architecture/middleware-map.md
+
+API feature
+
+.ai/architecture/api-routes.md
+.ai/architecture/schema-map.md
+
+Database feature
+
+.ai/architecture/database.md
+.ai/file-index/models-index.md
+
+Stage 5 — Implementation Context
+
+Load relevant:
+
+file-index docs
+dependency graph
+workflow documentation
+
+Never load entire `.ai` documentation set.
 
 ---------------------------------------------------------------------
 
 DETERMINISTIC IMPLEMENTATION PLAYBOOK
 
-Before implementing any change the AI must generate a deterministic execution plan.
+Before implementing code generate a deterministic execution plan.
 
 Plan must include:
 
-1 WHAT
-Exact feature or fix.
+WHAT
+exact feature or change
 
-2 WHY
-Problem being solved.
+WHY
+problem solved
 
-3 WHERE
-Exact files modified.
+WHERE
+exact files modified
 
-4 WHEN
-Step order.
+WHEN
+execution order
 
-5 HOW
-Exact code-level implementation.
+HOW
+code-level implementation
 
-6 BEFORE / AFTER CODE
-Concrete snippets.
+BEFORE / AFTER CODE
 
-7 DEPENDENCY IMPACT
+DEPENDENCY IMPACT
 
-8 RISK LEVEL
+RISK LEVEL
 
-9 VERIFICATION STEPS
+VERIFICATION STEPS
 
 Commands:
 
@@ -712,7 +767,7 @@ lint
 test
 typecheck
 
-10 ROLLBACK STRATEGY
+ROLLBACK STRATEGY
 
 ---------------------------------------------------------------------
 
@@ -729,11 +784,12 @@ performance
 
 QUALITY VERIFICATION
 
-Verify:
+Verify automatically:
 
 build success
-lint success
-type correctness
+imports resolve
+types valid
+lint passes
 tests pass
 
 ---------------------------------------------------------------------
@@ -743,16 +799,17 @@ HALLUCINATION PREVENTION
 Before referencing files:
 
 verify file existence
-verify APIs from code
 verify architecture patterns
+verify APIs
+verify types
 
-If uncertain ask clarification.
+If uncertain request clarification.
 
 ---------------------------------------------------------------------
 
 LEARNING SYSTEM
 
-When patterns appear repeatedly update architecture docs.
+When patterns appear repeatedly update architecture documentation.
 
 Examples:
 
@@ -764,12 +821,12 @@ new API structure
 
 CONTEXT COMPRESSION
 
-Load context in order:
+Prioritize documentation loading:
 
 1 code-map.md
 2 feature-boundaries.md
-3 file-index
-4 architecture docs
+3 relevant file-index docs
+4 relevant architecture docs
 5 debugging docs
 
 ---------------------------------------------------------------------
