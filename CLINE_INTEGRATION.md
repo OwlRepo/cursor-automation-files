@@ -536,6 +536,30 @@ usage patterns
 
 ---------------------------------------------------------------------
 
+FILE INDEX UPDATE PROTOCOL (LLM-DRIVEN)
+
+File index maintenance must be performed by the LLM using the workflow defined in:
+
+.ai/workflows/update-file-indexes.md
+
+Do not treat unattended index generators or scripts as the sole maintenance mechanism; the LLM must explicitly follow that workflow (user-invoked agent prompt or a named project command when defined).
+
+Triggers:
+
+setting up indexes
+after substantive code edits
+when the user requests a navigation index refresh
+
+Procedure:
+
+1 Run `git status` in the project repository; use `git diff --name-only` as needed so changed paths reflect staged and unstaged work.
+
+2 Map each changed path to the affected index file(s) under `.ai/file-index/` (for example `components/` → `components-index.md`). Do not modify unrelated indexes.
+
+3 Update only those index files that are stale (add/remove rows, correct paths, purpose, relationships). Do not rewrite every index unless a full refresh is required (for example a large-scale rename).
+
+---------------------------------------------------------------------
+
 FILE ANCHOR VERIFICATION
 
 Before editing a file:
@@ -622,6 +646,7 @@ feature-development.md
 bug-fix.md
 refactoring.md
 code-review.md
+update-file-indexes.md
 
 ---------------------------------------------------------------------
 
@@ -837,7 +862,7 @@ AI understands architecture automatically
 Correct files identified before editing
 Plans precede edits
 Architecture patterns respected
-Indexes remain updated
+Indexes remain updated incrementally via git-informed edits following `.ai/workflows/update-file-indexes.md`
 Hallucinations minimized
 
 ---------------------------------------------------------------------
