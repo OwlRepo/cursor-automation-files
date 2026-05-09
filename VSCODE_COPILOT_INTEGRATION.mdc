@@ -1,5 +1,5 @@
 # AI Development System Bootstrap for VS Code + GitHub Copilot
-# Ultimate Edition + Smart Environment Detection + Dynamic Context Loading
+# Ultimate Edition + Smart Environment Detection + Dynamic Context Loading + Strict TDD
 
 BOOTSTRAP NOTICE
 
@@ -17,6 +17,7 @@ The system enables AI to:
 • Automatically determine relevant documentation
 • Produce deterministic implementation plans
 • Dynamically load only necessary documentation
+• Strictly follow Test-Driven Development for code changes
 
 ---------------------------------------------------------------------
 
@@ -40,10 +41,18 @@ Before implementing changes:
 
 1. Understand architecture from `.ai/architecture`
 2. Locate files using `.ai/file-index`
-3. Follow workflows inside `.ai/workflows`
-4. When maintaining file indexes, follow `.ai/workflows/update-file-indexes.md` (LLM-driven: `git status` / changed paths, then update only affected index files)
+3. Discover existing tests before editing source files
+4. Strictly follow the TDD workflow inside `.ai/workflows/tdd-development.md`
+5. Follow workflows inside `.ai/workflows`
+6. When maintaining file indexes, follow `.ai/workflows/update-file-indexes.md` (LLM-driven: `git status` / changed paths, then update only affected index files)
 
 Always produce a deterministic plan before modifying code.
+
+Always write or update tests before implementation code unless the task is documentation-only, formatting-only, comment-only, generated documentation-only, file-index-only, or explicitly non-code.
+
+Do not implement production code before the failing test exists.
+
+For bug fixes, always add or update a regression test that fails before applying the fix.
 
 ---------------------------------------------------------------------
 
@@ -58,6 +67,11 @@ Content must instruct Copilot to:
 • Load `.ai/architecture/code-map.md` first
 • Respect feature boundaries
 • Use file indexes to locate files
+• Discover existing tests before editing implementation files
+• Strictly follow TDD: Red → Green → Refactor
+• Write or update tests before production code
+• Do not implement production code before the failing test exists
+• For bug fixes, add a regression test before fixing the bug
 • Follow workflows for feature, bug, or refactor tasks
 • When updating file indexes, follow `.ai/workflows/update-file-indexes.md` (explicit LLM workflow: inspect git changes, then patch only stale index shards)
 • Avoid editing unrelated modules
@@ -77,8 +91,11 @@ File indexes
 Debugging frameworks
 Development workflows
 Maintenance guides
+Strict TDD workflow documentation
 
 The system must allow AI to determine relevant documentation automatically.
+
+The system must also enforce test-first development for all behavior-changing code tasks.
 
 ---------------------------------------------------------------------
 
@@ -240,6 +257,7 @@ Structure:
 Generate at minimum under `.ai/workflows/`:
 
 update-file-indexes.md
+tdd-development.md
 
 ---------------------------------------------------------------------
 
@@ -497,6 +515,8 @@ verify request schema
 verify response schema
 check dependent consumers
 ensure backward compatibility
+write or update contract tests before implementation
+confirm request and response behavior through tests
 
 ---------------------------------------------------------------------
 
@@ -509,6 +529,8 @@ maintain compatibility
 avoid destructive operations
 update models
 update queries
+write or update database/service tests before implementation
+verify rollback strategy
 
 ---------------------------------------------------------------------
 
@@ -610,6 +632,170 @@ tests/
 *.test.ts
 *.spec.ts
 
+Also detect framework-specific test conventions:
+
+React Testing Library
+Jest
+Vitest
+Playwright
+Cypress
+NestJS testing utilities
+Supertest
+FastAPI TestClient
+Spring test folders
+
+Before editing source files:
+
+1. Locate the nearest existing test file.
+2. Determine whether the existing test file should be updated.
+3. If no test exists, create the closest appropriate test file following the repository’s conventions.
+4. Do not proceed to production implementation until the failing test exists, unless the task is explicitly exempt from TDD.
+
+---------------------------------------------------------------------
+
+STRICT TDD WORKFLOW
+
+All code changes must strictly follow Test-Driven Development unless the task is documentation-only, configuration-only, formatting-only, comment-only, generated documentation-only, file-index-only, or explicitly marked as non-code maintenance.
+
+For feature development, bug fixes, refactors, and API changes, follow the TDD cycle:
+
+1. RED
+   - Before writing implementation code, locate or create the relevant test file.
+   - Write the smallest failing test that describes the expected behavior.
+   - The test must fail for the correct reason.
+   - Do not implement production code before the failing test exists.
+
+2. GREEN
+   - Write the minimum production code required to make the failing test pass.
+   - Avoid premature abstraction.
+   - Avoid unrelated improvements.
+   - Keep the change scoped to the behavior covered by the test.
+
+3. REFACTOR
+   - Improve code structure only after tests pass.
+   - Preserve behavior.
+   - Keep tests passing after every refactor step.
+   - Do not change external behavior during refactor unless covered by a new failing test.
+
+Required TDD behavior:
+
+- Always discover existing tests before modifying source files.
+- Prefer updating existing tests before creating new test files.
+- If no test exists, create the closest appropriate test file using the project’s existing test conventions.
+- Every behavior change must be covered by at least one test.
+- Every bug fix must include a regression test that fails before the fix.
+- Every API contract change must include request and response contract tests where applicable.
+- Every database-related behavior change must include service/repository tests where applicable.
+- Every UI behavior change must include component or integration tests where applicable.
+- Every validation change must include validation tests.
+- Every error-handling change must include error scenario tests.
+- Every authentication or authorization change must include access control tests.
+
+TDD is mandatory for:
+
+- New features
+- Bug fixes
+- Refactors that affect behavior
+- API changes
+- Service logic changes
+- Database query changes
+- Authentication and authorization logic
+- Validation logic
+- Error handling logic
+- State management logic
+- UI behavior changes
+- Data transformation logic
+- Business rules
+- Integration behavior
+
+TDD may be skipped only for:
+
+- Documentation-only changes
+- Formatting-only changes
+- Comment-only changes
+- File index updates
+- Generated AI documentation updates
+- Non-behavioral configuration changes
+
+If TDD cannot be followed because the repository lacks a test setup, the AI must:
+
+1. State that no usable test setup was detected.
+2. Identify the missing test infrastructure.
+3. Propose the smallest test setup needed.
+4. Ask before adding a new testing framework.
+5. Do not silently implement behavior without explaining the testing limitation.
+
+---------------------------------------------------------------------
+
+TDD DEVELOPMENT WORKFLOW FILE
+
+Generate:
+
+.ai/workflows/tdd-development.md
+
+Content must define the required development workflow:
+
+1. Identify task type:
+   - feature
+   - bug fix
+   - refactor
+   - API change
+   - database change
+   - UI behavior change
+   - validation change
+   - authentication or authorization change
+   - error handling change
+   - state management change
+
+2. Locate related source files using:
+   - `.ai/architecture/code-map.md`
+   - `.ai/architecture/feature-boundaries.md`
+   - `.ai/file-index/`
+
+3. Locate related tests:
+   - `__tests__/`
+   - `tests/`
+   - `*.test.ts`
+   - `*.spec.ts`
+   - framework-specific test folders
+
+4. RED phase:
+   - Write or update the smallest failing test first.
+   - For bug fixes, reproduce the bug with a regression test.
+   - For features, test the expected behavior.
+   - For refactors, ensure existing behavior is covered before refactoring.
+   - For API changes, test request and response behavior.
+   - For validation changes, test valid and invalid inputs.
+   - For authentication and authorization changes, test allowed and denied access.
+   - Confirm the test fails for the correct reason before implementation.
+
+5. GREEN phase:
+   - Implement the minimum code required to pass the test.
+   - Avoid unrelated code edits.
+   - Do not refactor during green unless required for correctness.
+   - Keep implementation aligned with existing architecture patterns.
+   - Do not broaden scope beyond the failing test.
+
+6. REFACTOR phase:
+   - Improve naming, structure, duplication, and readability.
+   - Keep tests passing.
+   - Do not introduce new behavior without returning to RED.
+   - Preserve public contracts unless contract changes are covered by tests.
+
+7. Verification:
+   - Run targeted tests first.
+   - Run broader relevant test suite.
+   - Run lint.
+   - Run type-check.
+   - Run build when applicable.
+
+8. Completion report:
+   - Summarize tests added or updated.
+   - Summarize implementation files changed.
+   - Summarize verification commands run.
+   - Mention any tests that could not be run.
+   - Mention any TDD limitation encountered.
+
 ---------------------------------------------------------------------
 
 CHANGE SCOPE LIMITER
@@ -617,6 +803,14 @@ CHANGE SCOPE LIMITER
 Small → 1 file
 Medium → ≤5 files
 Large → confirmation required
+
+For behavior-changing code:
+
+Small → test file + implementation file is acceptable
+Medium → related tests + ≤5 implementation files
+Large → confirmation required before broad changes
+
+Do not expand the scope of implementation beyond the test-backed behavior.
 
 ---------------------------------------------------------------------
 
@@ -628,6 +822,14 @@ authentication
 database
 global state
 shared utilities
+
+For protected modules:
+
+- Require stricter TDD.
+- Require regression tests for bug fixes.
+- Require contract or integration tests when behavior crosses module boundaries.
+- Require risk assessment before implementation.
+- Require rollback strategy.
 
 ---------------------------------------------------------------------
 
@@ -657,6 +859,9 @@ Step 4
 Load relevant file indexes.
 
 Step 5
+Load relevant tests and testing patterns.
+
+Step 6
 Load debugging docs if needed.
 
 ---------------------------------------------------------------------
@@ -680,6 +885,17 @@ execution order
 HOW
 code-level implementation
 
+TDD PLAN
+- Existing tests located
+- Test file to update or create
+- First failing test to write
+- Expected failing behavior
+- Why the test should fail before implementation
+- Minimum implementation needed to pass
+- Refactor opportunities after green
+- Targeted test command to run
+- Broader verification command to run
+
 BEFORE / AFTER CODE
 
 DEPENDENCY IMPACT
@@ -689,6 +905,8 @@ RISK LEVEL
 VERIFICATION STEPS
 
 ROLLBACK STRATEGY
+
+Do not proceed to production implementation until the TDD PLAN is defined.
 
 ---------------------------------------------------------------------
 
@@ -700,6 +918,12 @@ architecture consistency
 dependency impact
 security
 performance
+test coverage
+regression risk
+API compatibility
+rollback safety
+
+For high risk changes, tests must exist before implementation.
 
 ---------------------------------------------------------------------
 
@@ -712,6 +936,16 @@ lint success
 tests pass
 types valid
 
+Verification order:
+
+1. Run targeted test for the changed behavior.
+2. Run related test suite.
+3. Run type-check.
+4. Run lint.
+5. Run build when applicable.
+
+If any command cannot be run, clearly state why.
+
 ---------------------------------------------------------------------
 
 HALLUCINATION PREVENTION
@@ -722,6 +956,10 @@ verify file existence
 verify APIs
 verify architecture patterns
 verify types
+verify test files
+verify command availability
+
+Do not invent files, functions, modules, APIs, routes, schemas, tests, or commands.
 
 ---------------------------------------------------------------------
 
@@ -734,6 +972,8 @@ Examples:
 new service pattern
 new component pattern
 new API structure
+new testing pattern
+new TDD convention
 
 ---------------------------------------------------------------------
 
@@ -744,8 +984,12 @@ Load context in order:
 1 code-map
 2 feature-boundaries
 3 file-index
-4 architecture docs
-5 debugging docs
+4 relevant tests
+5 architecture docs
+6 workflow docs
+7 debugging docs
+
+For code changes, always include `.ai/workflows/tdd-development.md` in the loaded context.
 
 ---------------------------------------------------------------------
 
@@ -754,6 +998,9 @@ SUCCESS CRITERIA
 AI understands architecture
 Files located correctly
 Plans precede edits
+Tests precede implementation
+TDD Red → Green → Refactor is followed
+Bug fixes include regression tests
 Architecture respected
 File indexes maintained incrementally via git-informed edits following `.ai/workflows/update-file-indexes.md`
 Hallucinations minimized
@@ -764,3 +1011,11 @@ Context optimized
 FINAL INSTRUCTION
 
 Analyze the repository and generate the AI development documentation system according to this specification.
+
+For all behavior-changing code tasks, strictly follow TDD:
+
+1. Write or update the failing test first.
+2. Implement the minimum code to pass.
+3. Refactor only after tests pass.
+
+Do not implement production code before the failing test exists, unless the task is explicitly exempt from TDD.
