@@ -760,6 +760,9 @@ DETERMINISTIC IMPLEMENTATION PLAYBOOK
 
 Before implementing code generate a deterministic execution plan.
 
+Hard gate:
+No implementation is allowed until the full plan is present and approved.
+
 Plan must include:
 
 WHAT
@@ -793,6 +796,38 @@ test
 typecheck
 
 ROLLBACK STRATEGY
+
+BEHAVIOR TEST MATRIX (REQUIRED)
+
+Success cases
+expected user-visible behavior
+
+Error cases
+expected user-visible failure behavior and handling
+
+Edge cases
+boundary and unusual real-user scenarios
+
+Behavior-first test rule:
+Define tests by expected behavior when a real user uses the feature/fix, not by internal production implementation details.
+
+CODE-FACT EVIDENCE (REQUIRED)
+
+exact file paths inspected
+exact symbols affected
+current behavior confirmed from repository code/tests/config
+constraints derived from existing architecture and dependencies
+
+Do not use assumptions, theory, or hypothesis-based planning.
+
+WEB VERIFICATION RULE
+
+If required facts are external, time-sensitive, or missing from repository evidence, verify using authoritative web sources before finalizing the plan.
+
+OPEN PREFERENCE DECISIONS (ONLY IF NEEDED)
+
+Ask clarifying questions only after evidence-based options are preselected.
+Questions must be developer preference/tradeoff choices, not discoverable repo facts.
 
 ---------------------------------------------------------------------
 
@@ -828,7 +863,7 @@ verify architecture patterns
 verify APIs
 verify types
 
-If uncertain request clarification.
+If uncertainty remains after evidence-based inspection, ask only preference/tradeoff clarification questions.
 
 ---------------------------------------------------------------------
 

@@ -36,11 +36,13 @@ This repository contains two master prompt files that act as "instruction manual
 
 **Shared concepts** in both files:
 
-- **Planning contract** – A plan must list exact files, edits, and verification steps before any code changes.
+- **Hard-gated TDD planning contract** – No implementation starts unless the plan includes `Behavior Test Matrix (Success/Error/Edge)`, `Code-Fact Evidence`, `Verification Commands`, and `Open Preference Decisions (only if needed)`.
 - **Quality gates** – Compile, lint, and pattern checks run after implementation.
 - **Project detection** – The AI analyzes your codebase to adapt to frontend, backend, full-stack, monorepo, etc.
 - **File specifications** – Full structure: architecture (8–10 files), file-index (6–9 files), debugging (4 files), rules (7 files), maintenance (3 files).
-- **When to ask questions** – Ask clarifying questions when requirements are ambiguous, critical info is missing, or changes are high-risk. Proceed automatically when requirements are clear and changes are low-risk.
+- **Evidence-first precision** – Plans must cite concrete repo facts (paths/symbols/current behavior) and avoid guess/theory/hypothesis-based steps.
+- **When to ask questions** – Ask only after best evidence-based options are preselected; questions should be developer preference/tradeoff decisions, not discoverable code facts.
+- **Web verification rule** – Use web verification when facts are external, time-variant, or unavailable from repository evidence.
 - **Update triggers** – When and how to update documentation when code changes (component→components-index, hook→hooks-index, etc.).
 
 **How to use**: Copy the relevant file into your project and reference it when starting AI-assisted workflows.
@@ -95,6 +97,7 @@ Research shows that structured prompts (plan-first, context-aware, rule-grounded
 
 - Plan before implementing.
 - Plans must be fact-based (grounded in existing code).
+- Plans must be behavior-first TDD scoped for success, error, and edge cases.
 - Follow approved plans strictly.
 - Run quality checks after changes.
 
@@ -222,10 +225,20 @@ Both integrations follow the same four-phase workflow. Each phase has a clear pu
 - Exact file list to update
 - Exact code sections and before/after snippets
 - Reason for every edit
+- Behavior Test Matrix: success, error, and edge cases
+- Code-Fact Evidence: exact paths/symbols/current behavior grounded in repo evidence
 - Verification steps (commands to run)
+- Open Preference Decisions (only if needed, after preselecting best evidence-based options)
 - Any doc or index updates needed
 
-**Why this matters**: Plans grounded in existing code reduce hallucinations and keep changes focused. You can review and adjust before anything is modified.
+**Hard gate**: If any required section is missing, implementation must not start.
+
+**Why this matters**: Behavior-first, evidence-grounded plans reduce hallucinations and keep changes focused. You can review and adjust before anything is modified.
+
+**Plan quality examples**:
+
+- Acceptable: "Success/error/edge tests defined from user-visible behavior, cites `src/auth/login.ts` and `tests/auth/login.spec.ts`, includes exact verification commands."
+- Unacceptable: "High-level implementation idea with no test matrix, no repo evidence, and guesses about internals."
 
 ### Phase 2: Implement
 

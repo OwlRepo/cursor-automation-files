@@ -437,10 +437,32 @@ LOW / MEDIUM / HIGH
 TEST PLAN:
 Specific commands and test files
 
+BEHAVIOR TEST MATRIX (REQUIRED):
+- Success cases (expected user-visible behavior)
+- Error cases (expected error handling and user-visible failures)
+- Edge cases (boundary and unusual real-user scenarios)
+
+All test definitions must validate expected behavior from user perspective, not internal production implementation details.
+
+CODE-FACT EVIDENCE (REQUIRED):
+- exact file paths inspected
+- exact functions/components/classes/routes involved
+- current behavior observed from repository evidence
+- constraints derived from existing code/tests/config
+
+Plans must be evidence-grounded. Do not use theory, guesses, or hypothetical internals.
+
+WEB VERIFICATION RULE:
+If required facts are external, time-variant, or not derivable from repository evidence, perform targeted web verification before finalizing the plan and cite the source category used (official docs, vendor docs, standards, release notes).
+
 ROLLBACK:
 How to undo safely
 
-Do not edit until this plan is complete.
+OPEN PREFERENCE DECISIONS (ONLY IF NEEDED):
+- ask questions only after best options are preselected from evidence
+- questions must be preference/tradeoff decisions, not discoverable repo facts
+
+Hard gate: Do not edit until this plan is complete. Missing any required section blocks implementation.
 
 ---
 
