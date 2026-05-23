@@ -37,6 +37,7 @@ This repository contains two master prompt files that act as "instruction manual
 **Shared concepts** in both files:
 
 - **Hard-gated TDD planning contract** – No implementation starts unless the plan includes `Behavior Test Matrix (Success/Error/Edge)`, `Code-Fact Evidence`, `Verification Commands`, and `Open Preference Decisions (only if needed)`.
+- **Strict TDD execution** – For behavior-changing code, all integrations enforce `RED → GREEN → REFACTOR`; production code cannot start before a failing test exists.
 - **Quality gates** – Compile, lint, and pattern checks run after implementation.
 - **Project detection** – The AI analyzes your codebase to adapt to frontend, backend, full-stack, monorepo, etc.
 - **File specifications** – Full structure: architecture (8–10 files), file-index (6–9 files), debugging (4 files), rules (7 files), maintenance (3 files).
@@ -98,6 +99,7 @@ Research shows that structured prompts (plan-first, context-aware, rule-grounded
 - Plan before implementing.
 - Plans must be fact-based (grounded in existing code).
 - Plans must be behavior-first TDD scoped for success, error, and edge cases.
+- TDD is mandatory for behavior-changing code tasks, with non-behavioral-only exemptions.
 - Follow approved plans strictly.
 - Run quality checks after changes.
 

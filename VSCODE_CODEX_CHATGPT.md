@@ -464,6 +464,22 @@ OPEN PREFERENCE DECISIONS (ONLY IF NEEDED):
 
 Hard gate: Do not edit until this plan is complete. Missing any required section blocks implementation.
 
+STRICT TDD ENFORCEMENT:
+- For all behavior-changing code tasks, TDD is mandatory.
+- RED: write or update the smallest failing test first.
+- GREEN: implement the minimum production code required to pass.
+- REFACTOR: improve structure only after tests pass.
+- Bug fixes must include a regression test that fails before the fix.
+- Do not implement production code before a failing test exists.
+
+TDD EXEMPTIONS (NON-BEHAVIORAL ONLY):
+- documentation-only
+- formatting-only
+- comment-only
+- file-index-only
+- generated documentation-only
+- non-behavioral configuration-only
+
 ---
 
 # FILE ANCHOR VERIFICATION
