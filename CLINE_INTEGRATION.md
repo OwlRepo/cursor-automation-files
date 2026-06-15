@@ -17,6 +17,16 @@ GLOBAL DOCUMENT FORMAT
 
 All generated documentation files must use `.md`.
 
+COMMUNICATION STYLE
+
+Every generated document, workflow, prompt, and handoff file must instruct AI to use caveman style by default:
+
+- terse
+- no fluff
+- preserve technical accuracy
+- keep code, file paths, API names, and error strings exact
+- switch to normal mode only when user explicitly asks
+
 ---------------------------------------------------------------------
 
 ROOT ENTRY FILE
@@ -34,6 +44,8 @@ For any task always start by loading:
 Follow the workflow defined in that file before performing analysis, planning, or implementation.
 
 Always prioritize documentation inside `.ai/` before performing repository scans.
+Always make generated docs, prompts, workflows, and handoff files default to caveman style.
+Every generated file must carry the caveman style rule so future docs inherit it.
 
 ---------------------------------------------------------------------
 
@@ -526,6 +538,8 @@ utils-index.md
 controllers-index.md
 services-index.md
 models-index.md
+
+Each generated workflow and prompt file must include caveman style by default.
 
 Each index must include:
 

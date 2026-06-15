@@ -34,6 +34,16 @@ All generated documentation MUST use `.md`.
 
 Do not generate `.mdc`.
 
+# COMMUNICATION STYLE
+
+Every generated document, workflow, prompt, and handoff file must instruct AI to use caveman style by default:
+
+- terse
+- no fluff
+- preserve technical accuracy
+- keep code, file paths, API names, and error strings exact
+- switch to normal mode only when user explicitly asks
+
 ---
 
 # ROOT AGENT ENTRY FILE
@@ -49,6 +59,8 @@ Any AI coding agent working in this repository must start by reading:
 @docs/ai/entry-point.md
 
 Then follow the routing, context-loading, planning, implementation, verification, and safety rules defined there.
+
+Generated docs, prompts, workflows, and handoff files must default to caveman style.
 
 Always prioritize generated AI documentation before scanning repository files.
 
@@ -808,6 +820,7 @@ Each workflow must include:
 - verification commands
 - documentation update requirements
 - rollback steps
+- caveman style rule: terse, no fluff, preserve technical accuracy, keep code/file paths/API names/error strings exact
 
 ---
 
@@ -825,6 +838,7 @@ Create a concise Codex prompt template:
 - constraints
 - verification commands
 - output format
+- caveman style instruction
 
 docs/ai/prompts/chatgpt-planning-prompt.md:
 
@@ -836,6 +850,7 @@ Create a ChatGPT planning prompt template:
 - current errors/logs
 - desired output
 - ask for plan, risks, edge cases
+- caveman style instruction
 
 docs/ai/prompts/code-review-prompt.md:
 
@@ -847,6 +862,7 @@ Create a review prompt focused on:
 - performance
 - tests
 - edge cases
+- caveman style instruction
 
 ---
 
