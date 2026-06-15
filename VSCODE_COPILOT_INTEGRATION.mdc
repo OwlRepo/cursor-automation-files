@@ -1,1068 +1,163 @@
-# AI Development System Bootstrap for VS Code + GitHub Copilot
-# Ultimate Edition + Smart Environment Detection + Dynamic Context Loading + Strict TDD
-
-BOOTSTRAP NOTICE
-
-This file is a one-time bootstrap specification used to generate an AI development support system for VS Code with GitHub Copilot.
-
-After generation the repository will contain documentation and navigation structures that allow Copilot to reason about the project architecture and development workflows.
-
-The system enables AI to:
-
-• Understand architecture automatically
-• Navigate large repositories safely
-• Avoid hallucinations
-• Identify correct files before editing
-• Respect architecture patterns
-• Automatically determine relevant documentation
-• Produce deterministic implementation plans
-• Dynamically load only necessary documentation
-• Strictly follow Test-Driven Development for code changes
-
----------------------------------------------------------------------
-
-GLOBAL DOCUMENT FORMAT
-
-All generated documentation files must use `.md`.
-
-COMMUNICATION STYLE
-
-Every generated document, workflow, prompt, and handoff file must instruct AI to use caveman style by default:
-
-- terse
-- no fluff
-- preserve technical accuracy
-- keep code, file paths, API names, and error strings exact
-- switch to normal mode only when user explicitly asks
-
----------------------------------------------------------------------
-
-ROOT AGENT ENTRY FILE
-
-Create file at repository root:
-
-AGENTS.md
-
-Content:
-
-For any development task consult the AI documentation inside `.ai/`.
-Generated docs, prompts, workflows, and handoff files must default to caveman style.
-
-Before implementing changes:
-
-1. Understand architecture from `.ai/architecture`
-2. Locate files using `.ai/file-index`
-3. Discover existing tests before editing source files
-4. Strictly follow the TDD workflow inside `.ai/workflows/tdd-development.md`
-5. Follow workflows inside `.ai/workflows`
-6. When maintaining file indexes, follow `.ai/workflows/update-file-indexes.md` (LLM-driven: `git status` / changed paths, then update only affected index files)
-
-Always produce a deterministic plan before modifying code.
-
-Always write or update tests before implementation code unless the task is documentation-only, formatting-only, comment-only, generated documentation-only, file-index-only, or explicitly non-code.
-
-Do not implement production code before the failing test exists.
-
-For bug fixes, always add or update a regression test that fails before applying the fix.
-
----------------------------------------------------------------------
-
-COPILOT CONTEXT FILE
-
-Create:
-
-.github/copilot-instructions.md
-
-Content must instruct Copilot to:
-
-• Load `.ai/architecture/code-map.md` first
-• Respect feature boundaries
-• Use file indexes to locate files
-• Discover existing tests before editing implementation files
-• Strictly follow TDD: Red → Green → Refactor
-• Write or update tests before production code
-• Do not implement production code before the failing test exists
-• For bug fixes, add a regression test before fixing the bug
-• Follow workflows for feature, bug, or refactor tasks
-• When updating file indexes, follow `.ai/workflows/update-file-indexes.md` (explicit LLM workflow: inspect git changes, then patch only stale index shards)
-• Avoid editing unrelated modules
-• Produce deterministic implementation plans
-• Use caveman style by default: terse, no fluff, preserve technical accuracy, keep code/file paths/API names/error strings exact
-
----------------------------------------------------------------------
-
-PRIMARY OBJECTIVE
-
-Analyze the repository and generate an AI knowledge system containing:
-
-Architecture documentation
-Navigation maps
-Feature boundaries
-Dependency graphs
-File indexes
-Debugging frameworks
-Development workflows
-Maintenance guides
-Strict TDD workflow documentation
-
-The system must allow AI to determine relevant documentation automatically.
-
-The system must also enforce test-first development for all behavior-changing code tasks.
-
----------------------------------------------------------------------
-
-PROJECT DETECTION
-
-Detect project type:
-
-Frontend
-Backend
-Fullstack
-Mobile
-Desktop
-CLI
-
-Detect technology stack:
-
-Frameworks
-Languages
-Libraries
-Database
-ORM
-State management
-Routing
-
-Use:
-
-package.json
-requirements.txt
-go.mod
-Cargo.toml
-pom.xml
-
----------------------------------------------------------------------
-
-SMART ENVIRONMENT DETECTION
-
-Detect development environment automatically.
-
-Detect:
-
-Runtime
-Node
-Bun
-Deno
-Python
-Java
-Go
-Rust
-
-Package manager
-npm
-pnpm
-yarn
-bun
-
-Frameworks
-Next.js
-React
-Vue
-Angular
-Express
-NestJS
-FastAPI
-Spring
-
-Build systems
-Vite
-Webpack
-Turbopack
-Parcel
-Rollup
-
-Testing frameworks
-Jest
-Vitest
-Mocha
-Cypress
-Playwright
-
-Linting / formatting
-ESLint
-Prettier
-Biome
-
-Containerization
-Dockerfile
-docker-compose
-Kubernetes
-
-CI/CD
-GitHub Actions
-GitLab CI
-CircleCI
-Jenkins
-
-Environment files
-
-.env
-.env.local
-.env.production
-.env.development
-
-Generate:
-
-.ai/architecture/environment-detection.md
-
----------------------------------------------------------------------
-
-SEMANTIC SEARCH PROTOCOL
-
-Before scanning repository perform semantic search.
-
-Search targets:
-
-function names
-services
-API routes
-components
-hooks
-database models
-
-Search order:
-
-1 file-index
-2 code-map
-3 semantic search
-4 direct inspection
-
-Avoid brute-force scanning.
-
----------------------------------------------------------------------
-
-MONOREPO DETECTION
-
-Check for:
-
-turbo.json
-workspaces
-apps
-packages
-
-Document workspace boundaries.
-
----------------------------------------------------------------------
-
-DOCUMENTATION DIRECTORY
-
-Create:
-
-.ai/
-
-Structure:
-
-.ai/architecture/
-.ai/file-index/
-.ai/debugging/
-.ai/workflows/
-
-Generate at minimum under `.ai/workflows/`:
-
-update-file-indexes.md
-tdd-development.md
-
----------------------------------------------------------------------
-
-ARCHITECTURE DOCUMENTATION
-
-Generate:
-
-.ai/architecture/
-
-overview.md
-tech-stack.md
-module-structure.md
-api-integration.md
-
-Conditional:
-
-routing.md
-state-management.md
-data-fetching.md
-component-patterns.md
-database.md
-service-patterns.md
-
----------------------------------------------------------------------
-
-WEB + REST API INTELLIGENCE
-
-Generate additional documentation for REST systems.
-
----------------------------------------------------------------------
-
-API ROUTE DISCOVERY
-
-Detect all API endpoints.
-
-Examples:
-
-Next.js → app/api
-Express → router files
-NestJS → controllers
-FastAPI → decorators
-Spring → @RestController
-
-Generate:
-
-.ai/architecture/api-routes.md
-
-Document:
-
-method
-route
-request schema
-response schema
-controller
-authentication requirements
-
----------------------------------------------------------------------
-
-SCHEMA DISCOVERY
-
-Detect request and response schemas.
-
-Sources:
-
-TypeScript interfaces
-Zod schemas
-Joi validation
-DTO classes
-OpenAPI
-JSON schema
-
-Generate:
-
-.ai/architecture/schema-map.md
-
----------------------------------------------------------------------
-
-AUTHENTICATION FLOW
-
-Detect authentication systems.
-
-Examples:
-
-JWT
-OAuth
-Session cookies
-API keys
-Auth middleware
-
-Generate:
-
-.ai/architecture/auth-flow.md
-
-Authentication modules are HIGH RISK.
-
----------------------------------------------------------------------
-
-MIDDLEWARE MAP
-
-Detect middleware layers.
-
-Examples:
-
-authentication
-authorization
-validation
-rate limiting
-logging
-error handling
-
-Generate:
-
-.ai/architecture/middleware-map.md
-
----------------------------------------------------------------------
-
-ERROR HANDLING SYSTEM
-
-Generate:
-
-.ai/architecture/error-handling.md
-
-Document:
-
-error classes
-response mapping
-logging strategy
-
----------------------------------------------------------------------
-
-EXTERNAL SERVICE MAP
-
-Detect integrations.
-
-Examples:
-
-payments
-email
-analytics
-third-party APIs
-auth providers
-
-Generate:
-
-.ai/architecture/external-services.md
-
----------------------------------------------------------------------
-
-ENVIRONMENT CONFIGURATION
-
-Generate:
-
-.ai/architecture/environment.md
-
-Document:
-
-environment variables
-usage
-affected modules
-
----------------------------------------------------------------------
-
-SEMANTIC CODE MAP
-
-Generate:
-
-.ai/architecture/code-map.md
-
-Include:
-
-system entry points
-application flows
-core modules
-external integrations
-
----------------------------------------------------------------------
-
-FEATURE BOUNDARY MAP
-
-Generate:
-
-.ai/architecture/feature-boundaries.md
-
-Defines boundaries between features.
-
----------------------------------------------------------------------
-
-DEPENDENCY GRAPH
-
-Generate:
-
-.ai/architecture/dependency-graph.md
-
-Example chain:
-
-Component → Hook → Service → Utility → API → Database
-
----------------------------------------------------------------------
-
-MODULE OWNERSHIP MAP
-
-Document global modules.
-
-Examples:
-
-authentication
-database
-configuration
-shared utilities
-
----------------------------------------------------------------------
-
-ARCHITECTURAL DECISION RECORDS
-
-Create:
-
-.ai/architecture/adr/
-
-Example:
-
-0001-state-management.md
-0002-api-pattern.md
-
----------------------------------------------------------------------
-
-RISK MATRIX
-
-Generate:
-
-.ai/architecture/risk-matrix.md
-
-LOW
-UI components
-styles
-utilities
-
-MEDIUM
-hooks
-routes
-services
-
-HIGH
-authentication
-database
-global state
-shared utilities
-
----------------------------------------------------------------------
-
-API CONTRACT PROTECTION
-
-Before modifying APIs:
-
-verify request schema
-verify response schema
-check dependent consumers
-ensure backward compatibility
-write or update contract tests before implementation
-confirm request and response behavior through tests
-
----------------------------------------------------------------------
-
-DATABASE MIGRATION SAFETY
-
-If schema change required:
-
-generate migration plan
-maintain compatibility
-avoid destructive operations
-update models
-update queries
-write or update database/service tests before implementation
-verify rollback strategy
-
----------------------------------------------------------------------
-
-DEV COMMAND DETECTION
-
-Generate:
-
-.ai/architecture/dev-commands.md
-
-Detect commands:
-
-build
-lint
-test
-type-check
-
----------------------------------------------------------------------
-
-PERFORMANCE GUIDELINES
-
-Generate:
-
-.ai/architecture/performance-guidelines.md
-
-Avoid unnecessary rerenders
-avoid large payloads
-prefer pagination
-cache expensive computations
-
----------------------------------------------------------------------
-
-FILE INDEX SYSTEM
-
-Generate:
-
-.ai/file-index/
-
-src-index.md
-components-index.md
-hooks-index.md
-routes-index.md
-stores-index.md
-utils-index.md
-controllers-index.md
-services-index.md
-models-index.md
-
-Each index must contain:
-
-file path
-purpose
-relationships
-usage patterns
-
----------------------------------------------------------------------
-
-FILE INDEX UPDATE PROTOCOL (LLM-DRIVEN)
-
-File index maintenance must be performed by the LLM using the workflow defined in:
-
-.ai/workflows/update-file-indexes.md
-
-Do not treat unattended index generators or scripts as the sole maintenance mechanism; the LLM must explicitly follow that workflow (user-invoked chat prompt or a named project command when defined).
-
-Triggers:
-
-setting up indexes
-after substantive code edits
-when the user requests a navigation index refresh
-
-Procedure:
-
-1 Run `git status` in the project repository; use `git diff --name-only` as needed so changed paths reflect staged and unstaged work.
-
-2 Map each changed path to the affected index file(s) under `.ai/file-index/` (for example `components/` → `components-index.md`). Do not modify unrelated indexes.
-
-3 Update only those index files that are stale (add/remove rows, correct paths, purpose, relationships). Do not rewrite every index unless a full refresh is required (for example a large-scale rename).
-
----------------------------------------------------------------------
-
-FILE ANCHOR VERIFICATION
-
-Before editing file:
-
-confirm file path exists
-extract code anchor
-verify expected function/class
-
----------------------------------------------------------------------
-
-TEST DISCOVERY
-
-Before modifying modules locate tests.
-
-Search:
-
-__tests__/
-tests/
-*.test.ts
-*.spec.ts
-
-Also detect framework-specific test conventions:
-
-React Testing Library
-Jest
-Vitest
-Playwright
-Cypress
-NestJS testing utilities
-Supertest
-FastAPI TestClient
-Spring test folders
-
-Before editing source files:
-
-1. Locate the nearest existing test file.
-2. Determine whether the existing test file should be updated.
-3. If no test exists, create the closest appropriate test file following the repository’s conventions.
-4. Do not proceed to production implementation until the failing test exists, unless the task is explicitly exempt from TDD.
-
----------------------------------------------------------------------
-
-STRICT TDD WORKFLOW
-
-All code changes must strictly follow Test-Driven Development unless the task is documentation-only, configuration-only, formatting-only, comment-only, generated documentation-only, file-index-only, or explicitly marked as non-code maintenance.
-
-For feature development, bug fixes, refactors, and API changes, follow the TDD cycle:
-
-1. RED
-   - Before writing implementation code, locate or create the relevant test file.
-   - Write the smallest failing test that describes the expected behavior.
-   - The test must fail for the correct reason.
-   - Do not implement production code before the failing test exists.
-
-2. GREEN
-   - Write the minimum production code required to make the failing test pass.
-   - Avoid premature abstraction.
-   - Avoid unrelated improvements.
-   - Keep the change scoped to the behavior covered by the test.
-
-3. REFACTOR
-   - Improve code structure only after tests pass.
-   - Preserve behavior.
-   - Keep tests passing after every refactor step.
-   - Do not change external behavior during refactor unless covered by a new failing test.
-
-Required TDD behavior:
-
-- Always discover existing tests before modifying source files.
-- Prefer updating existing tests before creating new test files.
-- If no test exists, create the closest appropriate test file using the project’s existing test conventions.
-- Every behavior change must be covered by at least one test.
-- Every bug fix must include a regression test that fails before the fix.
-- Every API contract change must include request and response contract tests where applicable.
-- Every database-related behavior change must include service/repository tests where applicable.
-- Every UI behavior change must include component or integration tests where applicable.
-- Every validation change must include validation tests.
-- Every error-handling change must include error scenario tests.
-- Every authentication or authorization change must include access control tests.
-
-TDD is mandatory for:
-
-- New features
-- Bug fixes
-- Refactors that affect behavior
-- API changes
-- Service logic changes
-- Database query changes
-- Authentication and authorization logic
-- Validation logic
-- Error handling logic
-- State management logic
-- UI behavior changes
-- Data transformation logic
-- Business rules
-- Integration behavior
-
-TDD may be skipped only for:
-
-- Documentation-only changes
-- Formatting-only changes
-- Comment-only changes
-- File index updates
-- Generated AI documentation updates
-- Non-behavioral configuration changes
-
-If TDD cannot be followed because the repository lacks a test setup, the AI must:
-
-1. State that no usable test setup was detected.
-2. Identify the missing test infrastructure.
-3. Propose the smallest test setup needed.
-4. Ask before adding a new testing framework.
-5. Do not silently implement behavior without explaining the testing limitation.
-
----------------------------------------------------------------------
-
-TDD DEVELOPMENT WORKFLOW FILE
-
-Generate:
-
-.ai/workflows/tdd-development.md
-
-Content must define the required development workflow:
-
-1. Identify task type:
-   - feature
-   - bug fix
-   - refactor
-   - API change
-   - database change
-   - UI behavior change
-   - validation change
-   - authentication or authorization change
-   - error handling change
-   - state management change
-
-2. Locate related source files using:
-   - `.ai/architecture/code-map.md`
-   - `.ai/architecture/feature-boundaries.md`
-   - `.ai/file-index/`
-
-3. Locate related tests:
-   - `__tests__/`
-   - `tests/`
-   - `*.test.ts`
-   - `*.spec.ts`
-   - framework-specific test folders
-
-4. RED phase:
-   - Write or update the smallest failing test first.
-   - For bug fixes, reproduce the bug with a regression test.
-   - For features, test the expected behavior.
-   - For refactors, ensure existing behavior is covered before refactoring.
-   - For API changes, test request and response behavior.
-   - For validation changes, test valid and invalid inputs.
-   - For authentication and authorization changes, test allowed and denied access.
-   - Confirm the test fails for the correct reason before implementation.
-
-5. GREEN phase:
-   - Implement the minimum code required to pass the test.
-   - Avoid unrelated code edits.
-   - Do not refactor during green unless required for correctness.
-   - Keep implementation aligned with existing architecture patterns.
-   - Do not broaden scope beyond the failing test.
-
-6. REFACTOR phase:
-   - Improve naming, structure, duplication, and readability.
-   - Keep tests passing.
-   - Do not introduce new behavior without returning to RED.
-   - Preserve public contracts unless contract changes are covered by tests.
-
-7. Verification:
-   - Run targeted tests first.
-   - Run broader relevant test suite.
-   - Run lint.
-   - Run type-check.
-   - Run build when applicable.
-
-8. Completion report:
-   - Summarize tests added or updated.
-   - Summarize implementation files changed.
-   - Summarize verification commands run.
-   - Mention any tests that could not be run.
-   - Mention any TDD limitation encountered.
-
----------------------------------------------------------------------
-
-CHANGE SCOPE LIMITER
-
-Small → 1 file
-Medium → ≤5 files
-Large → confirmation required
-
-For behavior-changing code:
-
-Small → test file + implementation file is acceptable
-Medium → related tests + ≤5 implementation files
-Large → confirmation required before broad changes
-
-Do not expand the scope of implementation beyond the test-backed behavior.
-
----------------------------------------------------------------------
-
-CRITICAL MODULE PROTECTION
-
-Protected modules:
-
-authentication
-database
-global state
-shared utilities
-
-For protected modules:
-
-- Require stricter TDD.
-- Require regression tests for bug fixes.
-- Require contract or integration tests when behavior crosses module boundaries.
-- Require risk assessment before implementation.
-- Require rollback strategy.
-
----------------------------------------------------------------------
-
-DYNAMIC CONTEXT LOADING
-
-To prevent context overload dynamically load documentation.
-
-Step 1
-Identify task scope.
-
-Step 2
-Load minimal architecture docs:
-
-code-map
-feature-boundaries
-
-Step 3
-Load feature specific docs.
-
-Example:
-
-Auth → auth-flow.md
-API → api-routes.md
-Database → database.md
-
-Step 4
-Load relevant file indexes.
-
-Step 5
-Load relevant tests and testing patterns.
-
-Step 6
-Load debugging docs if needed.
-
----------------------------------------------------------------------
-
-DETERMINISTIC IMPLEMENTATION PLAYBOOK
-
-Before implementing code generate a plan including:
-
-Hard gate:
-No implementation is allowed until the full plan is present and approved.
-
-WHAT
-functionality implemented
-
-WHY
-problem solved
-
-WHERE
-exact files modified
-
-WHEN
-execution order
-
-HOW
-code-level implementation
-
-TDD PLAN
-- Existing tests located
-- Test file to update or create
-- First failing test to write
-- Expected failing behavior
-- Why the test should fail before implementation
-- Minimum implementation needed to pass
-- Refactor opportunities after green
-- Targeted test command to run
-- Broader verification command to run
-
-BEFORE / AFTER CODE
-
-DEPENDENCY IMPACT
-
-RISK LEVEL
-
-VERIFICATION STEPS
-
-ROLLBACK STRATEGY
-
-Do not proceed to production implementation until the TDD PLAN is defined.
-
-BEHAVIOR TEST MATRIX (REQUIRED)
-
-Success cases
-expected user-visible behavior
-
-Error cases
-expected user-visible failure behavior and handling
-
-Edge cases
-boundary and unusual real-user scenarios
-
-Behavior-first test rule:
-Define tests by expected behavior when a real user uses the feature/fix, not by internal production implementation details.
-
-CODE-FACT EVIDENCE (REQUIRED)
-
-exact file paths inspected
-exact symbols affected
-current behavior confirmed from repository code/tests/config
-constraints derived from existing architecture and dependencies
-
-Do not use assumptions, theory, or hypothesis-based planning.
-
-WEB VERIFICATION RULE
-
-If required facts are external, time-sensitive, or missing from repository evidence, verify using authoritative web sources before finalizing the plan.
-
-OPEN PREFERENCE DECISIONS (ONLY IF NEEDED)
-
-Ask clarifying questions only after evidence-based options are preselected.
-Questions must be developer preference/tradeoff choices, not discoverable repo facts.
-
----------------------------------------------------------------------
-
-STAFF ENGINEER REVIEW GUARD
-
-Before high risk changes evaluate:
-
-architecture consistency
-dependency impact
-security
-performance
-test coverage
-regression risk
-API compatibility
-rollback safety
-
-For high risk changes, tests must exist before implementation.
-
----------------------------------------------------------------------
-
-QUALITY VERIFICATION
-
-Verify:
-
-build success
-lint success
-tests pass
-types valid
-
-Verification order:
-
-1. Run targeted test for the changed behavior.
-2. Run related test suite.
-3. Run type-check.
-4. Run lint.
-5. Run build when applicable.
-
-If any command cannot be run, clearly state why.
-
----------------------------------------------------------------------
-
-HALLUCINATION PREVENTION
-
-Before referencing files:
-
-verify file existence
-verify APIs
-verify architecture patterns
-verify types
-verify test files
-verify command availability
-
-Do not invent files, functions, modules, APIs, routes, schemas, tests, or commands.
-
----------------------------------------------------------------------
-
-LEARNING SYSTEM
-
-When patterns appear repeatedly update architecture docs.
-
-Examples:
-
-new service pattern
-new component pattern
-new API structure
-new testing pattern
-new TDD convention
-
----------------------------------------------------------------------
-
-CONTEXT COMPRESSION
-
-Load context in order:
-
-1 code-map
-2 feature-boundaries
-3 file-index
-4 relevant tests
-5 architecture docs
-6 workflow docs
-7 debugging docs
-
-For code changes, always include `.ai/workflows/tdd-development.md` in the loaded context.
-
----------------------------------------------------------------------
-
-SUCCESS CRITERIA
-
-AI understands architecture
-Files located correctly
-Plans precede edits
-Tests precede implementation
-TDD Red → Green → Refactor is followed
-Bug fixes include regression tests
-Architecture respected
-File indexes maintained incrementally via git-informed edits following `.ai/workflows/update-file-indexes.md`
-Hallucinations minimized
-Context optimized
-
----------------------------------------------------------------------
-
-FINAL INSTRUCTION
-
-Analyze the repository and generate the AI development documentation system according to this specification.
-
-For all behavior-changing code tasks, strictly follow TDD:
-
-1. Write or update the failing test first.
-2. Implement the minimum code to pass.
-3. Refactor only after tests pass.
-
-Do not implement production code before the failing test exists, unless the task is explicitly exempt from TDD.
+# VS Code + Copilot Bootstrap
+
+Goal: generate AI system for VS Code + Copilot. Caveman style. Less token burn. Keep truth.
+
+## Caveman Rule
+
+- Caveman in all generated docs, prompts, workflows, handoffs.
+- Keep code, paths, commands, API names, error strings exact.
+- No fluff. No hedging. Short lines.
+- Stop caveman only if user says `normal mode` or `stop caveman`.
+
+## Caveman Check
+
+- Run `command -v caveman`.
+- If missing, install from [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman).
+- Suggested install: `npx skills add JuliusBrussee/caveman`.
+- If still missing, stop and tell user install first.
+- Why important: keeps style locked, cuts tokens, stops drift.
+
+## Root Files
+
+- `AGENTS.md` → `@docs/ai/entry-point.md`
+- Generate `.github/copilot-instructions.md`.
+- If Cursor exists, also generate `.cursorrules` → load `docs/ai/entry-point.md`
+- Generate `.ai-scratchpad.md` for temp plan checkpoints.
+
+## Tree To Generate
+
+- `docs/ai/entry-point.md`
+- `docs/ai/operating-principles.md`
+- `docs/ai/context-loading.md`
+- `docs/ai/task-routing.md`
+- `docs/ai/implementation-playbook.md`
+- `docs/ai/verification.md`
+- `docs/ai/hallucination-prevention.md`
+- `docs/ai/risk-matrix.md`
+- `docs/ai/rollback.md`
+- `docs/ai/chatgpt-handoff.md`
+- `docs/ai/codex-handoff.md`
+- `docs/ai/architecture/architecture-manifest.md`
+- `docs/ai/architecture/code-map.md`
+- `docs/ai/architecture/feature-boundaries.md`
+- `docs/ai/architecture/api-routes.md`
+- `docs/ai/architecture/schema-map.md`
+- `docs/ai/architecture/auth-flow.md`
+- `docs/ai/architecture/middleware-map.md`
+- `docs/ai/architecture/error-handling.md`
+- `docs/ai/architecture/external-services.md`
+- `docs/ai/architecture/risk-matrix.md`
+- `docs/ai/architecture/testing-strategy.md`
+- `docs/ai/architecture/dev-commands.md`
+- `docs/ai/architecture/performance-guidelines.md`
+- `docs/ai/architecture/security-guidelines.md`
+- `docs/ai/file-index/repository-map.md`
+- `docs/ai/workflows/update-file-indexes.md`
+- `docs/ai/workflows/tdd-development.md`
+- `docs/ai/workflows/bug-fix.md`
+- `docs/ai/workflows/feature-implementation.md`
+- `docs/ai/workflows/enhancement.md`
+- `docs/ai/workflows/refactor.md`
+- `docs/ai/workflows/code-review.md`
+- `docs/ai/workflows/debugging.md`
+- `docs/ai/workflows/api-change.md`
+- `docs/ai/workflows/database-change.md`
+- `docs/ai/workflows/dependency-upgrade.md`
+- `docs/ai/prompts/codex-task-prompt.md`
+- `docs/ai/prompts/chatgpt-planning-prompt.md`
+- `docs/ai/prompts/code-review-prompt.md`
+- `docs/ai/prompts/debugging-prompt.md`
+- `docs/ai/prompts/refactor-prompt.md`
+- `.codex/instructions.md`
+- `.codex/local-workflow.md`
+- `.codex/safety.md`
+- `.vscode/tasks.json`
+- `.vscode/extensions.json`
+- `.vscode/settings.json`
+
+## Copilot Rules
+
+`.github/copilot-instructions.md` must:
+
+- load `docs/ai/architecture/code-map.md` first
+- load `docs/ai/architecture/feature-boundaries.md` next
+- load `docs/ai/file-index/repository-map.md` next
+- discover tests before edits
+- follow TDD
+- avoid unrelated modules
+- use deterministic plans
+- no brute-force scan
+
+## Context Order
+
+For code change:
+
+1. `docs/ai/architecture/code-map.md`
+2. `docs/ai/architecture/feature-boundaries.md`
+3. `docs/ai/file-index/repository-map.md`
+4. relevant workflow
+5. related tests
+6. target files
+
+## Routing
+
+- Bug fix → bug workflow
+- Feature → feature workflow
+- Enhancement → enhancement workflow
+- Refactor → refactor workflow
+- Review → code-review workflow
+- Debugging → debugging workflow
+- API change → api-change workflow
+- Database change → database-change workflow
+- Dependency upgrade → dependency-upgrade workflow
+- Docs update → docs workflow if present
+
+## TDD
+
+- TDD mandatory for behavior change.
+- RED first. Smallest failing test.
+- GREEN second. Minimum code.
+- REFACTOR last. No new behavior.
+- Bug fix needs regression test.
+- Exempt only: docs, formatting, comments, file-index, generated docs, non-behavioral config.
+- Complex UI/CSS/visual layout may skip strict TDD only if DOM/a11y checks cannot prove result. Need human visual check.
+
+## Plan
+
+Before code edit, write:
+
+- WHAT
+- WHY
+- WHERE
+- WHEN
+- HOW
+- BEFORE/AFTER
+- DEPENDENCY IMPACT
+- RISK
+- TEST PLAN
+- BEHAVIOR TEST MATRIX
+- CODE FACTS
+- ROLLBACK
+
+## Safety
+
+- No new npm package or dependency without human approval.
+- First try native web APIs or repo utilities.
+- Check current branch before edit.
+- Never commit on `main` or `master`.
+- Use Conventional Commits.
+- High-risk change needs confirmation.
+- Build, test, typecheck fail 3 times in row → stop, revert, print failure chain, ask human review.
+
+## File Index
+
+- Use one dense `repository-map.md`.
+- Update rows only.
+- Use `git status` + `git diff --name-only`.
+- Do not rewrite unrelated rows.
+
+## Final
+
+- Preserve caveman style in generated docs.
+- Preserve minimal context loading.
+- Prefer short docs over many stale docs.

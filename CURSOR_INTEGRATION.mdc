@@ -1,852 +1,133 @@
-# Cursor AI Integration — Autonomous Development System
-# Ultimate Edition + Smart Environment Detection + Autonomous Task Routing + Dynamic Context Loading
-
-BOOTSTRAP NOTICE
-
-This file is a one-time bootstrap specification used to generate the full `.cursor` AI development system for a project.
-
-After generation development workflows rely on the generated `.cursor` documentation instead of this bootstrap file.
-
-The generated system enables AI to:
-
-• Understand project architecture automatically
-• Navigate large repositories safely
-• Avoid hallucinations
-• Identify correct files before editing
-• Respect architecture patterns
-• Automatically choose correct documentation context
-• Execute deterministic development workflows
-• Dynamically load only necessary documentation for each task
-
----------------------------------------------------------------------
-
-GLOBAL OUTPUT FORMAT
-
-All generated documentation inside `.cursor/` MUST use `.md`.
-
-Never generate `.mdc`.
-
-COMMUNICATION STYLE
-
-Every generated document, workflow, prompt, and handoff file must instruct AI to use caveman style by default:
-
-- terse
-- no fluff
-- preserve technical accuracy
-- keep code, file paths, API names, and error strings exact
-- switch to normal mode only when user explicitly asks
-
----------------------------------------------------------------------
-
-ROOT AGENT ENTRY FILE
-
-Generate at repository root:
-
-AGENTS.md
-
-Content:
-
-For any task always start by loading:
-
-@.cursor/rules/entry-point.md
-
-Follow the workflow defined in that file before performing analysis, planning, or implementation.
-
-Always prioritize `.cursor` documentation before scanning repository files.
-Generated docs, prompts, workflows, and handoff files must default to caveman style.
-
----------------------------------------------------------------------
-
-PRIMARY OBJECTIVE
-
-Analyze the repository and generate a `.cursor` AI development system containing:
-
-Architecture documentation
-Semantic navigation maps
-Feature boundaries
-Dependency graphs
-File indexes
-Workflows (see WORKFLOW DIRECTORY)
-Debugging frameworks
-Automation rules
-Maintenance guides
-
-The system must allow AI to automatically determine which documentation files to load.
-
----------------------------------------------------------------------
-
-PROJECT DETECTION
-
-Detect project type:
-
-Frontend
-Backend
-Fullstack
-Mobile
-Desktop
-CLI
-
-Detect technology stack:
-
-Frameworks
-Languages
-Libraries
-Database
-ORM
-State management
-Routing
-
-Use:
-
-package.json
-requirements.txt
-go.mod
-Cargo.toml
-pom.xml
-
----------------------------------------------------------------------
-
-SMART ENVIRONMENT DETECTION
-
-Detect development environment automatically.
-
-Detect:
-
-Runtime
-Node
-Bun
-Deno
-Python
-Java
-Go
-Rust
-
-Package Manager
-npm
-pnpm
-yarn
-bun
-
-Framework Versions
-Next.js
-React
-Vue
-Angular
-Express
-NestJS
-FastAPI
-Spring
-
-Build Systems
-Vite
-Webpack
-Turbopack
-Parcel
-Rollup
-
-Testing Framework
-Jest
-Vitest
-Mocha
-Cypress
-Playwright
-
-Linting / Formatting
-ESLint
-Prettier
-Biome
-
-Containerization
-Dockerfile
-docker-compose
-Kubernetes
-
-CI/CD
-GitHub Actions
-GitLab CI
-CircleCI
-Jenkins
-
-Environment files
-
-.env
-.env.local
-.env.production
-.env.development
-
-Generate:
-
-.cursor/architecture/environment-detection.md
-
----------------------------------------------------------------------
-
-SEMANTIC SEARCH PROTOCOL
-
-Before scanning repository perform semantic search.
-
-Search targets:
-
-function names
-services
-API routes
-components
-hooks
-database models
-
-Search order:
-
-1 file-index
-2 code-map
-3 semantic repo search
-4 direct inspection
-
-Avoid brute force scans.
-
----------------------------------------------------------------------
-
-MONOREPO DETECTION
-
-Detect:
-
-turbo.json
-workspaces
-apps/
-packages/
-
-If detected document workspace boundaries.
-
----------------------------------------------------------------------
-
-ARCHITECTURE DOCUMENTATION
-
-Generate:
-
-.cursor/architecture/
-
-overview.md
-tech-stack.md
-module-structure.md
-api-integration.md
-
-Conditional:
-
-routing.md
-state-management.md
-data-fetching.md
-component-patterns.md
-database.md
-service-patterns.md
-
----------------------------------------------------------------------
-
-WEB + REST API INTELLIGENCE
-
-Generate specialized REST API documentation.
-
----------------------------------------------------------------------
-
-API ROUTE DISCOVERY
-
-Automatically detect API endpoints.
-
-Examples:
-
-Next.js → app/api
-Express → router files
-NestJS → controllers
-FastAPI → decorators
-Spring → @RestController
-
-Generate:
-
-.cursor/architecture/api-routes.md
-
-Document:
-
-method
-route
-request schema
-response schema
-controller
-auth requirements
-
----------------------------------------------------------------------
-
-SCHEMA DISCOVERY
-
-Detect request and response schemas from:
-
-TypeScript interfaces
-Zod
-Joi
-DTO classes
-OpenAPI
-JSON schemas
-
-Generate:
-
-.cursor/architecture/schema-map.md
-
----------------------------------------------------------------------
-
-AUTHENTICATION FLOW
-
-Detect:
-
-JWT
-Session cookies
-OAuth
-API keys
-Passport strategies
-Auth middleware
-
-Generate:
-
-.cursor/architecture/auth-flow.md
-
-Authentication modules considered HIGH RISK.
-
----------------------------------------------------------------------
-
-MIDDLEWARE MAP
-
-Identify middleware layers.
-
-Examples:
-
-authentication
-authorization
-validation
-rate limiting
-logging
-error middleware
-
-Generate:
-
-.cursor/architecture/middleware-map.md
-
----------------------------------------------------------------------
-
-ERROR HANDLING SYSTEM
-
-Generate:
-
-.cursor/architecture/error-handling.md
-
-Document:
-
-error types
-response mapping
-logging behavior
-
----------------------------------------------------------------------
-
-EXTERNAL SERVICE MAP
-
-Detect external integrations.
-
-Examples:
-
-payments
-email
-analytics
-third-party APIs
-auth providers
-
-Generate:
-
-.cursor/architecture/external-services.md
-
----------------------------------------------------------------------
-
-ENVIRONMENT CONFIGURATION
-
-Generate:
-
-.cursor/architecture/environment.md
-
-Document:
-
-environment variables
-usage
-affected modules
-
----------------------------------------------------------------------
-
-SEMANTIC CODE MAP
-
-Generate:
-
-.cursor/architecture/code-map.md
-
-Include:
-
-system entry points
-application flows
-core modules
-external integrations
-
----------------------------------------------------------------------
-
-FEATURE BOUNDARY MAP
-
-Generate:
-
-.cursor/architecture/feature-boundaries.md
-
-Defines logical boundaries between features.
-
----------------------------------------------------------------------
-
-DEPENDENCY GRAPH
-
-Generate:
-
-.cursor/architecture/dependency-graph.md
-
-Example chain:
-
-Component → Hook → Service → Utility → API → Database
-
----------------------------------------------------------------------
-
-MODULE OWNERSHIP MAP
-
-Document global modules.
-
-Examples:
-
-authentication
-database
-configuration
-shared utilities
-
-These modules are global dependencies.
-
----------------------------------------------------------------------
-
-ARCHITECTURAL DECISION RECORDS
-
-Create:
-
-.cursor/architecture/adr/
-
-Example:
-
-0001-state-management.md
-0002-api-pattern.md
-
----------------------------------------------------------------------
-
-RISK MATRIX
-
-Generate:
-
-.cursor/architecture/risk-matrix.md
-
-LOW
-UI components
-styles
-utilities
-
-MEDIUM
-hooks
-routes
-services
-
-HIGH
-authentication
-database
-global state
-shared utilities
-
----------------------------------------------------------------------
-
-API CONTRACT PROTECTION
-
-Before modifying APIs:
-
-verify request schema
-verify response schema
-check consumers
-ensure backward compatibility
-
-Breaking changes require confirmation.
-
----------------------------------------------------------------------
-
-DATABASE MIGRATION SAFETY
-
-If schema change required:
-
-generate migration plan
-maintain backward compatibility
-avoid destructive operations
-update models
-update queries
-
----------------------------------------------------------------------
-
-DEV COMMAND DETECTION
-
-Generate:
-
-.cursor/architecture/dev-commands.md
-
-Detect commands:
-
-build
-lint
-test
-type-check
-
----------------------------------------------------------------------
-
-PERFORMANCE GUIDELINES
-
-Generate:
-
-.cursor/architecture/performance-guidelines.md
-
-Avoid unnecessary rerenders
-avoid large payloads
-prefer pagination
-cache heavy computations
-
----------------------------------------------------------------------
-
-FILE INDEX SYSTEM
-
-Generate:
-
-.cursor/file-index/
-
-src-index.md
-components-index.md
-hooks-index.md
-routes-index.md
-stores-index.md
-utils-index.md
-controllers-index.md
-services-index.md
-models-index.md
-
-Each entry must include:
-
-file path
-purpose
-dependencies
-usage patterns
-
----------------------------------------------------------------------
-
-FILE INDEX UPDATE PROTOCOL (LLM-DRIVEN)
-
-File index maintenance must be performed by the LLM using the workflow defined in:
-
-.cursor/workflows/update-file-indexes.md
-
-Do not treat unattended index generators or scripts as the sole maintenance mechanism; the LLM must explicitly follow that workflow (user-invoked agent prompt or a named project command when defined).
-
-Triggers:
-
-setting up indexes
-after substantive code edits
-when the user requests a navigation index refresh
-
-Procedure:
-
-1 Run `git status` in the project repository; use `git diff --name-only` as needed so changed paths reflect staged and unstaged work.
-
-2 Map each changed path to the affected index file(s) under `.cursor/file-index/` (for example `components/` → `components-index.md`). Do not modify unrelated indexes.
-
-3 Update only those index files that are stale (add/remove rows, correct paths, purpose, dependencies, usage patterns). Do not rewrite every index unless a full refresh is required (for example a large-scale rename).
-
----------------------------------------------------------------------
-
-WORKFLOW DIRECTORY
-
-Generate inside:
-
-.cursor/workflows/
-
-update-file-indexes.md
-
----------------------------------------------------------------------
-
-FILE ANCHOR VERIFICATION
-
-Before editing file:
-
-confirm path exists
-extract code anchor
-verify expected function/class
-
----------------------------------------------------------------------
-
-TEST DISCOVERY
-
-Before modifying modules locate tests.
-
-Search:
-
-__tests__/
-tests/
-*.test.ts
-*.spec.ts
-
----------------------------------------------------------------------
-
-CHANGE SCOPE LIMITER
-
-Small → 1 file
-Medium → ≤5 files
-Large → confirmation required
-
----------------------------------------------------------------------
-
-CRITICAL MODULE PROTECTION
-
-Protected modules:
-
-authentication
-database
-global state
-shared utilities
-
----------------------------------------------------------------------
-
-DYNAMIC CONTEXT LOADING (NEW)
-
-To prevent context overload the system must dynamically load documentation.
-
-Step 1 — Identify task scope
-
-Determine feature/module involved.
-
-Step 2 — Load minimal architecture context
-
-Load only:
-
-code-map
-feature-boundaries
-
-Step 3 — Load relevant feature docs
-
-Load only documentation related to the feature being modified.
-
-Examples:
-
-Auth feature → load auth-flow.md
-API feature → load api-routes.md
-Database feature → load database.md
-
-Step 4 — Load file indexes
-
-Load only indexes relevant to target files.
-
-Step 5 — Load debugging docs if task is bug fix.
-
-This system ensures minimal context usage while maintaining reasoning accuracy.
-
----------------------------------------------------------------------
-
-AUTONOMOUS TASK ROUTING
-
-entry-point.md must classify tasks automatically.
-
-Task types:
-
-Bug Fix
-Feature Implementation
-Enhancement
-Refactor
-Code Review
-Debugging
-
-Routing rules:
-
-Bug → debugging workflow
-Feature → feature workflow
-Refactor → dependency graph + refactor workflow
-Review → architecture + review workflow
-
-Generated docs, prompts, workflows, and handoff files must use caveman style by default.
-
----------------------------------------------------------------------
-
-DETERMINISTIC IMPLEMENTATION PLAYBOOK
-
-Before implementing code the AI must generate a deterministic execution plan.
-
-Hard gate:
-No implementation is allowed until the full plan is present and approved.
-
-Plan must include:
-
-WHAT
-exact functionality
-
-WHY
-problem solved
-
-WHERE
-exact files modified
-
-WHEN
-implementation order
-
-HOW
-code-level implementation
-
-BEFORE / AFTER CODE
-code snippets
-
-DEPENDENCY IMPACT
-
-RISK LEVEL
-
-VERIFICATION STEPS
-
-Commands:
-
-build
-lint
-test
-typecheck
-
-ROLLBACK STRATEGY
-
-BEHAVIOR TEST MATRIX (REQUIRED)
-
-Success cases
-expected user-visible behavior
-
-Error cases
-expected user-visible failure behavior and handling
-
-Edge cases
-boundary and unusual real-user scenarios
-
-Behavior-first test rule:
-Define tests by expected behavior when a real user uses the feature/fix, not by internal production implementation details.
-
-CODE-FACT EVIDENCE (REQUIRED)
-
-exact file paths inspected
-exact symbols affected
-current behavior confirmed from repository code/tests/config
-constraints derived from existing architecture and dependencies
-
-Do not use assumptions, theory, or hypothesis-based planning.
-
-WEB VERIFICATION RULE
-
-If required facts are external, time-sensitive, or missing from repository evidence, verify using authoritative web sources before finalizing the plan.
-
-OPEN PREFERENCE DECISIONS (ONLY IF NEEDED)
-
-Ask clarifying questions only after evidence-based options are preselected.
-Questions must be developer preference/tradeoff choices, not discoverable repo facts.
-
-STRICT TDD ENFORCEMENT
-
-For all behavior-changing code tasks, TDD is mandatory.
-
-RED
-write or update the smallest failing test first
-
-GREEN
-implement the minimum production code required to pass
-
-REFACTOR
-improve structure only after tests pass
-
-Bug fixes must include a regression test that fails before the fix.
-Do not implement production code before a failing test exists.
-
-TDD EXEMPTIONS (NON-BEHAVIORAL ONLY)
-
-documentation-only
-formatting-only
-comment-only
-file-index-only
-generated documentation-only
-non-behavioral configuration-only
-
----------------------------------------------------------------------
-
-STAFF ENGINEER REVIEW GUARD
-
-Before high risk changes evaluate:
-
-architecture consistency
-dependency impact
-security
-performance
-
----------------------------------------------------------------------
-
-QUALITY VERIFICATION
-
-Verify automatically:
-
-build success
-lint success
-tests pass
-types valid
-
----------------------------------------------------------------------
-
-HALLUCINATION PREVENTION
-
-Before referencing files:
-
-verify file exists
-verify architecture patterns
-verify APIs
-verify types
-
-If uncertainty remains after evidence-based inspection, ask only preference/tradeoff clarification questions.
-
----------------------------------------------------------------------
-
-LEARNING SYSTEM
-
-When patterns appear repeatedly update architecture docs.
-
-Examples:
-
-new service pattern
-new component pattern
-new API structure
-
----------------------------------------------------------------------
-
-CONTEXT COMPRESSION
-
-Load context in order:
-
-1 code-map
-2 feature-boundaries
-3 relevant file-index
-4 relevant architecture docs
-5 debugging docs
-
----------------------------------------------------------------------
-
-SUCCESS CRITERIA
-
-AI understands architecture automatically
-Correct files identified before editing
-Plans precede edits
-Architecture patterns respected
-Indexes updated incrementally via git-informed edits following `.cursor/workflows/update-file-indexes.md`
-Hallucinations minimized
-Context optimized
-
----------------------------------------------------------------------
-
-FINAL INSTRUCTION
-
-Analyze the repository and generate the `.cursor` AI integration system according to this specification.
+# Cursor Bootstrap
+
+Goal: generate `.cursor` AI system. Caveman style. Less token burn. Keep truth.
+
+## Caveman Rule
+
+- Caveman in all generated docs, prompts, workflows, handoffs.
+- Keep code, paths, commands, API names, error strings exact.
+- No fluff. No hedging. Short lines.
+- Stop caveman only if user says `normal mode` or `stop caveman`.
+
+## Caveman Check
+
+- Run `command -v caveman`.
+- If missing, install from [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman).
+- Suggested install: `npx skills add JuliusBrussee/caveman`.
+- If still missing, stop and tell user install first.
+- Why important: keeps style locked, cuts tokens, stops drift.
+
+## Root Files
+
+- `AGENTS.md` → `@.cursor/rules/entry-point.md`
+- If native Cursor hook wants it, also generate `.cursorrules` → load `docs/ai/entry-point.md`
+- Generate `.ai-scratchpad.md` for temp plan checkpoints.
+
+## Tree To Generate
+
+- `.cursor/rules/entry-point.md`
+- `.cursor/rules/*.md` for bug, feature, enhancement, refactor, review, testing, automation, architecture
+- `.cursor/architecture/architecture-manifest.md`
+- `.cursor/architecture/code-map.md`
+- `.cursor/architecture/feature-boundaries.md`
+- `.cursor/architecture/api-routes.md`
+- `.cursor/architecture/schema-map.md`
+- `.cursor/architecture/auth-flow.md`
+- `.cursor/architecture/middleware-map.md`
+- `.cursor/architecture/error-handling.md`
+- `.cursor/architecture/external-services.md`
+- `.cursor/architecture/risk-matrix.md`
+- `.cursor/architecture/testing-strategy.md`
+- `.cursor/architecture/dev-commands.md`
+- `.cursor/architecture/performance-guidelines.md`
+- `.cursor/architecture/security-guidelines.md`
+- `.cursor/file-index/repository-map.md`
+- `.cursor/workflows/update-file-indexes.md`
+- `.cursor/workflows/tdd-development.md`
+- `.cursor/workflows/bug-fix.md`
+- `.cursor/workflows/feature-implementation.md`
+- `.cursor/workflows/enhancement.md`
+- `.cursor/workflows/refactor.md`
+- `.cursor/workflows/code-review.md`
+- `.cursor/workflows/debugging.md`
+- `.cursor/workflows/api-change.md`
+- `.cursor/workflows/database-change.md`
+- `.cursor/workflows/dependency-upgrade.md`
+- `.cursor/debugging/*.md`
+
+## Entry Point
+
+`entry-point.md` must:
+
+- load `code-map` first
+- load `feature-boundaries` next
+- load `repository-map` next
+- load one relevant workflow
+- load related tests
+- load target source files last
+- route tasks by type
+- keep context minimal
+- no brute-force repo scan
+
+## Routing
+
+- Bug fix → bug workflow
+- Feature → feature workflow
+- Enhancement → enhancement workflow
+- Refactor → refactor workflow
+- Review → code-review workflow
+- Debugging → debugging workflow
+- API change → api-change workflow
+- Database change → database-change workflow
+- Dependency upgrade → dependency-upgrade workflow
+- Docs update → docs workflow if present
+
+## TDD
+
+- TDD mandatory for behavior change.
+- RED first. Smallest failing test.
+- GREEN second. Minimum code.
+- REFACTOR last. No new behavior.
+- Bug fix needs regression test.
+- Exempt only: docs, formatting, comments, file-index, generated docs, non-behavioral config.
+- Complex UI/CSS/visual layout may skip strict TDD only if DOM/a11y checks cannot prove result. Need human visual check.
+
+## Plan
+
+Before code edit, write:
+
+- WHAT
+- WHY
+- WHERE
+- WHEN
+- HOW
+- BEFORE/AFTER
+- DEPENDENCY IMPACT
+- RISK
+- TEST PLAN
+- BEHAVIOR TEST MATRIX
+- CODE FACTS
+- ROLLBACK
+
+## Safety
+
+- No new npm package or dependency without human approval.
+- First try native web APIs or repo utilities.
+- Check current branch before edit.
+- Never commit on `main` or `master`.
+- Use Conventional Commits.
+- High-risk change needs confirmation.
+- Build, test, typecheck fail 3 times in row → stop, revert, print failure chain, ask human review.
+
+## File Index
+
+- Use one dense `repository-map.md`.
+- Update rows only.
+- Use `git status` + `git diff --name-only`.
+- Do not rewrite unrelated rows.
+
+## Final
+
+- Preserve caveman style in generated docs.
+- Preserve minimal context loading.
+- Prefer short docs over many stale docs.
