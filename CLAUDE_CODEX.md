@@ -33,31 +33,35 @@ Goal: Split-Brain AI pipeline. Claude Code plans. Codex executes. Caveman style.
 
 ## Tree Framework
 
-- `CLAUDE.md` → Load project context rules for Claude session.
-- `.claude/settings.json` → Enforce read-only file permissions.
+Keep docs minimal. Avoid folder bloat. Prevent stale text.
+
+- `CLAUDE.md` → Native project context rules read by Claude Code at session boot.
+- `AGENTS.md` → Universal fallback index mapping directly to `docs/ai/entry-point.md`.
+- `.claude/settings.json` → Enforce strict read-only permissions for Claude Code.
 - `.codex/instructions.md` → Lock Codex into mechanical muscle mode.
-- `.ai-scratchpad.md` → Shared transient Handoff Blueprint file.
-- `docs/ai/file-index/repository-map.md` → Dense tracking ledger. Updated rows only.
+- `.ai-scratchpad.md` → Shared transient Handoff Blueprint file. Single source of truth.
+- `docs/ai/entry-point.md` → Root entry index for all agnostic agent queries.
+- `docs/ai/architecture-manifest.md` → ONE single dense log containing code maps, boundaries, schemas, and API routes. No multi-file breakdown.
+- `docs/ai/file-index/repository-map.md` → Dense tracking ledger. Update rows only.
 
 ## Context Order
 
-For code changes:
+For code changes, load files in this exact sequence:
 
-1. `docs/ai/architecture/code-map.md`
-2. `docs/ai/architecture/feature-boundaries.md`
-3. `docs/ai/file-index/repository-map.md`
-4. Relevant specific workflow file
-5. Related tests
-6. Target source files last
+1. `docs/ai/architecture-manifest.md` (Code maps, boundaries, and routes)
+2. `docs/ai/file-index/repository-map.md` (Dense file ledger)
+3. Related test suites
+4. Target source files last
 
 ## Task Routing
 
-- Bug fix → bug workflow
-- Feature → feature workflow
-- Enhancement → enhancement workflow
-- Refactor → refactor workflow
-- Review → code-review workflow
-- Debugging → debugging workflow
+Analyze every request before acting. Classify intent into exactly one of three core lanes:
+
+| Intent Classification | Execution Lane | Handoff Action |
+|---|---|---|
+| Bug, error, regression, failing test, unexpected crash | **BUG / RCA LANE** | Diagnose → Root Cause Analysis (RCA) → Human Approval → Build Directives to `.ai-scratchpad.md` |
+| New feature, enhancement, refactor, cleanup, schema change | **MUTATION LANE** | Map boundaries → Plan Steps → Human Approval → Build Directives to `.ai-scratchpad.md` |
+| Question, code review, explanation, read-only investigation | **READ-ONLY LANE** | Code discovery → Print evidence-backed findings. STOP. No file generation. |
 
 ## Handoff Blueprint Plan Format
 
