@@ -77,7 +77,25 @@ This file also governs what supporting files exist in this repo and what each mu
 
 - `CLAUDE.md` — this file.
 - `.claude/settings.json` (or `.claude/settings.example.json` if Claude Code's settings schema isn't verified yet for this environment) — must wire the `check-predict-verify.sh` hook, see below.
-- `.claude/hooks/check-predict-verify.sh` — mechanical backstop for the Learning Contract. Blocks Edit/Write/MultiEdit calls on source files unless `.claude/.predict-verify-ack` exists and is fresh. **Create this file with the exact content in the "Hook Script Source" block below — copy it verbatim, character for character. Do not paraphrase, "improve," or regenerate this script from the English description; the stdin-parsing logic is load-bearing and a rewritten version will likely break silently.**
+- `.claude/hooks/check-predict-verify.sh` — mechanical backstop for the Learning Contract. Blocks Edit/Write/MultiEdit calls on source files unless `.claude/.predict-verify-ack` exists and is fresh. **Create this file with the exact content in the "Hook Script Source" block further below — copy it verbatim, character for character. Do not paraphrase, "improve," or regenerate this script from the English description; the stdin-parsing logic is load-bearing and a rewritten version will likely break silently.**
+- `docs/ai/entry-point.md` — where a new session starts reading; one paragraph on what this repo is and how the docs below fit together.
+- `docs/ai/task-router.md` — task classification table, mirrors the Task Router section below.
+- `docs/ai/architecture-manifest.md` — high-level system shape (repo layout, module/package boundaries, data flow) — built from actual Repository Auto-Discovery findings, not guessed.
+- `docs/ai/module-ownership-map.md` — domain → FE/BE/DB/tests/risk map.
+- `docs/ai/contracts/api-contracts.md` — request/response shapes per endpoint (skip or state "Not applicable" if no API layer was discovered).
+- `docs/ai/contracts/db-contracts.md` — tables, columns, relations, migrations (skip or state "Not applicable" if no database was discovered).
+- `docs/ai/testing-strategy.md` — verification level per task size, based on whatever test setup already exists in the repo.
+- `docs/ai/risk-register.md` — which domains default to Deep and why.
+- `docs/ai/context-refresh.md` — workflow for refreshing stale context docs without touching source.
+- `docs/ai/file-index/repository-map.md` — the code/file indexer (symbol → file:line), pre-populated from discovery, see Repository File Index below.
+- `docs/ai/prompts/bugfix-rca.md` — detailed bug RCA template.
+- `docs/ai/prompts/bugfix-plan.md` — detailed RCA-backed implementation plan template.
+- `docs/ai/prompts/feature-plan.md` — detailed feature discovery + implementation plan template.
+- `docs/ai/prompts/refactor-plan.md` — detailed behavior-preserving refactor plan template.
+
+Explicitly **not** generated (Codex removed): `AGENTS.md`, `.codex/instructions.md`, `.ai-scratchpad.md`. If any of these exist from a prior Codex setup, flag them as stale during bootstrap and ask whether to delete.
+
+Each generated file must include: file purpose, load/use rule, source-of-truth rule, and any safety gate relevant to that file. Files may be compact, but must be operational — no placeholder-only files unless the file is explicitly an index/map meant to be filled later. Generated architecture manifests must never pretend to know project architecture that hasn't been inspected — unverified sections get marked `TODO: Fill after repository analysis. Do not treat as verified.`
 
 ### Hook Script Source — copy verbatim into `.claude/hooks/check-predict-verify.sh`
 
@@ -135,24 +153,6 @@ fi
 
 echo '{}'
 ```
-- `docs/ai/entry-point.md` — where a new session starts reading; one paragraph on what this repo is and how the docs below fit together.
-- `docs/ai/task-router.md` — task classification table, mirrors the Task Router section below.
-- `docs/ai/architecture-manifest.md` — high-level system shape (repo layout, module/package boundaries, data flow) — built from actual Repository Auto-Discovery findings, not guessed.
-- `docs/ai/module-ownership-map.md` — domain → FE/BE/DB/tests/risk map.
-- `docs/ai/contracts/api-contracts.md` — request/response shapes per endpoint (skip or state "Not applicable" if no API layer was discovered).
-- `docs/ai/contracts/db-contracts.md` — tables, columns, relations, migrations (skip or state "Not applicable" if no database was discovered).
-- `docs/ai/testing-strategy.md` — verification level per task size, based on whatever test setup already exists in the repo.
-- `docs/ai/risk-register.md` — which domains default to Deep and why.
-- `docs/ai/context-refresh.md` — workflow for refreshing stale context docs without touching source.
-- `docs/ai/file-index/repository-map.md` — the code/file indexer (symbol → file:line), pre-populated from discovery, see Repository File Index below.
-- `docs/ai/prompts/bugfix-rca.md` — detailed bug RCA template.
-- `docs/ai/prompts/bugfix-plan.md` — detailed RCA-backed implementation plan template.
-- `docs/ai/prompts/feature-plan.md` — detailed feature discovery + implementation plan template.
-- `docs/ai/prompts/refactor-plan.md` — detailed behavior-preserving refactor plan template.
-
-Explicitly **not** generated (Codex removed): `AGENTS.md`, `.codex/instructions.md`, `.ai-scratchpad.md`. If any of these exist from a prior Codex setup, flag them as stale during bootstrap and ask whether to delete.
-
-Each generated file must include: file purpose, load/use rule, source-of-truth rule, and any safety gate relevant to that file. Files may be compact, but must be operational — no placeholder-only files unless the file is explicitly an index/map meant to be filled later. Generated architecture manifests must never pretend to know project architecture that hasn't been inspected — unverified sections get marked `TODO: Fill after repository analysis. Do not treat as verified.`
 
 ## Bootstrap Command Contract
 
