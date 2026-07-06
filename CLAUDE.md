@@ -76,7 +76,8 @@ This file also governs what supporting files exist in this repo and what each mu
 **Bootstrap outputs (Claude-only — no Codex artifacts):**
 
 - `CLAUDE.md` — this file.
-- `.claude/settings.json` (or `.claude/settings.example.json` if Claude Code's settings schema isn't verified yet for this environment).
+- `.claude/settings.json` (or `.claude/settings.example.json` if Claude Code's settings schema isn't verified yet for this environment) — must wire the `check-predict-verify.sh` hook, see below.
+- `.claude/hooks/check-predict-verify.sh` — mechanical backstop for the Learning Contract. Blocks Edit/Write/MultiEdit calls on source files unless `.claude/.predict-verify-ack` exists and is fresh. Copy verbatim; don't regenerate from scratch, since its exact stdin-parsing logic is load-bearing.
 - `docs/ai/entry-point.md` — where a new session starts reading; one paragraph on what this repo is and how the docs below fit together.
 - `docs/ai/task-router.md` — task classification table, mirrors the Task Router section below.
 - `docs/ai/architecture-manifest.md` — high-level system shape (repo layout, module/package boundaries, data flow) — built from actual Repository Auto-Discovery findings, not guessed.
@@ -266,6 +267,7 @@ Before calling anything done:
 - Required unit/e2e tests listed and passing, TDD order.
 - Matching `docs/ai/*` entries updated.
 - New/moved significant symbols reflected in `docs/ai/file-index/repository-map.md`.
+- If this task matched the Learning Contract trigger (new pattern/library/design decision): prediction was captured BEFORE implementation and `learnings.md` was updated after. If it was skipped, the skip was stated explicitly with which existing pattern it matched — not silently bypassed.
 - Deep tasks: explicit approval confirmed before implementation.
 - Types match established shared contracts.
 - *(Auto-filled: any project-specific invariant that must always hold, discovered from the codebase — e.g. tenant isolation if multi-tenancy code was found, currency handling if payment code was found, idempotency if job/queue code was found.)*
@@ -281,9 +283,11 @@ Before calling anything done:
 
 ---
 
-## Learning Contract (Predict → Verify)
+## Learning Contract (Predict → Verify) — mechanically enforced
 
 Standalone contract — does not assume any external "learn" skill exists. If this project has a `/learn` or similar skill installed later, reconcile the two then; until confirmed, this section is the only source of truth for the learning loop.
+
+A hook at `.claude/hooks/check-predict-verify.sh` blocks source-file edits unless `.claude/.predict-verify-ack` exists and is fresh (written within the current work turn). This forces the trigger decision below to actually happen every time — it can't be silently skipped, only explicitly logged as skipped.
 
 **Trigger:** any new pattern, library, or design decision not already established elsewhere in this repo.
 
@@ -291,9 +295,10 @@ When triggered:
 1. Stop before writing implementation code.
 2. Ask me to write my prediction first — function signature guess, what could break it, expected approach.
 3. Wait for my prediction.
-4. Implement.
-5. Diff explicitly: where the real implementation differs from my prediction, and *why* (tradeoff, not just difference).
-6. Append one entry to `learnings.md` at repo root, automatically, without being asked:
+4. Write `.claude/.predict-verify-ack` with `{"status":"triggered","note":"<what's new>"}`.
+5. Implement.
+6. Diff explicitly: where the real implementation differs from my prediction, and *why* (tradeoff, not just difference).
+7. Append one entry to `learnings.md` at repo root, automatically, without being asked:
 ```
 ## [date] — [feature/module]
 **Predicted:** [one line]
@@ -301,7 +306,7 @@ When triggered:
 **Why different:** [one line — tradeoff, not just diff]
 ```
 
-**Skip trigger** for repetitive work matching an already-established pattern in this repo. State explicitly: "skipping predict-verify — matches [existing pattern]." When unsure whether something counts as new, default to triggering — cheap to ask, expensive to skip real learning.
+**Skip trigger** for repetitive work matching an already-established pattern in this repo. Write `.claude/.predict-verify-ack` with `{"status":"skipped","matches":"<existing pattern>"}` and state explicitly: "skipping predict-verify — matches [existing pattern]." When unsure whether something counts as new, default to triggering — cheap to ask, expensive to skip real learning.
 
 ---
 
