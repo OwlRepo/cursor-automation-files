@@ -77,7 +77,64 @@ This file also governs what supporting files exist in this repo and what each mu
 
 - `CLAUDE.md` — this file.
 - `.claude/settings.json` (or `.claude/settings.example.json` if Claude Code's settings schema isn't verified yet for this environment) — must wire the `check-predict-verify.sh` hook, see below.
-- `.claude/hooks/check-predict-verify.sh` — mechanical backstop for the Learning Contract. Blocks Edit/Write/MultiEdit calls on source files unless `.claude/.predict-verify-ack` exists and is fresh. Copy verbatim; don't regenerate from scratch, since its exact stdin-parsing logic is load-bearing.
+- `.claude/hooks/check-predict-verify.sh` — mechanical backstop for the Learning Contract. Blocks Edit/Write/MultiEdit calls on source files unless `.claude/.predict-verify-ack` exists and is fresh. **Create this file with the exact content in the "Hook Script Source" block below — copy it verbatim, character for character. Do not paraphrase, "improve," or regenerate this script from the English description; the stdin-parsing logic is load-bearing and a rewritten version will likely break silently.**
+
+### Hook Script Source — copy verbatim into `.claude/hooks/check-predict-verify.sh`
+
+```bash
+#!/bin/bash
+# Enforce predict-verify acknowledgment before source code edits.
+#
+# Blocks Edit/Write/MultiEdit tool calls unless a fresh acknowledgment file
+# exists at .claude/.predict-verify-ack, written by Claude per the Learning
+# Contract in CLAUDE.md. This does NOT judge whether a task is genuinely a
+# "new pattern" — that judgment call still belongs to Claude. What this
+# enforces is that the judgment call actually gets made and recorded, every
+# time, instead of silently skipped.
+
+ACK_FILE=".claude/.predict-verify-ack"
+MAX_AGE_SECONDS=900   # ack must be from the current work turn (~15 min)
+
+# Read the tool call payload from stdin (Claude Code passes tool_input as JSON)
+INPUT=$(cat)
+TARGET_PATH=$(echo "$INPUT" | grep -o '"file_path"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed -E 's/.*"file_path"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/')
+
+# Don't gate edits to docs, the learning log itself, or config —
+# only gate actual source code edits.
+case "$TARGET_PATH" in
+  *docs/ai/*|*learnings.md|*CLAUDE.md|*.claude/*|*README*|*.md)
+    echo '{}'
+    exit 0
+    ;;
+esac
+
+if [ ! -f "$ACK_FILE" ]; then
+  cat >&2 <<'MSG'
+BLOCKED: no predict-verify acknowledgment found.
+
+Before editing source code, run the Learning Contract check from CLAUDE.md:
+- New pattern/library/design decision -> capture the prediction first, then
+  write .claude/.predict-verify-ack with: {"status":"triggered","note":"<what's new>"}
+- Matches an existing pattern already used in this repo -> write
+  .claude/.predict-verify-ack with: {"status":"skipped","matches":"<existing pattern>"}
+
+Then retry the edit.
+MSG
+  echo '{"permissionDecision":"deny","message":"No predict-verify acknowledgment. See stderr for what to write to .claude/.predict-verify-ack."}'
+  exit 0
+fi
+
+ACK_MTIME=$(stat -c %Y "$ACK_FILE" 2>/dev/null || stat -f %m "$ACK_FILE" 2>/dev/null)
+NOW=$(date +%s)
+AGE=$(( NOW - ACK_MTIME ))
+
+if [ "$AGE" -gt "$MAX_AGE_SECONDS" ]; then
+  echo '{"permissionDecision":"deny","message":"predict-verify acknowledgment is stale (older than 15 min). Re-run the Learning Contract check for THIS task, then rewrite .claude/.predict-verify-ack before editing."}'
+  exit 0
+fi
+
+echo '{}'
+```
 - `docs/ai/entry-point.md` — where a new session starts reading; one paragraph on what this repo is and how the docs below fit together.
 - `docs/ai/task-router.md` — task classification table, mirrors the Task Router section below.
 - `docs/ai/architecture-manifest.md` — high-level system shape (repo layout, module/package boundaries, data flow) — built from actual Repository Auto-Discovery findings, not guessed.
@@ -109,11 +166,40 @@ Each generated file must include: file purpose, load/use rule, source-of-truth r
 5. Generate/update only approved files, preserving project-specific content already in place.
 6. Report a final Output Summary.
 
-**Output summary must include:** what kind of project this was understood to be, files created, files updated, files skipped, existing content preserved, anything marked inferred/unverified that needs confirmation, verification performed, manual follow-up required.
+**Output summary must include:** what kind of project this was understood to be, files created, files updated, files skipped, existing content preserved, anything marked inferred/unverified that needs confirmation, verification performed, manual follow-up required, and the predict-verify hook validation result (installed + tested working, or exact failure reason).
 
 **Drift handling:** if generated setup files already exist, compare against this spec, preserve project-specific additions, update stale rules, don't remove useful local conventions, and report what drifted and what was changed to realign.
 
 **Rules during generation:** don't invent package scripts — verification commands must come from actual package scripts or repo docs discovered in step 1. Don't create an active `.claude/settings.json` unless the Claude Code settings schema is verified for this environment; use `.claude/settings.example.json` otherwise.
+
+**Hook wiring** — whichever settings file is used, it must include:
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/check-predict-verify.sh\"" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Hook creation and validation — mandatory, not optional:**
+
+1. Create `.claude/hooks/check-predict-verify.sh` using the exact content from the "Hook Script Source" block above — copy verbatim, do not regenerate or paraphrase.
+2. Make it executable: `chmod +x .claude/hooks/check-predict-verify.sh`.
+3. Wire it into `.claude/settings.json` (or `.claude/settings.example.json`) exactly as shown above.
+4. **Validate before reporting bootstrap as done:**
+   - Confirm the file exists and its content byte-matches the source block (diff it, don't eyeball it).
+   - Confirm the executable bit is set (`ls -l` should show `x`).
+   - Run a dry-run test: create a throwaway test file outside any exempted path (e.g. `touch /tmp/predict-verify-hook-test.ts` equivalent within repo scope isn't needed — instead, simulate the hook's stdin contract directly: `echo '{"file_path":"src/test.ts"}' | .claude/hooks/check-predict-verify.sh` and confirm it returns a `deny` decision when `.claude/.predict-verify-ack` doesn't exist yet).
+   - Then create a fresh `.claude/.predict-verify-ack` (e.g. `echo '{"status":"skipped","matches":"bootstrap test"}' > .claude/.predict-verify-ack`) and re-run the same dry-run command, confirming it now returns `{}` (allow).
+   - Clean up the test ack file afterward so it doesn't leave a false "already acknowledged" state for the first real task.
+5. If validation fails at any step, report the exact failure — do not report the hook as installed if it wasn't actually confirmed working.
 
 ---
 
