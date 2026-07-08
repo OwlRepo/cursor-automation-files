@@ -10,6 +10,8 @@ Single-agent spec. Claude routes, investigates, plans, implements, and validates
 
 Run this, in order, the first time this file is read in a repo (or whenever explicitly asked to bootstrap/refresh):
 
+**0. Machine-Level Skill Prerequisites Check** — before anything project-specific, confirm `caveman`, `gstack`, and `ecc` (Everyday Claude Code) are installed at the machine level. Follow the exact check-install-remember sequence in **Skill Prerequisites** below. If the persistent marker from a prior run already exists, this step is a fast pass-through — skip straight to step 1.
+
 **1. Repository Auto-Discovery** — inspect, in this priority order, whatever exists:
 - `package.json` / `pyproject.toml` / `Cargo.toml` / `go.mod` / `composer.json` / equivalent → project name, description, dependencies, scripts.
 - `README.md` / `README` → what the project is, who it's for, how to run it.
@@ -24,9 +26,47 @@ Run this, in order, the first time this file is read in a repo (or whenever expl
 
 **3. Generate `docs/ai/*`** — follow the Bootstrap Source Contract and Bootstrap Command Contract below using the same discovered facts. Default behavior for the autonomous flow: skip the "wait for plan approval" step (that's for later refreshes) and go straight to generation, since the triggering phrase itself is the approval — but still produce the Output Summary afterward so I can review and correct anything.
 
-**4. Report back** — a short summary: what kind of project this is (as understood), what got filled in automatically vs. marked inferred, what files were created, and anything it couldn't determine that needs my input (e.g., "couldn't tell if this has multi-tenancy — confirm?").
+**4. Report back** — a short summary: what kind of project this is (as understood), the Skill Prerequisites result (already set up vs. freshly installed, per skill, or `UNVERIFIED DEPENDENCY` if one couldn't be installed), what got filled in automatically vs. marked inferred, what files were created, and anything it couldn't determine that needs my input (e.g., "couldn't tell if this has multi-tenancy — confirm?").
 
-After this sequence runs once, treat the file as filled and skip straight to normal operation on future sessions — re-run discovery only if asked to "refresh" or "re-bootstrap," or if the repo structure changed enough that the existing docs look stale (see Context Refresh Rule below).
+After this sequence runs once, treat the file as filled and skip straight to normal operation on future sessions — re-run repository discovery only if asked to "refresh" or "re-bootstrap," or if the repo structure changed enough that the existing docs look stale (see Context Refresh Rule below). Skill Prerequisites re-runs on its own separate cadence — see that section.
+
+---
+
+## Skill Prerequisites (Machine-Level, One-Time Setup)
+
+Three skills are required for this workflow: `caveman`, `gstack`, and `ecc` (Everyday Claude Code). This check is **machine-level, not repo-level** — think of it like installing a printer driver once on your laptop rather than reinstalling it for every document you print. Once verified on a machine, any repo using this CLAUDE.md template skips straight past this section.
+
+**Check sequence** (bootstrap step 0, and the first thing any session checks before the marker below has ever been seen):
+
+1. Look for the marker file `~/.claude/.skills-bootstrap-complete.json`. If it exists and lists all three skills as `true`, skip the rest of this section and proceed — this machine is already set up.
+2. If the marker is missing or incomplete, check each skill directory directly:
+   - `~/.claude/skills/caveman`
+   - `~/.claude/skills/gstack`
+   - `~/.claude/skills/ecc`
+3. Any skill found already installed → note it as present, no action taken.
+4. Any skill NOT found → install it using its official install/setup method. If that install method isn't already known or discoverable (a marketplace/plugin command, a setup script, install docs in the skill's own repo), stop and mark that skill `UNVERIFIED DEPENDENCY` — ask me for the install source rather than guessing at a command or fabricating an install path.
+5. Once all three are confirmed present (whether pre-existing or freshly installed this run), write the marker file:
+
+```json
+{
+  "caveman": true,
+  "gstack": true,
+  "ecc": true,
+  "checked_at": "<ISO timestamp>"
+}
+```
+
+6. That marker is the "remember it's done" mechanism — a stamped passport. Once stamped, future sessions on this machine don't go through the checkpoint again for these three skills. They just check for the stamp, confirm it's there, and move on. Only redo the full check if the marker is missing, or if I explicitly ask to re-verify (e.g. "re-check my skills setup").
+
+**Report either way** in the bootstrap Output Summary: which of the three were already installed, which were freshly installed, and which (if any) are blocked as `UNVERIFIED DEPENDENCY`.
+
+---
+
+## Session Start Protocol (every session, no exceptions)
+
+1. Confirm the Skill Prerequisites marker above is present. If not, run that check before anything else.
+2. Invoke `caveman` at the **Ultra** setting immediately at the start of every session — unconditional, not gated by task type, not something to decide on a case-by-case basis. It's the baseline reasoning mode for this repo, the same way you'd put on safety glasses before touching the table saw regardless of what you're cutting that day.
+3. Proceed to the Task Router.
 
 ---
 
@@ -65,7 +105,7 @@ Source of truth = real source code, tests, types, schemas, routes, controllers, 
 
 ## UNVERIFIED DEPENDENCY Rule
 
-If a migration, schema, contract, permission, or integration detail is unknown: mark `UNVERIFIED DEPENDENCY` and stop. Do not proceed to implementation until resolved. Do not guess on schema, permissions/isolation model, or public API shape.
+If a migration, schema, contract, permission, or integration detail is unknown: mark `UNVERIFIED DEPENDENCY` and stop. Do not proceed to implementation until resolved. Do not guess on schema, permissions/isolation model, or public API shape. (The same marker is reused in Skill Prerequisites above for an unknown skill-install method — same principle: don't guess, ask.)
 
 ---
 
@@ -249,6 +289,17 @@ Only downgrade Deep if repo evidence proves the task is isolated and low-risk.
 
 **Implementation** — after plan approval (Standard/Deep) or directly for Tiny/Express. Include exact files, exact changes, verification commands, manual QA, rollback/risk notes when relevant.
 
+## Plan Format Contract
+
+Every plan produced under Output Modes — Bugfix Plan, Feature Plan, Refactor Plan, Infra Plan — opens with a **TL;DR** section before anything else, including before the formal contract sections already required below (Issue Selected, Bug Summary, etc.).
+
+TL;DR requirements:
+- Plain English, no unexplained jargon.
+- Lead with an analogy suited to the change — what is this like, in everyday terms?
+- Include a small visualization (a short flow, a simple table, a before/after comparison) where it genuinely shortens the path to understanding. Skip it if the plan is small enough that a couple of plain sentences are already the fastest path — the goal is clarity, not decoration.
+- Answers, in a few lines: what's broken or needed, why, what's about to change, and what to expect once it's done.
+- Compresses the plan for a fast skim — it does not replace the full detailed sections underneath. The complete contract sections still carry the full plan.
+
 ## Bugfix RCA Contract
 
 For bug reports, RCA first, no implementation steps yet. Required sections: Issue Selected, Bug Summary, Reproduction Flow From Code, FE/BE Investigation, FE-BE Contract Check (if applicable), Root Cause, Why Existing Code Allows The Bug, Eliminated Causes, Remaining Uncertainties, Confidence Level, Basic Solution Direction. Stop after RCA — wait for approval before planning implementation.
@@ -256,6 +307,21 @@ For bug reports, RCA first, no implementation steps yet. Required sections: Issu
 ## Testing Requirement
 
 Strict TDD, no exceptions, unless the project is confirmed during bootstrap to be a throwaway/prototype (in which case say so explicitly rather than silently skipping coverage). Write the failing test first, confirm it fails, implement until it passes. Every touched file needs unit coverage; user-facing or cross-layer flows also need e2e coverage. Missing tooling is not a reason to skip coverage — set it up first. Implementation isn't complete until its tests exist and pass.
+
+## Plan Execution Protocol
+
+While an approved plan is being executed step-by-step, all of Claude's internal working-through-the-problem reasoning — the deliberation happening between "here's the plan" and "here's what got built" — runs at `caveman` Ultra: terse, self-directed, no padding, aimed squarely at the next concrete action. It's the difference between how you'd explain a fix to me versus the clipped shorthand you'd jot on a sticky note to yourself mid-task — the sticky note doesn't need full sentences, it needs to be right and fast.
+
+This is separate from the Communication Style rule above. Everything actually shown to me — the plan itself, the per-step explanations, the "why" with an analogy — stays in plain English exactly as Communication Style requires. Caveman Ultra governs the internal thinking only, never the output I read.
+
+## Post-Implementation QA Gate
+
+TDD proves the code does what its test says. This gate proves the change actually works end-to-end — a different check, not a duplicate of TDD, so it always runs after implementation and after TDD is green, never folded into the TDD step itself.
+
+- **FE + BE change:** always invoke gstack's `/qa` (or `/qa-only`) skill to verify the change across both layers before marking the step or plan done.
+- **Backend-only change:** the FE portion of `/qa` doesn't apply — instead, the unit tests for the change must explicitly cover five buckets: happy path, error cases, edge cases, rare/boundary edge cases, and optimization/performance-relevant cases. Coverage missing from any bucket counts as incomplete, not "good enough."
+- If `/qa` or the unit test sweep turns up a failure, fix the bug and re-run the same check until it passes clean — never mark the step done on a red result.
+- Mandatory for Standard and Deep tasks. For Tiny/Express, apply judgment — a config typo fix doesn't need the full sweep — but say so explicitly rather than silently skipping it.
 
 ---
 
@@ -351,6 +417,7 @@ Before calling anything done:
 - API and DB/schema changes documented, or explicitly marked "none required."
 - Verification commands confirmed from package scripts or repo docs (never assumed).
 - Required unit/e2e tests listed and passing, TDD order.
+- Post-Implementation QA Gate run and passing (`/qa` for FE+BE, or the five-bucket unit test sweep for backend-only changes) — not skipped, not folded into TDD.
 - Matching `docs/ai/*` entries updated.
 - New/moved significant symbols reflected in `docs/ai/file-index/repository-map.md`.
 - If this task matched the Learning Contract trigger (new pattern/library/design decision): prediction was captured BEFORE implementation and `learnings.md` was updated after. If it was skipped, the skip was stated explicitly with which existing pattern it matched — not silently bypassed.
@@ -396,23 +463,22 @@ When triggered:
 
 ---
 
-## gstack
+## Skill Routing
 
-Check `~/.claude/skills/gstack` during bootstrap step 1. If it doesn't exist, delete this entire section and the Skill Routing section below — don't leave dead references to skills that aren't installed.
+`caveman` (Ultra) is always-on per the Session Start Protocol and Plan Execution Protocol above — it doesn't need prompt-based selection, it's just running.
 
-If it does exist: use `/browse` for all web browsing, never `mcp__claude-in-chrome__*` tools directly. Read the actual installed skill list from that directory rather than trusting any hardcoded list, and use it for routing below.
+`gstack` and `ecc` are selected per-prompt, not always-on. Before invoking either, analyze the incoming request deeply enough to be genuinely confident it's the right fit — this is a **strict-fit rule, not a lenient one**. A "might be useful" or "just in case" invocation is the failure mode to avoid: it burns tokens and risks pulling in hallucinated context from a skill that doesn't actually apply to the request. More than one skill can be selected together when the request genuinely spans multiple domains (e.g. a bug report that also needs a design pass) — but each one selected must independently clear the strict-fit check, not ride along on another skill's justification.
 
-## Skill Routing *(only if gstack section above wasn't deleted)*
+Read the actual installed command list from `~/.claude/skills/gstack` and `~/.claude/skills/ecc` rather than trusting a hardcoded list — the tables below are a starting map, not the source of truth.
 
-Invoke the matching skill when a request fits. When in doubt, invoke it.
-
+**gstack:**
 - Product ideas/brainstorming → `/office-hours`
 - Strategy/scope → `/plan-ceo-review`
 - Architecture → `/plan-eng-review`
 - Design system/plan review → `/design-consultation` or `/plan-design-review`
 - Full review pipeline → `/autoplan`
 - Bugs/errors → `/investigate`
-- QA/testing site behavior → `/qa` or `/qa-only`
+- QA/testing site behavior → `/qa` or `/qa-only` (also mandatory post-implementation — see Post-Implementation QA Gate)
 - Code review/diff check → `/review`
 - Visual polish → `/design-review`
 - Ship/deploy/PR → `/ship` or `/land-and-deploy`
@@ -420,6 +486,12 @@ Invoke the matching skill when a request fits. When in doubt, invoke it.
 - Resume context → `/context-restore`
 - Backlog-ready spec/issue → `/spec`
 - New pattern/design decision worth internalizing → run the Learning Contract above
+- All web browsing → `/browse`, never `mcp__claude-in-chrome__*` tools directly
+
+**ecc (Everyday Claude Code):**
+- *(command list `TODO: Fill after reading ~/.claude/skills/ecc during bootstrap. Do not invent command names.`)*
+
+If `gstack` or `ecc` genuinely can't be found or installed (see Skill Prerequisites), delete the relevant bullets above rather than leaving dead references — but this is now the exception path, not the default, since both are expected to already be installed via the Skill Prerequisites step.
 
 ## Design System
 
